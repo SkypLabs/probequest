@@ -7,11 +7,12 @@ from sys import argv, exit
 from argparse import ArgumentParser
 
 def parseProbeReq(packet):
+    timestamp = packet.getlayer(RadioTap).time
     s_mac = packet.getlayer(RadioTap).addr2
     essid = packet.getlayer(Dot11ProbeReq).info.decode("utf-8")
 
     if essid:
-        print("{} -> {}".format(s_mac, essid))
+        print("{timestamp} - {s_mac} -> {essid}".format(timestamp=timestamp, s_mac=s_mac, essid=essid))
 
 if __name__ == "__main__":
     ap = ArgumentParser(description="Sniff Wifi probe requests")
