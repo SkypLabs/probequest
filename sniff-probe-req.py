@@ -19,4 +19,7 @@ if __name__ == "__main__":
 
     print("[*] Start sniffing probe requests...")
 
-    sniff(iface=args["interface"], filter="type mgt subtype probe-req", prn=parseProbeReq)
+    try:
+        sniff(iface=args["interface"], filter="type mgt subtype probe-req", prn=parseProbeReq)
+    except IOError:
+        exit("[!] Interface doesn't exist")
