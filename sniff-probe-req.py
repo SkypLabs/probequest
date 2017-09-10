@@ -19,8 +19,8 @@ def parseProbeReq(packet):
             outfile.writerow([timestamp, s_mac, essid])
 
 if __name__ == "__main__":
-    ap = ArgumentParser(description="Sniff Wifi probe requests")
-    ap.add_argument("-i", "--interface", required=True, help="network interface to use")
+    ap = ArgumentParser(description="Wi-Fi probe requests sniffer")
+    ap.add_argument("-i", "--interface", required=True, help="wireless interface to use (must be in monitor mode)")
     ap.add_argument("-f", "--file", type=FileType("a", encoding="UTF-8"), help="output file to save the captured data (CSV format)")
     args = vars(ap.parse_args())
 
