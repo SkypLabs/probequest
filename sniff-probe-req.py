@@ -3,6 +3,7 @@
 
 from scapy.all import *
 from csv import writer
+from re import compile, match
 from os import geteuid
 from sys import argv, exit
 from argparse import ArgumentParser, FileType
@@ -12,8 +13,12 @@ def parseProbeReq(packet):
     s_mac = packet.getlayer(RadioTap).addr2
     essid = packet.getlayer(Dot11ProbeReq).info.decode("utf-8")
 
+    # If the probe request contains an ESSID.
     if essid:
         if "essid_filter" in globals() and not essid in essid_filter:
+            return
+
+        if "essid_regex" in globals() and not match(essid_regex, essid):
             return
 
         print("{timestamp} - {s_mac} -> {essid}".format(timestamp=timestamp, s_mac=s_mac, essid=essid))
@@ -23,11 +28,16 @@ def parseProbeReq(packet):
 
 if __name__ == "__main__":
     ap = ArgumentParser(description="Wi-Fi probe requests sniffer")
-    ap.add_argument("-e", "--essid", nargs="+", help="ESSID of the APs to filter (space-separated list)")
+
     ap.add_argument("--exclude", nargs="+", help="MAC addresses of the stations to exclude (space-separated list)")
     ap.add_argument("-i", "--interface", required=True, help="wireless interface to use (must be in monitor mode)")
     ap.add_argument("-o", "--output", type=FileType("a", encoding="UTF-8"), help="output file to save the captured data (CSV format)")
     ap.add_argument("-s", "--station", nargs="+", help="MAC addresses of the stations to filter (space-separated list)")
+
+    essid_arguments = ap.add_mutually_exclusive_group()
+    essid_arguments.add_argument("-e", "--essid", nargs="+", help="ESSID of the APs to filter (space-separated list)")
+    essid_arguments.add_argument("-r", "--regex", help="regex to filter the ESSIDs")
+
     args = vars(ap.parse_args())
 
     if not geteuid() == 0:
@@ -38,6 +48,9 @@ if __name__ == "__main__":
 
     if args["essid"]:
         essid_filter = args["essid"]
+
+    if args["regex"]:
+        essid_regex = compile(args["regex"])
 
     filter = "type mgt subtype probe-req"
 
