@@ -26,7 +26,7 @@ if __name__ == "__main__":
     ap.add_argument("-e", "--essid", nargs="+", help="ESSID of the APs to filter (space-separated list)")
     ap.add_argument("-f", "--file", type=FileType("a", encoding="UTF-8"), help="output file to save the captured data (CSV format)")
     ap.add_argument("-i", "--interface", required=True, help="wireless interface to use (must be in monitor mode)")
-    ap.add_argument("-s", "--stations", nargs="+", help="MAC addresses of the stations to filter (space-separated list)")
+    ap.add_argument("-s", "--station", nargs="+", help="MAC addresses of the stations to filter (space-separated list)")
     args = vars(ap.parse_args())
 
     if not geteuid() == 0:
@@ -40,10 +40,10 @@ if __name__ == "__main__":
 
     filter = "type mgt subtype probe-req"
 
-    if args["stations"]:
+    if args["station"]:
         filter += " && ("
 
-        for i, station in enumerate(args["stations"]):
+        for i, station in enumerate(args["station"]):
             if i == 0:
                 filter += "ether src host {s_mac}".format(s_mac=station)
             else:
