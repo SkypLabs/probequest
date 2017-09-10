@@ -1,0 +1,2 @@
+argparse==1.4.0
+scapy-python3==0.21
