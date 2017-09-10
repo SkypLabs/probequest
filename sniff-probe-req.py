@@ -15,7 +15,7 @@ def parseProbeReq(packet):
     if essid:
         print("{timestamp} - {s_mac} -> {essid}".format(timestamp=timestamp, s_mac=s_mac, essid=essid))
 
-        if outfile:
+        if "outfile" in globals():
             outfile.writerow([timestamp, s_mac, essid])
 
 if __name__ == "__main__":
