@@ -34,10 +34,10 @@ How to
 ::
 
     usage: sniff-probe-req.py [-h] [-e ESSID [ESSID ...]]
-                              [--exclude EXCLUDE [EXCLUDE ...]] [-f FILE] -i
-                              INTERFACE [-s STATION [STATION ...]]
+                              [--exclude EXCLUDE [EXCLUDE ...]] -i INTERFACE
+                              [-o OUTPUT] [-r REGEX] [-s STATION [STATION ...]]
 
-    Wi-Fi probe requests sniffer
+    Wi-Fi Probe Requests Sniffer
 
     optional arguments:
       -h, --help            show this help message and exit
@@ -46,9 +46,12 @@ How to
       --exclude EXCLUDE [EXCLUDE ...]
                             MAC addresses of the stations to exclude (space-
                             separated list)
-      -f FILE, --file FILE  output file to save the captured data (CSV format)
       -i INTERFACE, --interface INTERFACE
                             wireless interface to use (must be in monitor mode)
+      -o OUTPUT, --output OUTPUT
+                            output file to save the captured data (CSV format)
+      -r REGEX, --regex REGEX
+                            regex to filter the ESSIDs
       -s STATION [STATION ...], --station STATION [STATION ...]
                             MAC addresses of the stations to filter (space-
                             separated list)
