@@ -2,9 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from scapy.all import *
+from csv import writer
 from os import geteuid
 from sys import argv, exit
-from argparse import ArgumentParser
+from argparse import ArgumentParser, FileType
 
 def parseProbeReq(packet):
     timestamp = packet.getlayer(RadioTap).time
@@ -14,13 +15,20 @@ def parseProbeReq(packet):
     if essid:
         print("{timestamp} - {s_mac} -> {essid}".format(timestamp=timestamp, s_mac=s_mac, essid=essid))
 
+        if outfile:
+            outfile.writerow([timestamp, s_mac, essid])
+
 if __name__ == "__main__":
     ap = ArgumentParser(description="Sniff Wifi probe requests")
     ap.add_argument("-i", "--interface", required=True, help="network interface to use")
+    ap.add_argument("-f", "--file", type=FileType("a", encoding="UTF-8"), help="output file to save the captured data (CSV format)")
     args = vars(ap.parse_args())
 
     if not geteuid() == 0:
         exit("[!] You must be root")
+
+    if args["file"]:
+        outfile = writer(args["file"], delimiter=";")
 
     print("[*] Start sniffing probe requests...")
 
