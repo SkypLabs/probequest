@@ -33,9 +33,9 @@ How to
 
 ::
 
-    usage: sniff-probe-req.py [-h] [-e ESSID [ESSID ...]]
-                              [--exclude EXCLUDE [EXCLUDE ...]] -i INTERFACE
-                              [-o OUTPUT] [-r REGEX] [-s STATION [STATION ...]]
+    usage: sniff-probe-req [-h] [-e ESSID [ESSID ...]]
+                           [--exclude EXCLUDE [EXCLUDE ...]] -i INTERFACE
+                           [-o OUTPUT] [-r REGEX] [-s STATION [STATION ...]]
 
     Wi-Fi Probe Requests Sniffer
 

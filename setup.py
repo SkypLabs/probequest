@@ -28,6 +28,6 @@ setup(
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
     ],
-    scripts = ['sniff-probe-req.py'],
+    scripts = ['sniff-probe-req'],
     install_requires = ['argparse', 'scapy-python3'],
 )
