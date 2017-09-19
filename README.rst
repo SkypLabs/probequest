@@ -25,15 +25,15 @@ This software requires Python 3 and the following dependencies:
 
 Also, `tcpdump <http://www.tcpdump.org/>`__ has to be installed and in the PATH.
 
-Using pip
----------
+Installation
+============
 
 ::
 
-    pip3 install -r requirements.txt
+    pip3 install --upgrade sniff-probe-req
 
 How to
-------
+======
 
 ::
 
@@ -61,6 +61,6 @@ How to
                             separated list)
 
 License
--------
+=======
 
 `GPL version 3 <https://www.gnu.org/licenses/gpl.txt>`__
