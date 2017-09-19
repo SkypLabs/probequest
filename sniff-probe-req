@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from scapy.all import *
+from netaddr import EUI, NotRegisteredError
 from csv import writer
 from re import compile, match
 from os import geteuid
@@ -13,6 +14,8 @@ def parseProbeReq(packet):
     s_mac = packet.getlayer(RadioTap).addr2
     essid = packet.getlayer(Dot11ProbeReq).info.decode("utf-8")
 
+    mac_org = getMACOrganisation(s_mac)
+
     # If the probe request contains an ESSID.
     if essid:
         if "essid_filter" in globals() and not essid in essid_filter:
@@ -21,10 +24,21 @@ def parseProbeReq(packet):
         if "essid_regex" in globals() and not match(essid_regex, essid):
             return
 
-        print("{timestamp} - {s_mac} -> {essid}".format(timestamp=timestamp, s_mac=s_mac, essid=essid))
+        print("{timestamp} - {s_mac} ({mac_org}) -> {essid}".format(
+            timestamp=timestamp,
+            s_mac=s_mac,
+            mac_org=mac_org,
+            essid=essid
+        ))
 
         if "outfile" in globals():
             outfile.writerow([timestamp, s_mac, essid])
+
+def getMACOrganisation(mac):
+    try:
+        return EUI(mac).oui.registration().org
+    except NotRegisteredError:
+        return None
 
 if __name__ == "__main__":
     ap = ArgumentParser(description="Wi-Fi Probe Requests Sniffer")
