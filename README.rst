@@ -17,9 +17,11 @@ paper <https://brambonne.com/docs/bonne14sasquatch.pdf>`__.
 Dependencies
 ============
 
--  Python 3
--  `Scapy <https://github.com/phaethon/scapy>`__
+This software requires Python 3 and the following dependencies:
+
 -  `argparse <https://pypi.python.org/pypi/argparse>`__
+-  `netaddr <https://pypi.python.org/pypi/netaddr>`__
+-  `scapy <https://github.com/phaethon/scapy>`__
 
 Using pip
 ---------
