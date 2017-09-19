@@ -23,6 +23,8 @@ This software requires Python 3 and the following dependencies:
 -  `netaddr <https://pypi.python.org/pypi/netaddr>`__
 -  `scapy <https://github.com/phaethon/scapy>`__
 
+Also, `tcpdump <http://www.tcpdump.org/>`__ has to be installed and in the PATH.
+
 Using pip
 ---------
 
