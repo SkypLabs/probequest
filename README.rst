@@ -68,4 +68,4 @@ License
 `GPL version 3 <https://www.gnu.org/licenses/gpl.txt>`__
 
 .. |Known Vulnerabilities| image:: https://snyk.io/test/github/SkypLabs/sniff-probe-req/badge.svg
-   :target: https://snyk.io/test/github/SkypLabs/sniff-probe-req/badge.svg
+   :target: https://snyk.io/test/github/SkypLabs/sniff-probe-req
