@@ -2,7 +2,7 @@
 Wi-Fi Probe Requests Sniffer
 ============================
 
-|Known Vulnerabilities|
+|Dependency Status| |Known Vulnerabilities|
 
 This script allows you to sniff the Wi-Fi probe requests passing near
 your wireless interface.
@@ -67,5 +67,7 @@ License
 
 `GPL version 3 <https://www.gnu.org/licenses/gpl.txt>`__
 
+.. |Dependency Status| image:: https://gemnasium.com/badges/github.com/SkypLabs/sniff-probe-req.svg
+   :target: https://gemnasium.com/github.com/SkypLabs/sniff-probe-req
 .. |Known Vulnerabilities| image:: https://snyk.io/test/github/SkypLabs/sniff-probe-req/badge.svg
    :target: https://snyk.io/test/github/SkypLabs/sniff-probe-req
