@@ -37,6 +37,10 @@ Installation
 How to
 ======
 
+First of all, you need to `enable the monitor mode of your wireless interface <https://github.com/SkypLabs/sniff-probe-req/wiki/Enabling-the-Monitor-Mode>`__.
+
+Then:
+
 ::
 
     usage: sniff-probe-req [-h] [-e ESSID [ESSID ...]]
@@ -61,6 +65,12 @@ How to
       -s STATION [STATION ...], --station STATION [STATION ...]
                             MAC addresses of the stations to filter (space-
                             separated list)
+
+For example:
+
+::
+
+    sniff-probe-req -i wlan0
 
 License
 =======
