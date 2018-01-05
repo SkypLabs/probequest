@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+This script allows you to sniff the Wi-Fi probe requests
+passing near your wireless interface.
+"""
+
 from scapy.all import *
 from netaddr import EUI, NotRegisteredError
 from csv import writer
@@ -10,6 +15,10 @@ from sys import argv, exit
 from argparse import ArgumentParser, FileType
 
 def parseProbeReq(packet):
+    """
+    Callback function used to parse the probe request packets.
+    """
+
     timestamp = packet.getlayer(RadioTap).time
     s_mac = packet.getlayer(RadioTap).addr2
     essid = packet.getlayer(Dot11ProbeReq).info.decode("utf-8")
@@ -35,6 +44,10 @@ def parseProbeReq(packet):
             outfile.writerow([timestamp, s_mac, essid])
 
 def getMACOrganisation(mac):
+    """
+    Returns the OUI of a MAC address as a string.
+    """
+
     try:
         return EUI(mac).oui.registration().org
     except NotRegisteredError:
