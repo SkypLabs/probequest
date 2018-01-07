@@ -142,7 +142,9 @@ class ProbeRequestSniffer:
             self.stop_parser = Event()
 
         def run(self):
-            while not self.stop_parser.isSet():
+            # The parser continues to do its job even after the call of the
+            # join method if the queue is not empty.
+            while not self.stop_parser.isSet() or not self.new_packets.empty():
                 try:
                     packet = self.new_packets.get(timeout=1)
                     probe_request = self.parse(packet)
