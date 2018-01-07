@@ -60,7 +60,9 @@ class ProbeRequestSniffer:
 
     def start(self):
         """
-        Start the sniffer.
+        Start the probe request sniffer.
+
+        This method will start the sniffing thread and the parsing thread.
         """
 
         self.sniffer.start()
@@ -68,7 +70,9 @@ class ProbeRequestSniffer:
 
     def stop(self):
         """
-        Stop the sniffer.
+        Stop the probe request sniffer.
+
+        This method will stop the sniffing thread and the parsing thread.
         """
 
         self.sniffer.join()
@@ -76,7 +80,7 @@ class ProbeRequestSniffer:
 
     class PacketSniffer(Thread):
         """
-        A packet sniffer.
+        A packet sniffing thread.
         """
 
         def __init__(self, new_packets, interface, filters):
@@ -99,7 +103,7 @@ class ProbeRequestSniffer:
 
         def join(self, timeout=None):
             """
-            Stop the sniffer.
+            Stop the packet sniffer.
             """
 
             self.stop_sniffer.set()
@@ -114,7 +118,7 @@ class ProbeRequestSniffer:
 
     class ProbeRequestParser(Thread):
         """
-        A Wi-Fi probe request parser.
+        A Wi-Fi probe request parsing thread.
         """
 
         def __init__(self, new_packets, display_func, storage_func):
@@ -144,7 +148,7 @@ class ProbeRequestSniffer:
 
         def join(self, timeout=None):
             """
-            Stop the current thread.
+            Stop the probe request parsing thread.
             """
 
             self.stop_parser.set()
