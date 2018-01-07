@@ -6,52 +6,171 @@ This script allows you to sniff the Wi-Fi probe requests
 passing near your wireless interface.
 """
 
-from scapy.all import *
-from netaddr import EUI, NotRegisteredError
-from csv import writer
-from re import compile, match, IGNORECASE
-from os import geteuid
-from sys import argv, exit
 from argparse import ArgumentParser, FileType
+from csv import writer
+from netaddr import EUI, NotRegisteredError
+from os import geteuid
+from queue import Queue, Empty
+from re import compile, match, IGNORECASE
+from scapy.all import *
+from sys import argv, exit
+from threading import Thread, Event
+from time import sleep
 
-def parseProbeReq(packet):
+class ProbeRequest:
     """
-    Callback function used to parse the probe request packets.
-    """
-
-    timestamp = packet.getlayer(RadioTap).time
-    s_mac = packet.getlayer(RadioTap).addr2
-    essid = packet.getlayer(Dot11ProbeReq).info.decode("utf-8")
-
-    mac_org = getMACOrganisation(s_mac)
-
-    # If the probe request contains an ESSID.
-    if essid:
-        if "essid_filter" in globals() and not essid in essid_filter:
-            return
-
-        if "essid_regex" in globals() and not match(essid_regex, essid):
-            return
-
-        print("{timestamp} - {s_mac} ({mac_org}) -> {essid}".format(
-            timestamp=timestamp,
-            s_mac=s_mac,
-            mac_org=mac_org,
-            essid=essid
-        ))
-
-        if "outfile" in globals():
-            outfile.writerow([timestamp, s_mac, essid])
-
-def getMACOrganisation(mac):
-    """
-    Returns the OUI of a MAC address as a string.
+    A Wi-Fi probe request.
     """
 
-    try:
-        return EUI(mac).oui.registration().org
-    except NotRegisteredError:
-        return None
+    def __init__(self, timestamp, s_mac, s_mac_oui, essid):
+        self.timestamp = timestamp
+        self.s_mac = s_mac
+        self.s_mac_oui = s_mac_oui
+        self.essid = essid
+
+class ProbeRequestSniffer:
+    """
+    A Wi-Fi probe request sniffer.
+    """
+
+    def __init__(self, interface, filters, display_func=lambda p: None, storage_func=lambda p: None):
+        if not hasattr(display_func, '__call__'):
+            raise TypeError('The display function parameter is not a callable object')
+        if not hasattr(storage_func, '__call__'):
+            raise TypeError('The storage function parameter is not a callable object')
+
+        self.interface = interface
+        self.filters = filters
+        self.display_func = display_func
+        self.storage_func = storage_func
+
+        self.new_packets = Queue()
+
+        self.sniffer = self.PacketSniffer(
+            self.new_packets,
+            self.interface,
+            self.filters
+        )
+
+        self.parser = self.ProbeRequestParser(
+            self.new_packets,
+            self.display_func,
+            self.storage_func
+        )
+
+    def start(self):
+        """
+        Start the sniffer.
+        """
+
+        self.sniffer.start()
+        self.parser.start()
+
+    def stop(self):
+        """
+        Stop the sniffer.
+        """
+
+        self.sniffer.join()
+        self.parser.join()
+
+    class PacketSniffer(Thread):
+        """
+        A packet sniffer.
+        """
+
+        def __init__(self, new_packets, interface, filters):
+            super().__init__()
+
+            self.new_packets = new_packets
+            self.interface = interface
+            self.filters = filters
+
+            self.stop_sniffer = Event()
+
+        def run(self):
+            sniff(
+                iface=self.interface,
+                filter=self.filters,
+                store=False,
+                prn=self.new_packet,
+                stop_callback=self.stop_sniffer.isSet
+            )
+
+        def join(self, timeout=None):
+            """
+            Stop the sniffer.
+            """
+
+            self.stop_sniffer.set()
+            super().join(timeout)
+
+        def new_packet(self, packet):
+            """
+            Add a new packet to the queue to be processed.
+            """
+
+            self.new_packets.put(packet)
+
+    class ProbeRequestParser(Thread):
+        """
+        A Wi-Fi probe request parser.
+        """
+
+        def __init__(self, new_packets, display_func, storage_func):
+            super().__init__()
+
+            self.new_packets = new_packets
+            self.display_func = display_func
+            self.storage_func = storage_func
+
+            self.stop_parser = Event()
+
+        def run(self):
+            while not self.stop_parser.isSet():
+                try:
+                    packet = self.new_packets.get(timeout=1)
+                    probe_request = self.parse(packet)
+
+                    if not probe_request.essid:
+                        continue
+
+                    self.display_func(probe_request)
+                    self.storage_func(probe_request)
+
+                    self.new_packets.task_done()
+                except Empty:
+                    pass
+
+        def join(self, timeout=None):
+            """
+            Stop the current thread.
+            """
+
+            self.stop_parser.set()
+            super().join(timeout)
+
+        def parse(self, packet):
+            """
+            Parse the packet and return a probe request object.
+            """
+
+            timestamp = packet.getlayer(RadioTap).time
+            s_mac = packet.getlayer(RadioTap).addr2
+            s_mac_oui = self.get_mac_organisation(s_mac)
+            essid = packet.getlayer(Dot11ProbeReq).info.decode("utf-8")
+
+            return ProbeRequest(timestamp, s_mac, s_mac_oui, essid)
+
+        def get_mac_organisation(self, mac):
+            """
+            Returns the OUI of a MAC address as a string.
+            """
+
+            try:
+                return EUI(mac).oui.registration().org
+            except NotRegisteredError:
+                return None
 
 if __name__ == "__main__":
     ap = ArgumentParser(description="Wi-Fi Probe Requests Sniffer")
@@ -83,33 +202,54 @@ if __name__ == "__main__":
         else:
             essid_regex = compile(args["regex"])
 
-    filter = "type mgt subtype probe-req"
+    filters = "type mgt subtype probe-req"
 
     if args["exclude"]:
-        filter += " and not ("
+        filters += " and not ("
 
         for i, station in enumerate(args["exclude"]):
             if i == 0:
-                filter += "ether src host {s_mac}".format(s_mac=station)
+                filters += "ether src host {s_mac}".format(s_mac=station)
             else:
-                filter += " || ether src host {s_mac}".format(s_mac=station)
+                filters += " || ether src host {s_mac}".format(s_mac=station)
 
-        filter += ")"
+        filters += ")"
 
     if args["station"]:
-        filter += " and ("
+        filters += " and ("
 
         for i, station in enumerate(args["station"]):
             if i == 0:
-                filter += "ether src host {s_mac}".format(s_mac=station)
+                filters += "ether src host {s_mac}".format(s_mac=station)
             else:
-                filter += " || ether src host {s_mac}".format(s_mac=station)
+                filters += " || ether src host {s_mac}".format(s_mac=station)
 
-        filter += ")"
+        filters += ")"
+
+    def display_func(probe_request):
+        print("{timestamp} - {s_mac} ({mac_org}) -> {essid}".format(
+            timestamp=probe_request.timestamp,
+            s_mac=probe_request.s_mac,
+            mac_org=probe_request.s_mac_oui,
+            essid=probe_request.essid
+        ))
 
     print("[*] Start sniffing probe requests...")
 
     try:
-        sniff(iface=args["interface"], filter=filter, prn=parseProbeReq)
+        sniffer = ProbeRequestSniffer(
+            args["interface"],
+            filters,
+            display_func
+        )
+
+        sniffer.start()
+
+        while True:
+            sleep(100)
     except IOError:
         exit("[!] Interface doesn't exist")
+    except KeyboardInterrupt:
+        print("[*] Stopping the threads...")
+        sniffer.stop()
+        print("[*] Bye!")
