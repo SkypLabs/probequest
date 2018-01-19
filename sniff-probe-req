@@ -44,29 +44,28 @@ class ProbeRequestSniffer:
     A Wi-Fi probe request sniffer.
     """
 
-    def __init__(self, interface, filters, display_func=lambda p: None, storage_func=lambda p: None):
+    def __init__(self, interface, essid_filters=None, essid_regex=None, ignore_case=False, mac_exclusions=None, mac_filters=None, display_func=lambda p: None, storage_func=lambda p: None):
         if not hasattr(display_func, '__call__'):
             raise TypeError('The display function parameter is not a callable object')
         if not hasattr(storage_func, '__call__'):
             raise TypeError('The storage function parameter is not a callable object')
 
-        self.interface = interface
-        self.filters = filters
-        self.display_func = display_func
-        self.storage_func = storage_func
-
         self.new_packets = Queue()
 
         self.sniffer = self.PacketSniffer(
             self.new_packets,
-            self.interface,
-            self.filters
+            interface,
+            mac_exclusions=mac_exclusions,
+            mac_filters=mac_filters
         )
 
         self.parser = self.ProbeRequestParser(
             self.new_packets,
-            self.display_func,
-            self.storage_func
+            essid_filters=essid_filters,
+            essid_regex=essid_regex,
+            ignore_case=ignore_case,
+            display_func=display_func,
+            storage_func=storage_func
         )
 
     def start(self):
@@ -94,19 +93,41 @@ class ProbeRequestSniffer:
         A packet sniffing thread.
         """
 
-        def __init__(self, new_packets, interface, filters):
+        def __init__(self, new_packets, interface, mac_exclusions=None, mac_filters=None):
             super().__init__()
 
             self.new_packets = new_packets
             self.interface = interface
-            self.filters = filters
 
+            self.frame_filters = "type mgt subtype probe-req"
             self.stop_sniffer = Event()
+
+            if mac_exclusions is not None:
+                self.frame_filters += " and not ("
+
+                for i, station in enumerate(mac_exclusions):
+                    if i == 0:
+                        self.frame_filters += "ether src host {s_mac}".format(s_mac=station)
+                    else:
+                        self.frame_filters += " || ether src host {s_mac}".format(s_mac=station)
+
+                self.frame_filters += ")"
+
+            if mac_filters is not None:
+                self.frame_filters += " and ("
+
+                for i, station in enumerate(mac_filters):
+                    if i == 0:
+                        self.frame_filters += "ether src host {s_mac}".format(s_mac=station)
+                    else:
+                        self.frame_filters += " || ether src host {s_mac}".format(s_mac=station)
+
+                self.frame_filters += ")"
 
         def run(self):
             sniff(
                 iface=self.interface,
-                filter=self.filters,
+                filter=self.frame_filters,
                 store=False,
                 prn=self.new_packet,
                 stop_callback=self.stop_sniffer.isSet
@@ -132,14 +153,21 @@ class ProbeRequestSniffer:
         A Wi-Fi probe request parsing thread.
         """
 
-        def __init__(self, new_packets, display_func, storage_func):
+        def __init__(self, new_packets, essid_filters=None, essid_regex=None, ignore_case=False, display_func=lambda p: None, storage_func=lambda p: None):
             super().__init__()
 
             self.new_packets = new_packets
+            self.essid_filters = essid_filters
             self.display_func = display_func
             self.storage_func = storage_func
 
             self.stop_parser = Event()
+
+            if essid_regex is not None:
+                if ignore_case:
+                    self.essid_regex = compile(essid_regex, IGNORECASE)
+                else:
+                    self.essid_regex = compile(essid_regex)
 
         def run(self):
             # The parser continues to do its job even after the call of the
@@ -150,6 +178,12 @@ class ProbeRequestSniffer:
                     probe_request = self.parse(packet)
 
                     if not probe_request.essid:
+                        continue
+
+                    if self.essid_filters is not None and not probe_request.essid in self.essid_filters:
+                        continue
+
+                    if self.essid_regex is not None and not match(self.essid_regex, probe_request.essid):
                         continue
 
                     self.display_func(probe_request)
@@ -199,39 +233,6 @@ if __name__ == "__main__":
     if args["output"]:
         outfile = writer(args["output"], delimiter=";")
 
-    if args["essid"]:
-        essid_filter = args["essid"]
-
-    if args["regex"]:
-        if args["ignore_case"]:
-            essid_regex = compile(args["regex"], IGNORECASE)
-        else:
-            essid_regex = compile(args["regex"])
-
-    filters = "type mgt subtype probe-req"
-
-    if args["exclude"]:
-        filters += " and not ("
-
-        for i, station in enumerate(args["exclude"]):
-            if i == 0:
-                filters += "ether src host {s_mac}".format(s_mac=station)
-            else:
-                filters += " || ether src host {s_mac}".format(s_mac=station)
-
-        filters += ")"
-
-    if args["station"]:
-        filters += " and ("
-
-        for i, station in enumerate(args["station"]):
-            if i == 0:
-                filters += "ether src host {s_mac}".format(s_mac=station)
-            else:
-                filters += " || ether src host {s_mac}".format(s_mac=station)
-
-        filters += ")"
-
     def display_func(probe_request):
         print("{timestamp} - {s_mac} ({mac_org}) -> {essid}".format(
             timestamp=probe_request.timestamp,
@@ -245,8 +246,12 @@ if __name__ == "__main__":
     try:
         sniffer = ProbeRequestSniffer(
             args["interface"],
-            filters,
-            display_func
+            essid_filters=args["essid"],
+            essid_regex=args["regex"],
+            ignore_case=args["ignore_case"],
+            mac_exclusions=args["exclude"],
+            mac_filters=args["station"],
+            display_func=display_func
         )
 
         sniffer.start()
