@@ -44,7 +44,7 @@ class ProbeRequestSniffer:
     A Wi-Fi probe request sniffer.
     """
 
-    def __init__(self, interface, essid_filters=None, essid_regex=None, ignore_case=False, mac_exclusions=None, mac_filters=None, display_func=lambda p: None, storage_func=lambda p: None):
+    def __init__(self, interface, essid_filters=None, essid_regex=None, ignore_case=False, mac_exclusions=None, mac_filters=None, display_func=lambda p: None, storage_func=lambda p: None, debug=False):
         if not hasattr(display_func, '__call__'):
             raise TypeError('The display function parameter is not a callable object')
         if not hasattr(storage_func, '__call__'):
@@ -56,7 +56,8 @@ class ProbeRequestSniffer:
             self.new_packets,
             interface,
             mac_exclusions=mac_exclusions,
-            mac_filters=mac_filters
+            mac_filters=mac_filters,
+            debug=debug
         )
 
         self.parser = self.ProbeRequestParser(
@@ -65,7 +66,8 @@ class ProbeRequestSniffer:
             essid_regex=essid_regex,
             ignore_case=ignore_case,
             display_func=display_func,
-            storage_func=storage_func
+            storage_func=storage_func,
+            debug=debug
         )
 
     def start(self):
@@ -93,7 +95,7 @@ class ProbeRequestSniffer:
         A packet sniffing thread.
         """
 
-        def __init__(self, new_packets, interface, mac_exclusions=None, mac_filters=None):
+        def __init__(self, new_packets, interface, mac_exclusions=None, mac_filters=None, debug=False):
             super().__init__()
 
             self.new_packets = new_packets
@@ -124,6 +126,9 @@ class ProbeRequestSniffer:
 
                 self.frame_filters += ")"
 
+            if debug:
+                print("[!] Frame filters: " + self.frame_filters)
+
         def run(self):
             sniff(
                 iface=self.interface,
@@ -153,7 +158,7 @@ class ProbeRequestSniffer:
         A Wi-Fi probe request parsing thread.
         """
 
-        def __init__(self, new_packets, essid_filters=None, essid_regex=None, ignore_case=False, display_func=lambda p: None, storage_func=lambda p: None):
+        def __init__(self, new_packets, essid_filters=None, essid_regex=None, ignore_case=False, display_func=lambda p: None, storage_func=lambda p: None, debug=False):
             super().__init__()
 
             self.new_packets = new_packets
@@ -162,6 +167,11 @@ class ProbeRequestSniffer:
             self.storage_func = storage_func
 
             self.stop_parser = Event()
+
+            if debug:
+                print("[!] ESSID filters: " + str(self.essid_filters))
+                print("[!] ESSID regex: " + str(essid_regex))
+                print("[!] Ignore case: " + str(ignore_case))
 
             if essid_regex is not None:
                 if ignore_case:
@@ -217,6 +227,7 @@ if __name__ == "__main__":
     essid_arguments = ap.add_mutually_exclusive_group()
     station_arguments = ap.add_mutually_exclusive_group()
 
+    ap.add_argument("--debug", action="store_true", help="debug mode")
     essid_arguments.add_argument("-e", "--essid", nargs="+", help="ESSID of the APs to filter (space-separated list)")
     station_arguments.add_argument("--exclude", nargs="+", help="MAC addresses of the stations to exclude (space-separated list)")
     ap.add_argument("-i", "--interface", required=True, help="wireless interface to use (must be in monitor mode)")
@@ -225,6 +236,7 @@ if __name__ == "__main__":
     essid_arguments.add_argument("-r", "--regex", help="regex to filter the ESSIDs")
     station_arguments.add_argument("-s", "--station", nargs="+", help="MAC addresses of the stations to filter (space-separated list)")
 
+    ap.set_defaults(debug=False)
     ap.set_defaults(ignore_case=False)
     args = vars(ap.parse_args())
 
@@ -252,7 +264,8 @@ if __name__ == "__main__":
             ignore_case=args["ignore_case"],
             mac_exclusions=args["exclude"],
             mac_filters=args["station"],
-            display_func=display_func
+            display_func=display_func,
+            debug=args["debug"]
         )
 
         sniffer.start()
