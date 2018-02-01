@@ -193,6 +193,8 @@ class ProbeRequestSniffer:
                     self.essid_regex = compile(essid_regex, IGNORECASE)
                 else:
                     self.essid_regex = compile(essid_regex)
+            else:
+                self.essid_regex = None
 
         def run(self):
             # The parser continues to do its job even after the call of the
