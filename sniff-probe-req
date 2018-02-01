@@ -80,6 +80,11 @@ class ProbeRequestSniffer:
         self.sniffer.start()
         self.parser.start()
 
+        e = self.sniffer.get_exception()
+
+        if e is not None:
+            raise e
+
     def stop(self):
         """
         Stops the probe request sniffer.
@@ -103,6 +108,7 @@ class ProbeRequestSniffer:
 
             self.frame_filters = "type mgt subtype probe-req"
             self.stop_sniffer = Event()
+            self.exception = None
 
             if mac_exclusions is not None:
                 self.frame_filters += " and not ("
@@ -130,13 +136,16 @@ class ProbeRequestSniffer:
                 print("[!] Frame filters: " + self.frame_filters)
 
         def run(self):
-            sniff(
-                iface=self.interface,
-                filter=self.frame_filters,
-                store=False,
-                prn=self.new_packet,
-                stop_callback=self.stop_sniffer.isSet
-            )
+            try:
+                sniff(
+                    iface=self.interface,
+                    filter=self.frame_filters,
+                    store=False,
+                    prn=self.new_packet,
+                    stop_callback=self.stop_sniffer.isSet
+                )
+            except Exception as e:
+                self.exception = e
 
         def join(self, timeout=None):
             """
@@ -152,6 +161,12 @@ class ProbeRequestSniffer:
             """
 
             self.new_packets.put(packet)
+
+        def get_exception(self):
+            """
+            Returns the raised exception if any, otherwise returns none.
+            """
+            return self.exception
 
     class ProbeRequestParser(Thread):
         """
@@ -272,8 +287,9 @@ if __name__ == "__main__":
 
         while True:
             sleep(100)
-    except IOError:
-        exit("[!] Interface doesn't exist")
+    except OSError:
+        sniffer.stop()
+        exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))
     except KeyboardInterrupt:
         print("[*] Stopping the threads...")
         sniffer.stop()
