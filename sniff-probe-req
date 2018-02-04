@@ -285,8 +285,11 @@ if __name__ == "__main__":
     if args["output"]:
         outfile = writer(args["output"], delimiter=";")
 
-    def display_func(probe_request):
-        print(probe_request)
+    def display_probe_req(probe_req):
+        print(probe_req)
+
+    def write_csv(probe_req):
+        outfile.writerow([probe_req.timestamp, probe_req.s_mac, probe_req.s_mac_oui, probe_req.essid])
 
     print("[*] Start sniffing probe requests...")
 
@@ -298,7 +301,8 @@ if __name__ == "__main__":
             ignore_case=args["ignore_case"],
             mac_exclusions=args["exclude"],
             mac_filters=args["station"],
-            display_func=display_func,
+            display_func=display_probe_req,
+            storage_func=write_csv,
             debug=args["debug"]
         )
 
@@ -308,8 +312,16 @@ if __name__ == "__main__":
             sleep(100)
     except OSError:
         sniffer.stop()
+
+        if args["output"]:
+            args["output"].close()
+
         exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))
     except KeyboardInterrupt:
         print("[*] Stopping the threads...")
         sniffer.stop()
+
+        if args["output"]:
+            args["output"].close()
+
         print("[*] Bye!")
