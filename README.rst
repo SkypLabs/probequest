@@ -23,7 +23,7 @@ This software requires Python 3 and the following dependencies:
 
 -  `argparse <https://pypi.python.org/pypi/argparse>`__
 -  `netaddr <https://pypi.python.org/pypi/netaddr>`__
--  `scapy <https://github.com/phaethon/scapy>`__
+-  `scapy <https://github.com/secdev/scapy>`__
 
 Also, `tcpdump <http://www.tcpdump.org/>`__ has to be installed and in the PATH.
 
@@ -43,14 +43,16 @@ Then:
 
 ::
 
-    usage: sniff-probe-req [-h] [-e ESSID [ESSID ...]]
+    usage: sniff-probe-req [-h] [--debug] [-e ESSID [ESSID ...]]
                            [--exclude EXCLUDE [EXCLUDE ...]] -i INTERFACE
-                           [-o OUTPUT] [-r REGEX] [-s STATION [STATION ...]]
+                           [--ignore-case] [-o OUTPUT] [-r REGEX]
+                           [-s STATION [STATION ...]]
 
     Wi-Fi Probe Requests Sniffer
 
     optional arguments:
       -h, --help            show this help message and exit
+      --debug               debug mode
       -e ESSID [ESSID ...], --essid ESSID [ESSID ...]
                             ESSID of the APs to filter (space-separated list)
       --exclude EXCLUDE [EXCLUDE ...]
@@ -58,6 +60,8 @@ Then:
                             separated list)
       -i INTERFACE, --interface INTERFACE
                             wireless interface to use (must be in monitor mode)
+      --ignore-case         ignore case distinctions in the regex pattern
+                            (default: false)
       -o OUTPUT, --output OUTPUT
                             output file to save the captured data (CSV format)
       -r REGEX, --regex REGEX
