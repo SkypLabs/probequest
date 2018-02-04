@@ -15,7 +15,7 @@ from re import compile, match, IGNORECASE
 from scapy.all import *
 from sys import argv, exit
 from threading import Thread, Event
-from time import sleep
+from time import sleep, localtime, strftime
 
 class ProbeRequest:
     """
@@ -31,7 +31,7 @@ class ProbeRequest:
 
     def __str__(self):
         return "{timestamp} - {s_mac} ({mac_org}) -> {essid}".format(
-            timestamp=self.timestamp,
+            timestamp=strftime("%a, %d %b %Y %H:%M:%S %Z", localtime(self.timestamp)),
             s_mac=self.s_mac,
             mac_org=self.s_mac_oui,
             essid=self.essid
