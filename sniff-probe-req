@@ -44,6 +44,8 @@ class ProbeRequestSniffer:
     A Wi-Fi probe request sniffer.
     """
 
+    SNIFFER_STOP_TIMEOUT = 2.0
+
     def __init__(self, interface, essid_filters=None, essid_regex=None, ignore_case=False, mac_exclusions=None, mac_filters=None, display_func=lambda p: None, storage_func=lambda p: None, debug=False):
         if not hasattr(display_func, '__call__'):
             raise TypeError('The display function parameter is not a callable object')
@@ -92,7 +94,11 @@ class ProbeRequestSniffer:
         This method will stop the sniffing thread and the parsing thread.
         """
 
-        self.sniffer.join()
+        self.sniffer.join(timeout=ProbeRequestSniffer.SNIFFER_STOP_TIMEOUT)
+
+        if self.sniffer.isAlive():
+            self.sniffer.socket.close()
+
         self.parser.join()
 
     class PacketSniffer(Thread):
@@ -103,10 +109,13 @@ class ProbeRequestSniffer:
         def __init__(self, new_packets, interface, mac_exclusions=None, mac_filters=None, debug=False):
             super().__init__()
 
+            self.daemon = True
+
             self.new_packets = new_packets
             self.interface = interface
 
             self.frame_filters = "type mgt subtype probe-req"
+            self.socket = None
             self.stop_sniffer = Event()
             self.exception = None
 
@@ -137,12 +146,17 @@ class ProbeRequestSniffer:
 
         def run(self):
             try:
-                sniff(
+                self.socket = conf.L2listen(
+                    type=ETH_P_ALL,
                     iface=self.interface,
-                    filter=self.frame_filters,
+                    filter=self.frame_filters
+                )
+
+                sniff(
+                    opened_socket=self.socket,
                     store=False,
                     prn=self.new_packet,
-                    stop_callback=self.stop_sniffer.isSet
+                    stop_filter=self.stop_sniffer.isSet
                 )
             except Exception as e:
                 self.exception = e
