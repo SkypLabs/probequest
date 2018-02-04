@@ -29,6 +29,14 @@ class ProbeRequest:
 
         self.s_mac_oui = self.get_mac_organisation()
 
+    def __str__(self):
+        return "{timestamp} - {s_mac} ({mac_org}) -> {essid}".format(
+            timestamp=self.timestamp,
+            s_mac=self.s_mac,
+            mac_org=self.s_mac_oui,
+            essid=self.essid
+        )
+
     def get_mac_organisation(self):
         """
         Returns the OUI of the MAC address as a string.
@@ -278,12 +286,7 @@ if __name__ == "__main__":
         outfile = writer(args["output"], delimiter=";")
 
     def display_func(probe_request):
-        print("{timestamp} - {s_mac} ({mac_org}) -> {essid}".format(
-            timestamp=probe_request.timestamp,
-            s_mac=probe_request.s_mac,
-            mac_org=probe_request.s_mac_oui,
-            essid=probe_request.essid
-        ))
+        print(probe_request)
 
     print("[*] Start sniffing probe requests...")
 
