@@ -7,13 +7,14 @@ python:
   - 3.3
   - 3.4
   - 3.5
+  - 3.6
 
-script: python setup.py install
+script: python setup.py test
 
 jobs:
   include:
   - stage: PyPI release
-    python: '3.5'
+    python: '3.6'
     deploy:
       provider: pypi
       distributions: sdist
