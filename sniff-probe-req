@@ -250,7 +250,8 @@ class ProbeRequestSniffer:
             self.stop_parser.set()
             super().join(timeout)
 
-        def parse(self, packet):
+        @staticmethod
+        def parse(packet):
             """
             Parses the packet and returns a probe request object.
             """
