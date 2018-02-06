@@ -43,7 +43,8 @@ class TestProbeRequest(unittest.TestCase):
 
         probe_req = ProbeRequest(timestamp, s_mac, essid)
 
-        self.assertEqual(str(probe_req), "Mon, 05 Feb 2018 23:07:07 GMT - aa:bb:cc:dd:ee:ff (None) -> Test ESSID")
+        self.assertNotEqual(str(probe_req).find("Mon, 05 Feb 2018 23:07:07"), -1)
+        self.assertNotEqual(str(probe_req).find("aa:bb:cc:dd:ee:ff (None) -> Test ESSID"), -1)
 
 class TestProbeRequestSniffer(unittest.TestCase):
     def test_without_parameters(self):
