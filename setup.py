@@ -30,4 +30,5 @@ setup(
     ],
     scripts = ['sniff-probe-req'],
     install_requires = ['argparse>=1.4.0', 'netaddr>=0.7.19', 'scapy-python3>=0.21'],
+    test_suite = 'test',
 )
