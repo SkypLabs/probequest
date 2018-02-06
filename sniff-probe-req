@@ -286,11 +286,13 @@ if __name__ == "__main__":
     if args["output"]:
         outfile = writer(args["output"], delimiter=";")
 
+        def write_csv(probe_req):
+            outfile.writerow([probe_req.timestamp, probe_req.s_mac, probe_req.s_mac_oui, probe_req.essid])
+    else:
+        write_csv = lambda p: None
+
     def display_probe_req(probe_req):
         print(probe_req)
-
-    def write_csv(probe_req):
-        outfile.writerow([probe_req.timestamp, probe_req.s_mac, probe_req.s_mac_oui, probe_req.essid])
 
     print("[*] Start sniffing probe requests...")
 
