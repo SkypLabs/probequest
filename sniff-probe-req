@@ -11,9 +11,9 @@ from csv import writer
 from netaddr import EUI, NotRegisteredError
 from os import geteuid
 from queue import Queue, Empty
-from re import compile, match, IGNORECASE
+from re import compile as rcompile, match, IGNORECASE
 from scapy.all import *
-from sys import exit
+from sys import exit as sys_exit
 from threading import Thread, Event
 from time import sleep, localtime, strftime
 
@@ -212,9 +212,9 @@ class ProbeRequestSniffer:
 
             if essid_regex is not None:
                 if ignore_case:
-                    self.essid_regex = compile(essid_regex, IGNORECASE)
+                    self.essid_regex = rcompile(essid_regex, IGNORECASE)
                 else:
-                    self.essid_regex = compile(essid_regex)
+                    self.essid_regex = rcompile(essid_regex)
             else:
                 self.essid_regex = None
 
@@ -280,7 +280,7 @@ if __name__ == "__main__":
     args = vars(ap.parse_args())
 
     if not geteuid() == 0:
-        exit("[!] You must be root")
+        sys_exit("[!] You must be root")
 
     if args["output"]:
         outfile = writer(args["output"], delimiter=";")
@@ -316,7 +316,7 @@ if __name__ == "__main__":
         if args["output"]:
             args["output"].close()
 
-        exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))
+        sys_exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))
     except KeyboardInterrupt:
         print("[*] Stopping the threads...")
         sniffer.stop()
