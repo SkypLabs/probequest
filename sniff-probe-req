@@ -13,7 +13,7 @@ from os import geteuid
 from queue import Queue, Empty
 from re import compile, match, IGNORECASE
 from scapy.all import *
-from sys import argv, exit
+from sys import exit
 from threading import Thread, Event
 from time import sleep, localtime, strftime
 
