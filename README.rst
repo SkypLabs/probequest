@@ -2,7 +2,7 @@
 Wi-Fi Probe Requests Sniffer
 ============================
 
-|Code Coverage| |Dependency Status| |Known Vulnerabilities|
+|Build Status| |Code Coverage| |Dependency Status| |Known Vulnerabilities|
 
 This script allows you to sniff the Wi-Fi probe requests passing near
 your wireless interface.
@@ -81,6 +81,8 @@ License
 
 `GPL version 3 <https://www.gnu.org/licenses/gpl.txt>`__
 
+.. |Build Status| image:: https://travis-ci.org/SkypLabs/sniff-probe-req.svg
+   :target: https://travis-ci.org/SkypLabs/sniff-probe-req
 .. |Code Coverage| image:: https://api.codacy.com/project/badge/Grade/16b9e70e51744256b37099ae8fe9132d
    :target: https://www.codacy.com/app/skyper/sniff-probe-req?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=SkypLabs/sniff-probe-req&amp;utm_campaign=Badge_Grade
 .. |Dependency Status| image:: https://gemnasium.com/badges/github.com/SkypLabs/sniff-probe-req.svg
