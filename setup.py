@@ -29,6 +29,6 @@ setup(
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
     ],
     scripts = ['sniff-probe-req'],
-    install_requires = ['argparse>=1.4.0', 'netaddr>=0.7.19', 'scapy-python3>=0.21'],
+    install_requires = ['argparse>=1.4.0', 'netaddr>=0.7.19', 'scapy>=2.4.0rc4'],
     test_suite = 'test',
 )
