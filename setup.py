@@ -5,7 +5,7 @@ from os.path import dirname, abspath, join
 from codecs import open as fopen
 
 DIR = dirname(abspath(__file__))
-VERSION = '0.5.0'
+VERSION = '0.5.1'
 
 with fopen(join(DIR, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
