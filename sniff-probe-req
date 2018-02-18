@@ -166,7 +166,7 @@ class ProbeRequestSniffer:
                     opened_socket=self.socket,
                     store=False,
                     prn=self.new_packet,
-                    stop_filter=self.stop_sniffer.isSet
+                    stop_filter=self.should_stop_sniffer
                 )
             except Exception as e:
                 self.exception = e
@@ -188,6 +188,13 @@ class ProbeRequestSniffer:
             """
 
             self.new_packets.put(packet)
+
+        def should_stop_sniffer(self, packet):
+            """
+            Returns true if the sniffer should be stopped and false otherwise.
+            """
+
+            return self.stop_sniffer.isSet()
 
         def get_exception(self):
             """
