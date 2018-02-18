@@ -125,7 +125,9 @@ class ProbeRequestSniffer:
             self.frame_filters = "type mgt subtype probe-req"
             self.socket = None
             self.stop_sniffer = Event()
+
             self.exception = None
+            self.debug = debug
 
             if mac_exclusions is not None:
                 self.frame_filters += " and not ("
@@ -149,7 +151,7 @@ class ProbeRequestSniffer:
 
                 self.frame_filters += ")"
 
-            if debug:
+            if self.debug:
                 print("[!] Frame filters: " + self.frame_filters)
 
         def run(self):
@@ -168,6 +170,9 @@ class ProbeRequestSniffer:
                 )
             except Exception as e:
                 self.exception = e
+
+                if self.debug:
+                    print("[!] Exception: " + str(e))
 
         def join(self, timeout=None):
             """
