@@ -6,17 +6,17 @@
 Welcome to Sniff-Probe-Req's documentation!
 ===========================================
 
-Contents:
+The Sniff-Probe-Req project consists of a Python module and a tool allowing to sniff the Wi-Fi probe requests passing near your wireless interface.
 
-.. toctree::
-   :maxdepth: 2
+This project has been inspired by `this paper`_.
 
+What are Wi-Fi probe requests?
+------------------------------
 
+Probe requests are sent by a station to elicit information about access points, in particular to determine if an access point is present or not in the nearby environment. Some devices (mostly smartphones and tablets) use these requests to determine if one of the networks they have previously been connected to is in range, leaking personal information.
 
-Indices and tables
-==================
+.. include:: installation.rst
+.. include:: usage.rst
+.. include:: development.rst
 
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
-
+.. _this paper: https://brambonne.com/docs/bonne14sasquatch.pdf
