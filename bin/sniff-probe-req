@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+This script allows you to sniff the Wi-Fi probe requests
+passing near your wireless interface.
+"""
+
+from argparse import ArgumentParser, FileType
+from csv import writer
+from os import geteuid
+from sys import exit as sys_exit
+from time import sleep
+
+from sniff_probe_req.probe_request_sniffer import ProbeRequestSniffer
+from sniff_probe_req.version import VERSION
+
+if __name__ == "__main__":
+    ap = ArgumentParser(description="Wi-Fi Probe Requests Sniffer")
+    essid_arguments = ap.add_mutually_exclusive_group()
+    station_arguments = ap.add_mutually_exclusive_group()
+
+    ap.add_argument("--debug", action="store_true", help="debug mode")
+    essid_arguments.add_argument("-e", "--essid", nargs="+", help="ESSID of the APs to filter (space-separated list)")
+    station_arguments.add_argument("--exclude", nargs="+", help="MAC addresses of the stations to exclude (space-separated list)")
+    ap.add_argument("-i", "--interface", required=True, help="wireless interface to use (must be in monitor mode)")
+    ap.add_argument("--ignore-case", action="store_true", help="ignore case distinctions in the regex pattern (default: false)")
+    ap.add_argument("-o", "--output", type=FileType("a"), help="output file to save the captured data (CSV format)")
+    essid_arguments.add_argument("-r", "--regex", help="regex to filter the ESSIDs")
+    station_arguments.add_argument("-s", "--station", nargs="+", help="MAC addresses of the stations to filter (space-separated list)")
+    ap.add_argument("--version", action="version", version=VERSION)
+
+    ap.set_defaults(debug=False)
+    ap.set_defaults(ignore_case=False)
+    args = vars(ap.parse_args())
+
+    if not geteuid() == 0:
+        sys_exit("[!] You must be root")
+
+    if args["output"]:
+        outfile = writer(args["output"], delimiter=";")
+
+        def write_csv(probe_req):
+            outfile.writerow([probe_req.timestamp, probe_req.s_mac, probe_req.s_mac_oui, probe_req.essid])
+    else:
+        write_csv = lambda p: None
+
+    def display_probe_req(probe_req):
+        print(probe_req)
+
+    print("[*] Start sniffing probe requests...")
+
+    try:
+        sniffer = ProbeRequestSniffer(
+            args["interface"],
+            essid_filters=args["essid"],
+            essid_regex=args["regex"],
+            ignore_case=args["ignore_case"],
+            mac_exclusions=args["exclude"],
+            mac_filters=args["station"],
+            display_func=display_probe_req,
+            storage_func=write_csv,
+            debug=args["debug"]
+        )
+
+        sniffer.start()
+
+        while True:
+            sleep(100)
+    except OSError:
+        sniffer.stop()
+
+        if args["output"]:
+            args["output"].close()
+
+        sys_exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))
+    except KeyboardInterrupt:
+        print("[*] Stopping the threads...")
+        sniffer.stop()
+
+        if args["output"]:
+            args["output"].close()
+
+        print("[*] Bye!")

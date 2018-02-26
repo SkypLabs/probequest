@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 
-from setuptools import setup
+from setuptools import setup, find_packages
 from os.path import dirname, abspath, join
 from codecs import open as fopen
 
+from sniff_probe_req.version import VERSION
+
 DIR = dirname(abspath(__file__))
-VERSION = '0.5.1'
 
 with fopen(join(DIR, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
@@ -28,7 +29,8 @@ setup(
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
     ],
-    scripts = ['sniff-probe-req'],
-    install_requires = ['argparse>=1.4.0', 'netaddr>=0.7.19', 'scapy>=2.4.0rc4'],
+    packages = find_packages(),
+    scripts = ['bin/sniff-probe-req'],
     test_suite = 'test',
+    install_requires = ['argparse>=1.4.0', 'netaddr>=0.7.19', 'scapy>=2.4.0rc4'],
 )
