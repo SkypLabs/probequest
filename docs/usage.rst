@@ -11,17 +11,17 @@ With `ifconfig` and `iwconfig`
 
 ::
 
-    ifconfig down <wireless interface>
-    iwconfig <wireless interface> mode monitor
-    ifconfig up <wireless interface>
+    sudo ifconfig down <wireless interface>
+    sudo iwconfig <wireless interface> mode monitor
+    sudo ifconfig up <wireless interface>
 
 For example:
 
 ::
 
-    ifconfig down wlan0
-    iwconfig wlan0 mode monitor
-    ifconfig up wlan0
+    sudo ifconfig down wlan0
+    sudo iwconfig wlan0 mode monitor
+    sudo ifconfig up wlan0
 
 With `airmon-ng` from aircrack-ng
 """""""""""""""""""""""""""""""""
@@ -30,19 +30,19 @@ To kill all the interfering processes:
 
 ::
 
-    airmon-ng check kill
+    sudo airmon-ng check kill
 
 To enable the monitor mode:
 
 ::
 
-    airmon-ng start <wireless interface>
+    sudo airmon-ng start <wireless interface>
 
 For example:
 
 ::
 
-    airmon-ng start wlan0
+    sudo airmon-ng start wlan0
 
 Example of use
 ^^^^^^^^^^^^^^

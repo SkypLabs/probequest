@@ -6,7 +6,7 @@ Using pip (recommanded)
 
 ::
 
-    pip3 install --upgrade sniff-probe-req
+    sudo pip3 install --upgrade sniff-probe-req
 
 From sources
 ^^^^^^^^^^^^

@@ -6,7 +6,7 @@
 Welcome to Sniff-Probe-Req's documentation!
 ===========================================
 
-The Sniff-Probe-Req project consists of a Python module and a tool allowing to sniff the Wi-Fi probe requests passing near your wireless interface.
+The Sniff-Probe-Req project consists of Python modules and tools allowing to sniff the Wi-Fi probe requests passing near your wireless interface.
 
 This project has been inspired by `this paper`_.
 
