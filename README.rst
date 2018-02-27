@@ -4,7 +4,7 @@ Wi-Fi Probe Requests Sniffer
 
 |Build Status| |Code Coverage| |Dependency Status| |Known Vulnerabilities|
 
-This script allows you to sniff the Wi-Fi probe requests passing near
+This software allows you to sniff the Wi-Fi probe requests passing near
 your wireless interface.
 
 Probe requests are sent by a station to elicit information about access
@@ -25,8 +25,6 @@ This software requires Python 3 and the following dependencies:
 -  `netaddr <https://pypi.python.org/pypi/netaddr>`__
 -  `scapy <https://github.com/secdev/scapy>`__
 
-Also, `tcpdump <http://www.tcpdump.org/>`__ has to be installed and in the PATH.
-
 Installation
 ============
 
@@ -37,7 +35,7 @@ Installation
 How to
 ======
 
-First of all, you need to `enable the monitor mode of your wireless interface <https://github.com/SkypLabs/sniff-probe-req/wiki/Enabling-the-Monitor-Mode>`__.
+First of all, you need to `enable the monitor mode of your wireless interface <http://sniff-probe-req.readthedocs.io/en/latest/#enabling-the-monitor-mode>`__.
 
 Then:
 
@@ -74,7 +72,9 @@ For example:
 
 ::
 
-    sniff-probe-req -i wlan0
+    sudo sniff-probe-req -i wlan0
+
+For further information, have a look at `the online documentation <http://sniff-probe-req.readthedocs.io/en/latest/>`__.
 
 License
 =======
