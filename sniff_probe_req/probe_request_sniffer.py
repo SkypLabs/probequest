@@ -13,10 +13,10 @@ class ProbeRequestSniffer:
     SNIFFER_STOP_TIMEOUT = 2.0
 
     def __init__(self, interface, essid_filters=None, essid_regex=None, ignore_case=False, mac_exclusions=None, mac_filters=None, display_func=lambda p: None, storage_func=lambda p: None, debug=False):
-        if not hasattr(display_func, '__call__'):
-            raise TypeError('The display function parameter is not a callable object')
-        if not hasattr(storage_func, '__call__'):
-            raise TypeError('The storage function parameter is not a callable object')
+        if not hasattr(display_func, "__call__"):
+            raise TypeError("The display function parameter is not a callable object")
+        if not hasattr(storage_func, "__call__"):
+            raise TypeError("The storage function parameter is not a callable object")
 
         self.new_packets = Queue()
 
