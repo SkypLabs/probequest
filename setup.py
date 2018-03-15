@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-from setuptools import setup, find_packages
-from os.path import dirname, abspath, join
 from codecs import open as fopen
+from os.path import dirname, abspath, join
+from setuptools import setup, find_packages
 
 from sniff_probe_req.version import VERSION
 
@@ -32,5 +33,9 @@ setup(
     packages = find_packages(),
     scripts = ['bin/sniff-probe-req'],
     test_suite = 'test',
-    install_requires = ['argparse>=1.4.0', 'netaddr>=0.7.19', 'scapy>=2.4.0rc4'],
+    install_requires = [
+        'argparse>=1.4.0',
+        'netaddr>=0.7.19',
+        'scapy>=2.4.0rc4',
+    ],
 )
