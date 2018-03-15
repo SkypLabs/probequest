@@ -50,3 +50,7 @@ Example of use
 ::
 
     sudo sniff-probe-req -i wlan0
+
+Here is a sample output:
+
+.. image:: _static/img/sniff_probe_req_output_example.png
