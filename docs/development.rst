@@ -2,7 +2,7 @@ Development
 -----------
 
 Running the unit tests
-^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^
 
 To run the unit tests:
 
@@ -18,9 +18,10 @@ Below are the different steps to do before releasing a new version:
 
 - Run all tests and be sure they all pass
 - Update the `VERSION` variable in `sniff_probe_req/version.py`
+- Update the requirements in `setup.py` if needed
 - Update the package's metadata (description, classifiers, etc) in `setup.py` if needed
-- Update the requirements in `setup.py` and `requirements.txt`
 - Update `README.rst` if needed
+- Update the documentation if needed and make sure it compiles well (`cd ./docs && make html`)
 
 After having pushed the new release:
 
