@@ -1,8 +1,9 @@
+===========
 Development
------------
+===========
 
 Running the unit tests
-^^^^^^^^^^^^^^^^^^^^^^
+----------------------
 
 To run the unit tests:
 
@@ -12,7 +13,7 @@ To run the unit tests:
 
 
 Releasing a new version
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 
 Below are the different steps to do before releasing a new version:
 

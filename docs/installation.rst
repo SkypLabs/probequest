@@ -1,15 +1,16 @@
+============
 Installation
-------------
+============
 
 Using pip (recommanded)
-^^^^^^^^^^^^^^^^^^^^^^^
+-----------------------
 
 ::
 
     sudo pip3 install --upgrade sniff-probe-req
 
 From sources
-^^^^^^^^^^^^
+------------
 
 ::
 

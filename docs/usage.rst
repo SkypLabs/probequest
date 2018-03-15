@@ -1,13 +1,14 @@
+=====
 Usage
------
+=====
 
 Enabling the monitor mode
-^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------
 
 The `sniff-probe-req` script must be used with a wireless interface in monitor mode.
 
 With `ifconfig` and `iwconfig`
-""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ::
 
@@ -24,7 +25,7 @@ For example:
     sudo ifconfig up wlan0
 
 With `airmon-ng` from aircrack-ng
-"""""""""""""""""""""""""""""""""
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 To kill all the interfering processes:
 
@@ -45,7 +46,7 @@ For example:
     sudo airmon-ng start wlan0
 
 Example of use
-^^^^^^^^^^^^^^
+--------------
 
 ::
 
