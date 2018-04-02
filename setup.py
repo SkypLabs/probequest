@@ -36,6 +36,6 @@ setup(
     install_requires = [
         'argparse>=1.4.0',
         'netaddr>=0.7.19',
-        'scapy>=2.4.0rc4',
+        'scapy>=2.4.0',
     ],
 )
