@@ -12,17 +12,17 @@ With `ifconfig` and `iwconfig`
 
 ::
 
-    sudo ifconfig down <wireless interface>
+    sudo ifconfig <wireless interface> down
     sudo iwconfig <wireless interface> mode monitor
-    sudo ifconfig up <wireless interface>
+    sudo ifconfig <wireless interface> up
 
 For example:
 
 ::
 
-    sudo ifconfig down wlan0
+    sudo ifconfig wlan0 down
     sudo iwconfig wlan0 mode monitor
-    sudo ifconfig up wlan0
+    sudo ifconfig wlan0 up
 
 With `airmon-ng` from aircrack-ng
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
