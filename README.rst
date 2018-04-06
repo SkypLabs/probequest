@@ -35,7 +35,7 @@ Installation
 How to
 ======
 
-First of all, you need to `enable the monitor mode of your wireless interface <http://sniff-probe-req.readthedocs.io/en/latest/#enabling-the-monitor-mode>`__.
+First of all, you need to `enable the monitor mode of your wireless interface <http://sniff-probe-req.readthedocs.io/en/latest/usage.html#enabling-the-monitor-mode>`__.
 
 Then:
 
