@@ -20,23 +20,18 @@ class ProbeRequestSniffer:
 
         self.new_packets = Queue()
 
-        self.sniffer = self.PacketSniffer(
-            self.new_packets,
-            interface,
-            mac_exclusions=mac_exclusions,
-            mac_filters=mac_filters,
-            debug=debug
-        )
+        self.interface = interface
+        self.essid_filters = essid_filters
+        self.essid_regex = essid_regex
+        self.ignore_case = ignore_case
+        self.mac_exclusions = mac_exclusions
+        self.mac_filters = mac_filters
+        self.display_func = display_func
+        self.storage_func = storage_func
+        self.debug = debug
 
-        self.parser = self.ProbeRequestParser(
-            self.new_packets,
-            essid_filters=essid_filters,
-            essid_regex=essid_regex,
-            ignore_case=ignore_case,
-            display_func=display_func,
-            storage_func=storage_func,
-            debug=debug
-        )
+        self.new_sniffer()
+        self.new_parser()
 
     def start(self):
         """
@@ -45,8 +40,17 @@ class ProbeRequestSniffer:
         This method will start the sniffing thread and the parsing thread.
         """
 
-        self.sniffer.start()
-        self.parser.start()
+        try:
+            self.sniffer.start()
+        except RuntimeError:
+            self.new_sniffer()
+            self.sniffer.start()
+
+        try:
+            self.parser.start()
+        except RuntimeError:
+            self.new_parser()
+            self.parser.start()
 
         e = self.sniffer.get_exception()
 
@@ -66,6 +70,34 @@ class ProbeRequestSniffer:
             self.sniffer.socket.close()
 
         self.parser.join()
+
+    def new_sniffer(self):
+        """
+        Creates a new sniffing thread.
+        """
+
+        self.sniffer = self.PacketSniffer(
+            self.new_packets,
+            self.interface,
+            mac_exclusions=self.mac_exclusions,
+            mac_filters=self.mac_filters,
+            debug=self.debug
+        )
+
+    def new_parser(self):
+        """
+        Creates a new parsing thread.
+        """
+
+        self.parser = self.ProbeRequestParser(
+            self.new_packets,
+            essid_filters=self.essid_filters,
+            essid_regex=self.essid_regex,
+            ignore_case=self.ignore_case,
+            display_func=self.display_func,
+            storage_func=self.storage_func,
+            debug=self.debug
+        )
 
     class PacketSniffer(Thread):
         """
