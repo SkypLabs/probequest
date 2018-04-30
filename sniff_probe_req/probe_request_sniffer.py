@@ -33,6 +33,8 @@ class ProbeRequestSniffer:
         self.new_sniffer()
         self.new_parser()
 
+        self.sniffer_running = False
+
     def start(self):
         """
         Starts the probe request sniffer.
@@ -57,6 +59,8 @@ class ProbeRequestSniffer:
         if e is not None:
             raise e
 
+        self.sniffer_running = True
+
     def stop(self):
         """
         Stops the probe request sniffer.
@@ -70,6 +74,8 @@ class ProbeRequestSniffer:
             self.sniffer.socket.close()
 
         self.parser.join()
+
+        self.sniffer_running = False
 
     def new_sniffer(self):
         """
@@ -98,6 +104,14 @@ class ProbeRequestSniffer:
             storage_func=self.storage_func,
             debug=self.debug
         )
+
+    def is_running(self):
+        """
+        Returns true if the probe request sniffer is running and
+        false otherwise.
+        """
+
+        return self.sniffer_running
 
     class PacketSniffer(Thread):
         """
