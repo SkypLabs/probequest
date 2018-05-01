@@ -62,3 +62,7 @@ class TestProbeRequestSniffer(unittest.TestCase):
 
     def test_create_sniffer(self):
         sniffer = ProbeRequestSniffer("wlan0")
+
+    def test_stop_before_start(self):
+        sniffer = ProbeRequestSniffer("wlan0")
+        sniffer.stop()
