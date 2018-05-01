@@ -68,12 +68,20 @@ class ProbeRequestSniffer:
         This method will stop the sniffing thread and the parsing thread.
         """
 
-        self.sniffer.join(timeout=ProbeRequestSniffer.SNIFFER_STOP_TIMEOUT)
+        try:
+            self.sniffer.join(timeout=ProbeRequestSniffer.SNIFFER_STOP_TIMEOUT)
+        except RuntimeError:
+            # stop() has been called before start().
+            pass
+        finally:
+            if self.sniffer.isAlive():
+                self.sniffer.socket.close()
 
-        if self.sniffer.isAlive():
-            self.sniffer.socket.close()
-
-        self.parser.join()
+        try:
+            self.parser.join()
+        except RuntimeError:
+            # stop() has been called before start().
+            pass
 
         self.sniffer_running = False
 
