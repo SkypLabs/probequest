@@ -2,7 +2,7 @@
 Wi-Fi Probe Requests Sniffer
 ============================
 
-|PyPI Package| |Build Status| |Code Coverage| |Known Vulnerabilities|
+|PyPI Package| |Build Status| |Code Coverage| |Known Vulnerabilities| |Documentation Status|
 
 This software allows you to sniff the Wi-Fi probe requests passing near
 your wireless interface.
@@ -83,9 +83,16 @@ License
 
 .. |Build Status| image:: https://travis-ci.org/SkypLabs/sniff-probe-req.svg
    :target: https://travis-ci.org/SkypLabs/sniff-probe-req
+   :alt: Build Status
 .. |Code Coverage| image:: https://api.codacy.com/project/badge/Grade/16b9e70e51744256b37099ae8fe9132d
    :target: https://www.codacy.com/app/skyper/sniff-probe-req?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=SkypLabs/sniff-probe-req&amp;utm_campaign=Badge_Grade
+   :alt: Code Coverage
+.. |Documentation Status| image:: https://readthedocs.org/projects/sniff-probe-req/badge/?version=latest
+   :target: http://sniff-probe-req.readthedocs.io/en/latest/?badge=latest
+   :alt: Documentation Status
 .. |Known Vulnerabilities| image:: https://snyk.io/test/github/SkypLabs/sniff-probe-req/badge.svg
    :target: https://snyk.io/test/github/SkypLabs/sniff-probe-req
+   :alt: Known Vulnerabilities
 .. |PyPI Package| image:: https://badge.fury.io/py/sniff-probe-req.svg
    :target: https://badge.fury.io/py/sniff-probe-req
+   :alt: PyPI Package
