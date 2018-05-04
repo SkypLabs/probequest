@@ -32,8 +32,10 @@ sys.path.insert(0, os.path.abspath('..'))
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.todo',
+    'sphinx.ext.graphviz',
     'sphinx.ext.mathjax',
+	'sphinxcontrib.seqdiag',
+    'sphinx.ext.todo',
     'sphinx.ext.viewcode',
 ]
 
@@ -437,3 +439,8 @@ html_context = {
     'github_version': 'master', # Version
     'conf_py_path': '/docs/', # Path in the checkout to the docs root
 }
+
+# -- Options for sphinxcontrib-seqdiag extension ---------------------------------
+
+# Fontpath for seqdiag (truetype font)
+seqdiag_fontpath = '/usr/share/fonts/truetype/ipafont/ipagp.ttf'

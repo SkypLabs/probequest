@@ -1,2 +1,4 @@
 python:
   version: 3
+  extra_requirements:
+    - sphinxcontrib-seqdiag
