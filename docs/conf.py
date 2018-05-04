@@ -34,7 +34,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.graphviz',
     'sphinx.ext.mathjax',
-	'sphinxcontrib.seqdiag',
+    'sphinxcontrib.seqdiag',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
 ]
