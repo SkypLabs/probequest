@@ -34,8 +34,15 @@ setup(
     scripts = ['bin/sniff-probe-req'],
     test_suite = 'test',
     install_requires = [
-        'argparse>=1.4.0',
-        'netaddr>=0.7.19',
-        'scapy>=2.4.0',
+        'argparse >= 1.4.0',
+        'netaddr >= 0.7.19',
+        'scapy >= 2.4.0',
     ],
+    extras_require = {
+        'docs': [
+            'sphinx >= 1.4.0',
+            'sphinx_rtd_theme',
+            'sphinxcontrib-seqdiag >= 0.8.5',
+        ],
+    },
 )
