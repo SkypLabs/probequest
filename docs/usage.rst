@@ -5,7 +5,7 @@ Usage
 Enabling the monitor mode
 -------------------------
 
-The `sniff-probe-req` script must be used with a wireless interface in monitor mode.
+To be able to sniff the probe requests, your Wi-Fi network interface must be set to monitor mode.
 
 With `ifconfig` and `iwconfig`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -45,8 +45,16 @@ For example:
 
     sudo airmon-ng start wlan0
 
+sniff-probe-req
+---------------
+
+.. argparse::
+   :filename: ../bin/sniff-probe-req
+   :func: get_arg_parser
+   :prog: sniff-probe-req
+
 Example of use
---------------
+^^^^^^^^^^^^^^
 
 ::
 

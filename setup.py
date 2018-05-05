@@ -41,8 +41,9 @@ setup(
     extras_require = {
         'docs': [
             'sphinx >= 1.4.0',
-            'sphinx_rtd_theme',
             'sphinxcontrib-seqdiag >= 0.8.5',
+            'sphinx-argparse >= 0.2.2',
+            'sphinx_rtd_theme',
         ],
     },
 )

@@ -34,9 +34,10 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.graphviz',
     'sphinx.ext.mathjax',
-    'sphinxcontrib.seqdiag',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
+    'sphinxarg.ext',
+    'sphinxcontrib.seqdiag',
 ]
 
 # Add any paths that contain templates here, relative to this directory.

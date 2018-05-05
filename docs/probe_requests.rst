@@ -22,6 +22,6 @@ Below is a typical Wi-Fi authentication process between a mobile station (for ex
       "Mobile Station" <-- "Access Point" [label = "Association Response"];
     }
 
-Step 1 (and therefore, step 2) is optional since the access points announce their presence by broadcasting their name (ESSID) using `beacon frames`_.
+Step 1 is optional (and therefore, step 2) since the access points announce their presence by broadcasting their name (ESSID) using `beacon frames`_.
 
 .. _beacon frames: https://en.wikipedia.org/wiki/Beacon_frame
