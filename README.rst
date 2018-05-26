@@ -16,15 +16,6 @@ previously been connected to is in range, leaking personal information.
 Further details are discussed in `this
 paper <https://brambonne.com/docs/bonne14sasquatch.pdf>`__.
 
-Dependencies
-============
-
-This software requires Python 3 and the following dependencies:
-
--  `argparse <https://pypi.python.org/pypi/argparse>`__
--  `netaddr <https://pypi.python.org/pypi/netaddr>`__
--  `scapy <https://github.com/secdev/scapy>`__
-
 Installation
 ============
 
@@ -34,45 +25,6 @@ Installation
 
 How to
 ======
-
-First of all, you need to `enable the monitor mode of your wireless interface <http://probequest.readthedocs.io/en/latest/usage.html#enabling-the-monitor-mode>`__.
-
-Then:
-
-::
-
-    usage: probequest [-h] [--debug] [-e ESSID [ESSID ...]]
-                           [--exclude EXCLUDE [EXCLUDE ...]] -i INTERFACE
-                           [--ignore-case] [-o OUTPUT] [-r REGEX]
-                           [-s STATION [STATION ...]]
-
-    Wi-Fi Probe Requests Sniffer
-
-    optional arguments:
-      -h, --help            show this help message and exit
-      --debug               debug mode
-      -e ESSID [ESSID ...], --essid ESSID [ESSID ...]
-                            ESSID of the APs to filter (space-separated list)
-      --exclude EXCLUDE [EXCLUDE ...]
-                            MAC addresses of the stations to exclude (space-
-                            separated list)
-      -i INTERFACE, --interface INTERFACE
-                            wireless interface to use (must be in monitor mode)
-      --ignore-case         ignore case distinctions in the regex pattern
-                            (default: false)
-      -o OUTPUT, --output OUTPUT
-                            output file to save the captured data (CSV format)
-      -r REGEX, --regex REGEX
-                            regex to filter the ESSIDs
-      -s STATION [STATION ...], --station STATION [STATION ...]
-                            MAC addresses of the stations to filter (space-
-                            separated list)
-
-For example:
-
-::
-
-    sudo probequest -i wlan0
 
 For further information, have a look at `the online documentation <http://probequest.readthedocs.io/en/latest/>`__.
 
