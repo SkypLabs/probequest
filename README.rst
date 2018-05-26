@@ -1,6 +1,6 @@
-============================
-Wi-Fi Probe Requests Sniffer
-============================
+==========
+ProbeQuest
+==========
 
 |PyPI Package| |Build Status| |Code Coverage| |Known Vulnerabilities| |Documentation Status|
 
@@ -30,18 +30,18 @@ Installation
 
 ::
 
-    pip3 install --upgrade sniff-probe-req
+    pip3 install --upgrade probequest
 
 How to
 ======
 
-First of all, you need to `enable the monitor mode of your wireless interface <http://sniff-probe-req.readthedocs.io/en/latest/usage.html#enabling-the-monitor-mode>`__.
+First of all, you need to `enable the monitor mode of your wireless interface <http://probequest.readthedocs.io/en/latest/usage.html#enabling-the-monitor-mode>`__.
 
 Then:
 
 ::
 
-    usage: sniff-probe-req [-h] [--debug] [-e ESSID [ESSID ...]]
+    usage: probequest [-h] [--debug] [-e ESSID [ESSID ...]]
                            [--exclude EXCLUDE [EXCLUDE ...]] -i INTERFACE
                            [--ignore-case] [-o OUTPUT] [-r REGEX]
                            [-s STATION [STATION ...]]
@@ -72,27 +72,27 @@ For example:
 
 ::
 
-    sudo sniff-probe-req -i wlan0
+    sudo probequest -i wlan0
 
-For further information, have a look at `the online documentation <http://sniff-probe-req.readthedocs.io/en/latest/>`__.
+For further information, have a look at `the online documentation <http://probequest.readthedocs.io/en/latest/>`__.
 
 License
 =======
 
 `GPL version 3 <https://www.gnu.org/licenses/gpl.txt>`__
 
-.. |Build Status| image:: https://travis-ci.org/SkypLabs/sniff-probe-req.svg
-   :target: https://travis-ci.org/SkypLabs/sniff-probe-req
+.. |Build Status| image:: https://travis-ci.org/SkypLabs/probequest.svg
+   :target: https://travis-ci.org/SkypLabs/probequest
    :alt: Build Status
 .. |Code Coverage| image:: https://api.codacy.com/project/badge/Grade/16b9e70e51744256b37099ae8fe9132d
-   :target: https://www.codacy.com/app/skyper/sniff-probe-req?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=SkypLabs/sniff-probe-req&amp;utm_campaign=Badge_Grade
+   :target: https://www.codacy.com/app/skyper/probequest?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=SkypLabs/probequest&amp;utm_campaign=Badge_Grade
    :alt: Code Coverage
-.. |Documentation Status| image:: https://readthedocs.org/projects/sniff-probe-req/badge/?version=latest
-   :target: http://sniff-probe-req.readthedocs.io/en/latest/?badge=latest
+.. |Documentation Status| image:: https://readthedocs.org/projects/probequest/badge/?version=latest
+   :target: http://probequest.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
-.. |Known Vulnerabilities| image:: https://snyk.io/test/github/SkypLabs/sniff-probe-req/badge.svg
-   :target: https://snyk.io/test/github/SkypLabs/sniff-probe-req
+.. |Known Vulnerabilities| image:: https://snyk.io/test/github/SkypLabs/probequest/badge.svg
+   :target: https://snyk.io/test/github/SkypLabs/probequest
    :alt: Known Vulnerabilities
-.. |PyPI Package| image:: https://badge.fury.io/py/sniff-probe-req.svg
-   :target: https://badge.fury.io/py/sniff-probe-req
+.. |PyPI Package| image:: https://badge.fury.io/py/probequest.svg
+   :target: https://badge.fury.io/py/probequest
    :alt: PyPI Package
