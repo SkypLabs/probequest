@@ -20,8 +20,6 @@ class PNLViewer:
         ("key", "Q"), " quit",
     ])
 
-    REFRESH_INTERVAL = 2
-
     def __init__(self, interface):
         self.interface = interface
         self.stations = dict()
@@ -89,6 +87,8 @@ class PNLViewer:
             self.station_list.set_focus(2);
             self.station_chosen(None, probe_req.s_mac)
 
+        self.loop.draw_screen()
+
     def add_station(self, name):
         button = urwid.Button(name)
         urwid.connect_signal(button, "click", self.station_chosen, name)
@@ -115,12 +115,7 @@ class PNLViewer:
 
     def main(self):
         self.loop = urwid.MainLoop(self.view, self.palette, unhandled_input=self.unhandled_keypress)
-        self.loop.set_alarm_in(self.REFRESH_INTERVAL, self.refresh)
         self.loop.run()
-
-    def refresh(self, loop, user_data):
-        self.loop.draw_screen()
-        self.loop.set_alarm_in(self.REFRESH_INTERVAL, self.refresh)
 
     def exit_program(self):
         self.sniffer.stop()
