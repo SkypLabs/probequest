@@ -45,21 +45,21 @@ For example:
 
     sudo airmon-ng start wlan0
 
-sniff-probe-req
----------------
+probequest
+----------
 
 .. argparse::
-   :filename: ../bin/sniff-probe-req
+   :filename: ../bin/probequest
    :func: get_arg_parser
-   :prog: sniff-probe-req
+   :prog: probequest
 
 Example of use
 ^^^^^^^^^^^^^^
 
 ::
 
-    sudo sniff-probe-req -i wlan0
+    sudo probequest -i wlan0
 
 Here is a sample output:
 
-.. image:: _static/img/sniff_probe_req_output_example.png
+.. image:: _static/img/probequest_output_example.png

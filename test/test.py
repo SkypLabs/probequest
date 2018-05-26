@@ -1,8 +1,8 @@
 import unittest
 from datetime import datetime
 from netaddr.core import AddrFormatError
-from sniff_probe_req.probe_request import ProbeRequest
-from sniff_probe_req.probe_request_sniffer import ProbeRequestSniffer
+from probequest.probe_request import ProbeRequest
+from probequest.probe_request_sniffer import ProbeRequestSniffer
 
 class TestProbeRequest(unittest.TestCase):
     def test_without_parameters(self):

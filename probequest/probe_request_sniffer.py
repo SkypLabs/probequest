@@ -3,7 +3,7 @@ from re import compile as rcompile, match, IGNORECASE
 from scapy.all import *
 from threading import Thread, Event
 
-from sniff_probe_req.probe_request import ProbeRequest
+from probequest.probe_request import ProbeRequest
 
 class ProbeRequestSniffer:
     """
