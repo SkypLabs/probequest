@@ -36,16 +36,16 @@ class PNLViewer:
         self.sniffer_state_text = urwid.Text("Stopped")
 
         self.header = urwid.AttrWrap(urwid.Columns([
-            urwid.Text("Sniffer state: "),
+            urwid.Text("Sniffer status: "),
             self.sniffer_state_text,
             urwid.Text(" Interface: "),
             self.interface_text,
         ]), "header_stopped")
         footer = urwid.AttrWrap(urwid.Text(self.footer_text), "footer")
-        vline = urwid.AttrWrap(urwid.SolidFill(u'\u2502'), 'line')
+        vline = urwid.AttrWrap(urwid.SolidFill(u"\u2502"), "line")
 
-        station_panel = urwid.Padding(self.setup_menu("List of Stations", self.stations.keys()), align='center', width=('relative', 90))
-        pnl_panel = urwid.Padding(urwid.ListBox(urwid.SimpleListWalker([])), align='center', width=('relative', 90))
+        station_panel = urwid.Padding(self.setup_menu("List of Stations", self.stations.keys()), align="center", width=("relative", 90))
+        pnl_panel = urwid.Padding(urwid.ListBox(urwid.SimpleListWalker([])), align="center", width=("relative", 90))
 
         self.station_list = station_panel.base_widget
         self.pnl_list = pnl_panel.base_widget
@@ -130,28 +130,3 @@ class PNLViewer:
             return
 
         return True
-
-if __name__ == "__main__":
-    from argparse import ArgumentParser
-    from os import geteuid
-    from sys import exit as sys_exit
-    from time import sleep
-
-    from probequest.version import VERSION
-
-    ap = ArgumentParser(description="Displays the preferred network lists of nearby Wi-Fi devices")
-    ap.add_argument("-i", "--interface", required=True, help="wireless interface to use (must be in monitor mode)")
-    ap.add_argument("--version", action="version", version=VERSION)
-
-    args = vars(ap.parse_args())
-
-    if not geteuid() == 0:
-        sys_exit("[!] You must be root")
-
-    try:
-        pnl_viewer = PNLViewer(interface=args["interface"])
-        pnl_viewer.main()
-    except OSError:
-        sys_exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))
-    except KeyboardInterrupt:
-        pnl_viewer.sniffer.stop()

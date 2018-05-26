@@ -7,8 +7,16 @@ passing near your wireless interface.
 """
 
 from argparse import ArgumentParser, FileType
+from enum import Enum
 
 from probequest.version import VERSION
+
+class Mode(Enum):
+    RAW = "RAW"
+    TUI = "TUI"
+
+    def __str__(self):
+        return self.value
 
 def get_arg_parser():
     """
@@ -19,10 +27,12 @@ def get_arg_parser():
     ap.add_argument("--debug", action="store_true", help="debug mode")
     ap.add_argument("-i", "--interface", required=True, help="wireless interface to use (must be in monitor mode)")
     ap.add_argument("--ignore-case", action="store_true", help="ignore case distinctions in the regex pattern (default: false)")
+    ap.add_argument("--mode", type=Mode, choices=Mode.__members__.values(), help="set the mode to use")
     ap.add_argument("-o", "--output", type=FileType("a"), help="output file to save the captured data (CSV format)")
     ap.add_argument("--version", action="version", version=VERSION)
     ap.set_defaults(debug=False)
     ap.set_defaults(ignore_case=False)
+    ap.set_defaults(mode=Mode.RAW)
 
     essid_arguments = ap.add_mutually_exclusive_group()
     essid_arguments.add_argument("-e", "--essid", nargs="+", help="ESSID of the APs to filter (space-separated list)")
@@ -37,59 +47,73 @@ def get_arg_parser():
 if __name__ == "__main__":
     from os import geteuid
     from sys import exit as sys_exit
-    from time import sleep
-
-    from probequest.probe_request_sniffer import ProbeRequestSniffer
-
-    args = vars(get_arg_parser().parse_args())
 
     if not geteuid() == 0:
         sys_exit("[!] You must be root")
 
-    if args["output"]:
-        from csv import writer
+    args = vars(get_arg_parser().parse_args())
 
-        outfile = writer(args["output"], delimiter=";")
+    if args["mode"] == Mode.RAW:
+        from time import sleep
 
-        def write_csv(probe_req):
-            outfile.writerow([probe_req.timestamp, probe_req.s_mac, probe_req.s_mac_oui, probe_req.essid])
+        from probequest.probe_request_sniffer import ProbeRequestSniffer
+
+        if args["output"]:
+            from csv import writer
+
+            outfile = writer(args["output"], delimiter=";")
+
+            def write_csv(probe_req):
+                outfile.writerow([probe_req.timestamp, probe_req.s_mac, probe_req.s_mac_oui, probe_req.essid])
+        else:
+            write_csv = lambda p: None
+
+        def display_probe_req(probe_req):
+            print(probe_req)
+
+        print("[*] Start sniffing probe requests...")
+
+        try:
+            sniffer = ProbeRequestSniffer(
+                args["interface"],
+                essid_filters=args["essid"],
+                essid_regex=args["regex"],
+                ignore_case=args["ignore_case"],
+                mac_exclusions=args["exclude"],
+                mac_filters=args["station"],
+                display_func=display_probe_req,
+                storage_func=write_csv,
+                debug=args["debug"]
+            )
+
+            sniffer.start()
+
+            while True:
+                sleep(100)
+        except OSError:
+            sniffer.stop()
+
+            if args["output"]:
+                args["output"].close()
+
+            sys_exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))
+        except KeyboardInterrupt:
+            print("[*] Stopping the threads...")
+            sniffer.stop()
+
+            if args["output"]:
+                args["output"].close()
+
+            print("[*] Bye!")
+    elif args["mode"] == Mode.TUI:
+        from probequest.tui import PNLViewer
+
+        try:
+            pnl_viewer = PNLViewer(args["interface"])
+            pnl_viewer.main()
+        except OSError:
+            sys_exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))
+        except KeyboardInterrupt:
+            pnl_viewer.sniffer.stop()
     else:
-        write_csv = lambda p: None
-
-    def display_probe_req(probe_req):
-        print(probe_req)
-
-    print("[*] Start sniffing probe requests...")
-
-    try:
-        sniffer = ProbeRequestSniffer(
-            args["interface"],
-            essid_filters=args["essid"],
-            essid_regex=args["regex"],
-            ignore_case=args["ignore_case"],
-            mac_exclusions=args["exclude"],
-            mac_filters=args["station"],
-            display_func=display_probe_req,
-            storage_func=write_csv,
-            debug=args["debug"]
-        )
-
-        sniffer.start()
-
-        while True:
-            sleep(100)
-    except OSError:
-        sniffer.stop()
-
-        if args["output"]:
-            args["output"].close()
-
-        sys_exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))
-    except KeyboardInterrupt:
-        print("[*] Stopping the threads...")
-        sniffer.stop()
-
-        if args["output"]:
-            args["output"].close()
-
-        print("[*] Bye!")
+        sys_exit("[x] Invalid mode")
