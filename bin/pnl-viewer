@@ -85,6 +85,10 @@ class PNLViewer:
         if not any(essid.text == probe_req.essid for essid in self.stations[probe_req.s_mac]):
             self.stations[probe_req.s_mac].append(urwid.Text(probe_req.essid))
 
+        if len(self.stations.keys()) == 1:
+            self.station_list.set_focus(2);
+            self.station_chosen(None, probe_req.s_mac)
+
     def add_station(self, name):
         button = urwid.Button(name)
         urwid.connect_signal(button, "click", self.station_chosen, name)
