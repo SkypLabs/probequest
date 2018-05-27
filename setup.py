@@ -15,7 +15,7 @@ with fopen(join(DIR, 'README.rst'), encoding='utf-8') as f:
 setup(
     name = 'probequest',
     version = VERSION,
-    description = 'Wi-Fi Probe Requests Sniffer',
+    description = 'Toolkit for Playing with Wi-Fi Probe Requests',
     long_description = long_description,
     license = 'GPLv3',
     keywords = 'wifi wireless security sniffer',
