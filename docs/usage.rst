@@ -45,8 +45,8 @@ For example:
 
     sudo airmon-ng start wlan0
 
-probequest
-----------
+Command line arguments
+----------------------
 
 .. argparse::
    :filename: ../bin/probequest

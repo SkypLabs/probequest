@@ -4,7 +4,7 @@ ProbeQuest
 
 |PyPI Package| |Build Status| |Code Coverage| |Known Vulnerabilities| |Documentation Status|
 
-This software allows you to sniff the Wi-Fi probe requests passing near
+Toolkit allowing to sniff and display the Wi-Fi probe requests passing near
 your wireless interface.
 
 Probe requests are sent by a station to elicit information about access
@@ -23,10 +23,10 @@ Installation
 
     pip3 install --upgrade probequest
 
-How to
-======
+Documentation
+=============
 
-For further information, have a look at `the online documentation <http://probequest.readthedocs.io/en/latest/>`__.
+The project is documented `here <http://probequest.readthedocs.io/en/latest/>`__.
 
 License
 =======
