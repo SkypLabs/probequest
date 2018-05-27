@@ -23,10 +23,12 @@ project = 'ProbeQuest'
 copyright = '2018, Paul-Emmanuel Raoul'
 author = 'Paul-Emmanuel Raoul'
 
+from probequest.version import VERSION
+
 # The short X.Y version
-version = '0.5'
+version = ".".join(VERSION.split(".")[:2])
 # The full version, including alpha/beta/rc tags
-release = '0.5.1'
+release = VERSION
 
 
 # -- General configuration ---------------------------------------------------
