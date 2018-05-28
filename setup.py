@@ -41,6 +41,7 @@ setup(
         'argparse >= 1.4.0',
         'netaddr >= 0.7.19',
         'scapy >= 2.4.0',
+        'urwid>= 2.0.1',
     ],
     extras_require = {
         'docs': [
