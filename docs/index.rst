@@ -17,7 +17,7 @@ This project has been inspired by `this paper`_.
     installation
     usage
     mitigation
-    api
+    modules
     development
 
 .. _this paper: https://brambonne.com/docs/bonne14sasquatch.pdf
