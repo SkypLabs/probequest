@@ -62,55 +62,21 @@ if __name__ == "__main__":
     # Default mode.
     if args["mode"] == Mode.RAW:
         from time import sleep
-
-        from probequest.probe_request_sniffer import ProbeRequestSniffer
-
-        if args["output"]:
-            from csv import writer
-
-            outfile = writer(args["output"], delimiter=";")
-
-            def write_csv(probe_req):
-                outfile.writerow([probe_req.timestamp, probe_req.s_mac, probe_req.s_mac_oui, probe_req.essid])
-        else:
-            write_csv = lambda p: None
-
-        def display_probe_req(probe_req):
-            print(probe_req)
-
-        print("[*] Start sniffing probe requests...")
+        from probequest.raw import RawProbeRequestViewer
 
         try:
-            sniffer = ProbeRequestSniffer(
-                interface,
-                essid_filters=args["essid"],
-                essid_regex=args["regex"],
-                ignore_case=args["ignore_case"],
-                mac_exclusions=args["exclude"],
-                mac_filters=args["station"],
-                display_func=display_probe_req,
-                storage_func=write_csv,
-                debug=args["debug"]
-            )
-
-            sniffer.start()
+            print("[*] Start sniffing probe requests...")
+            raw_viewer = RawProbeRequestViewer(interface, **args)
+            raw_viewer.start()
 
             while True:
                 sleep(100)
         except OSError:
-            sniffer.stop()
-
-            if args["output"]:
-                args["output"].close()
-
+            raw_viewer.stop()
             sys_exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))
         except KeyboardInterrupt:
             print("[*] Stopping the threads...")
-            sniffer.stop()
-
-            if args["output"]:
-                args["output"].close()
-
+            raw_viewer.stop()
             print("[*] Bye!")
     elif args["mode"] == Mode.TUI:
         from probequest.tui import PNLViewer
