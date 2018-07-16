@@ -62,7 +62,7 @@ if __name__ == "__main__":
     # Default mode.
     if args["mode"] == Mode.RAW:
         from time import sleep
-        from probequest.raw import RawProbeRequestViewer
+        from probequest.ui.raw import RawProbeRequestViewer
 
         try:
             print("[*] Start sniffing probe requests...")
@@ -79,7 +79,7 @@ if __name__ == "__main__":
             raw_viewer.stop()
             print("[*] Bye!")
     elif args["mode"] == Mode.TUI:
-        from probequest.tui import PNLViewer
+        from probequest.ui.tui import PNLViewer
 
         try:
             pnl_viewer = PNLViewer(interface)
