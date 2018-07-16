@@ -17,8 +17,8 @@ class Mode(Enum):
     supported by this software.
     """
 
-    RAW = "RAW"
-    TUI = "TUI"
+    RAW = "raw"
+    TUI = "tui"
 
     def __str__(self):
         return self.value
