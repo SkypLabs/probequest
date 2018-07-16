@@ -12,24 +12,23 @@ class ProbeRequestSniffer:
 
     SNIFFER_STOP_TIMEOUT = 2.0
 
-    def __init__(self, interface, essid_filters=None, essid_regex=None, ignore_case=False, mac_exclusions=None, mac_filters=None, display_func=lambda p: None, storage_func=lambda p: None, debug=False):
-        if not hasattr(display_func, "__call__"):
+    def __init__(self, interface, **kwargs):
+        self.interface = interface
+        self.essid_filters = kwargs.get("essid_filters", None)
+        self.essid_regex = kwargs.get("essid_regex", None)
+        self.ignore_case = kwargs.get("ignore_case", None)
+        self.mac_exclusions = kwargs.get("mac_exclusions", None)
+        self.mac_filters = kwargs.get("mac_filters", None)
+        self.display_func = kwargs.get("display_func", lambda p: None)
+        self.storage_func = kwargs.get("storage_func", lambda p: None)
+        self.debug = kwargs.get("debug", False)
+
+        if not hasattr(self.display_func, "__call__"):
             raise TypeError("The display function parameter is not a callable object")
-        if not hasattr(storage_func, "__call__"):
+        if not hasattr(self.storage_func, "__call__"):
             raise TypeError("The storage function parameter is not a callable object")
 
         self.new_packets = Queue()
-
-        self.interface = interface
-        self.essid_filters = essid_filters
-        self.essid_regex = essid_regex
-        self.ignore_case = ignore_case
-        self.mac_exclusions = mac_exclusions
-        self.mac_filters = mac_filters
-        self.display_func = display_func
-        self.storage_func = storage_func
-        self.debug = debug
-
         self.new_sniffer()
         self.new_parser()
 
@@ -91,8 +90,8 @@ class ProbeRequestSniffer:
         """
 
         self.sniffer = self.PacketSniffer(
-            self.new_packets,
             self.interface,
+            self.new_packets,
             mac_exclusions=self.mac_exclusions,
             mac_filters=self.mac_filters,
             debug=self.debug
@@ -126,25 +125,28 @@ class ProbeRequestSniffer:
         A packet sniffing thread.
         """
 
-        def __init__(self, new_packets, interface, mac_exclusions=None, mac_filters=None, debug=False):
+        def __init__(self, interface, new_packets, **kwargs):
             super().__init__()
 
             self.daemon = True
 
-            self.new_packets = new_packets
             self.interface = interface
+            self.new_packets = new_packets
+
+            self.mac_exclusions = kwargs.get("mac_exclusions", None)
+            self.mac_filters = kwargs.get("mac_filters", None)
+            self.debug = kwargs.get("debug", False)
 
             self.frame_filters = "type mgt subtype probe-req"
             self.socket = None
             self.stop_sniffer = Event()
 
             self.exception = None
-            self.debug = debug
 
-            if mac_exclusions is not None:
+            if self.mac_exclusions is not None:
                 self.frame_filters += " and not ("
 
-                for i, station in enumerate(mac_exclusions):
+                for i, station in enumerate(self.mac_exclusions):
                     if i == 0:
                         self.frame_filters += "ether src host {s_mac}".format(s_mac=station)
                     else:
@@ -152,10 +154,10 @@ class ProbeRequestSniffer:
 
                 self.frame_filters += ")"
 
-            if mac_filters is not None:
+            if self.mac_filters is not None:
                 self.frame_filters += " and ("
 
-                for i, station in enumerate(mac_filters):
+                for i, station in enumerate(self.mac_filters):
                     if i == 0:
                         self.frame_filters += "ether src host {s_mac}".format(s_mac=station)
                     else:
@@ -219,26 +221,29 @@ class ProbeRequestSniffer:
         A Wi-Fi probe request parsing thread.
         """
 
-        def __init__(self, new_packets, essid_filters=None, essid_regex=None, ignore_case=False, display_func=lambda p: None, storage_func=lambda p: None, debug=False):
+        def __init__(self, new_packets, **kwargs):
             super().__init__()
 
             self.new_packets = new_packets
-            self.essid_filters = essid_filters
-            self.display_func = display_func
-            self.storage_func = storage_func
+            self.essid_filters = kwargs.get("essid_filters", None)
+            self.essid_regex = kwargs.get("essid_regex", None)
+            self.ignore_case = kwargs.get("ignore_case", False)
+            self.display_func = kwargs.get("display_func", lambda p: None)
+            self.storage_func = kwargs.get("storage_func", lambda p: None)
+            self.debug = kwargs.get("debug", False)
 
             self.stop_parser = Event()
 
-            if debug:
+            if self.debug:
                 print("[!] ESSID filters: " + str(self.essid_filters))
-                print("[!] ESSID regex: " + str(essid_regex))
-                print("[!] Ignore case: " + str(ignore_case))
+                print("[!] ESSID regex: " + str(self.essid_regex))
+                print("[!] Ignore case: " + str(self.ignore_case))
 
-            if essid_regex is not None:
-                if ignore_case:
-                    self.essid_regex = rcompile(essid_regex, IGNORECASE)
+            if self.essid_regex is not None:
+                if self.ignore_case:
+                    self.essid_regex = rcompile(self.essid_regex, IGNORECASE)
                 else:
-                    self.essid_regex = rcompile(essid_regex)
+                    self.essid_regex = rcompile(self.essid_regex)
             else:
                 self.essid_regex = None
 

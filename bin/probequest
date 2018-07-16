@@ -53,10 +53,11 @@ if __name__ == "__main__":
     from os import geteuid
     from sys import exit as sys_exit
 
-    args = vars(get_arg_parser().parse_args())
-
     if not geteuid() == 0:
         sys_exit("[!] You must be root")
+
+    args = vars(get_arg_parser().parse_args())
+    interface = args.pop("interface")
 
     # Default mode.
     if args["mode"] == Mode.RAW:
@@ -81,7 +82,7 @@ if __name__ == "__main__":
 
         try:
             sniffer = ProbeRequestSniffer(
-                args["interface"],
+                interface,
                 essid_filters=args["essid"],
                 essid_regex=args["regex"],
                 ignore_case=args["ignore_case"],
@@ -115,7 +116,7 @@ if __name__ == "__main__":
         from probequest.tui import PNLViewer
 
         try:
-            pnl_viewer = PNLViewer(args["interface"])
+            pnl_viewer = PNLViewer(interface)
             pnl_viewer.main()
         except OSError:
             sys_exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))
