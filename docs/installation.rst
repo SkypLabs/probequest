@@ -2,7 +2,7 @@
 Installation
 ============
 
-Using pip (recommanded)
+Using pip (recommended)
 -----------------------
 
 ::
