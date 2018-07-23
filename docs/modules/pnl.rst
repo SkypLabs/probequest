@@ -1,5 +1,5 @@
 PNL Viewer
 ----------
 
-.. automodule:: probequest.tui
+.. automodule:: probequest.ui.pnl
     :members:

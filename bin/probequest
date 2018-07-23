@@ -18,7 +18,7 @@ class Mode(Enum):
     """
 
     RAW = "raw"
-    TUI = "tui"
+    PNL = "pnl"
 
     def __str__(self):
         return self.value
@@ -78,8 +78,8 @@ if __name__ == "__main__":
             print("[*] Stopping the threads...")
             raw_viewer.stop()
             print("[*] Bye!")
-    elif args["mode"] == Mode.TUI:
-        from probequest.ui.tui import PNLViewer
+    elif args["mode"] == Mode.PNL:
+        from probequest.ui.pnl import PNLViewer
 
         try:
             pnl_viewer = PNLViewer(interface)
