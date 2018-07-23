@@ -39,6 +39,7 @@ setup(
     test_suite = 'test',
     install_requires = [
         'argparse >= 1.4.0',
+        'faker_wifi_essid',
         'netaddr >= 0.7.19',
         'scapy >= 2.4.0',
         'urwid>= 2.0.1',

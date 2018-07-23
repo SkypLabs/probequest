@@ -30,12 +30,14 @@ def get_arg_parser():
 
     ap = ArgumentParser(description="Toolkit for Playing with Wi-Fi Probe Requests")
     ap.add_argument("--debug", action="store_true", help="debug mode")
+    ap.add_argument("--fake", action="store_true", help="display only fake ESSIDs")
     ap.add_argument("-i", "--interface", required=True, help="wireless interface to use (must be in monitor mode)")
     ap.add_argument("--ignore-case", action="store_true", help="ignore case distinctions in the regex pattern (default: false)")
     ap.add_argument("--mode", type=Mode, choices=Mode.__members__.values(), help="set the mode to use")
     ap.add_argument("-o", "--output", type=FileType("a"), help="output file to save the captured data (CSV format)")
     ap.add_argument("--version", action="version", version=VERSION)
     ap.set_defaults(debug=False)
+    ap.set_defaults(fake=False)
     ap.set_defaults(ignore_case=False)
     ap.set_defaults(mode=Mode.RAW)
 
