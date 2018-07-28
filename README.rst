@@ -28,6 +28,14 @@ Documentation
 
 The project is documented `here <http://probequest.readthedocs.io/en/latest/>`__.
 
+In the Media
+============
+
+ProbeQuest has appeared in the following media:
+
+- `KitPloit <https://www.kitploit.com/2018/06/probequest-toolkit-for-playing-with-wi.html>`__
+- `Hakin9 Magazine, VOL.13, NO. 05, "Open Source Hacking Tools" <https://drive.google.com/open?id=1Jcv1gFUQ_ue1kqmUlqTy6zVfodB2HYNM>`__
+
 License
 =======
 
