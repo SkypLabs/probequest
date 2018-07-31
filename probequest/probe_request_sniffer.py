@@ -255,6 +255,9 @@ class ProbeRequestSniffer:
                     packet = self.new_packets.get(timeout=1)
                     probe_request = self.parse(packet)
 
+                    if probe_request is None:
+                        continue
+
                     if not probe_request.essid:
                         continue
 
@@ -285,8 +288,11 @@ class ProbeRequestSniffer:
             Parses the packet and returns a probe request object.
             """
 
-            timestamp = packet.getlayer(RadioTap).time
-            s_mac = packet.getlayer(RadioTap).addr2
-            essid = packet.getlayer(Dot11ProbeReq).info.decode("utf-8")
+            if packet.haslayer(Dot11ProbeReq):
+                timestamp = packet.getlayer(RadioTap).time
+                s_mac = packet.getlayer(RadioTap).addr2
+                essid = packet.getlayer(Dot11ProbeReq).info.decode("utf-8")
 
-            return ProbeRequest(timestamp, s_mac, essid)
+                return ProbeRequest(timestamp, s_mac, essid)
+            else:
+                return None
