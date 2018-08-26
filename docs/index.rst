@@ -16,6 +16,7 @@ This project has been inspired by `this paper`_.
     probe_requests
     installation
     usage
+    use_case
     mitigation
     modules
     development
