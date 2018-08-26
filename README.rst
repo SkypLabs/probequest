@@ -2,7 +2,7 @@
 ProbeQuest
 ==========
 
-|PyPI Package| |Build Status| |Code Coverage| |Known Vulnerabilities| |Documentation Status|
+|PyPI Package| |Build Status| |Code Coverage| |Documentation Status|
 
 Toolkit allowing to sniff and display the Wi-Fi probe requests passing near
 your wireless interface.
@@ -35,6 +35,7 @@ ProbeQuest has appeared in the following media:
 
 - `KitPloit <https://www.kitploit.com/2018/06/probequest-toolkit-for-playing-with-wi.html>`__
 - `Hakin9 Magazine, VOL.13, NO. 05, "Open Source Hacking Tools" <https://drive.google.com/open?id=1Jcv1gFUQ_ue1kqmUlqTy6zVfodB2HYNM>`__
+- `WonderHowTo <https://null-byte.wonderhowto.com/how-to/track-wi-fi-devices-connect-them-using-probequest-0186137/>`__ (including a `YouTube video <https://www.youtube.com/watch?v=Z8RHMUSYTiA>`__)
 
 License
 =======
