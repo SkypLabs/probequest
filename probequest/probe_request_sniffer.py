@@ -21,6 +21,7 @@ class ProbeRequestSniffer:
         self.mac_filters = kwargs.get("mac_filters", None)
         self.display_func = kwargs.get("display_func", lambda p: None)
         self.storage_func = kwargs.get("storage_func", lambda p: None)
+        self.fake = kwargs.get("fake", False)
         self.debug = kwargs.get("debug", False)
 
         if not hasattr(self.display_func, "__call__"):
@@ -38,7 +39,7 @@ class ProbeRequestSniffer:
         """
         Starts the probe request sniffer.
 
-        This method will start the sniffing thread and the parsing thread.
+        This method will start the sniffing and parsing threads.
         """
 
         try:
@@ -64,7 +65,7 @@ class ProbeRequestSniffer:
         """
         Stops the probe request sniffer.
 
-        This method will stop the sniffing thread and the parsing thread.
+        This method will stop the sniffing and parsing threads.
         """
 
         try:
@@ -89,13 +90,19 @@ class ProbeRequestSniffer:
         Creates a new sniffing thread.
         """
 
-        self.sniffer = self.PacketSniffer(
-            self.interface,
-            self.new_packets,
-            mac_exclusions=self.mac_exclusions,
-            mac_filters=self.mac_filters,
-            debug=self.debug
-        )
+        if self.fake:
+            self.sniffer = self.FakePacketSniffer(
+                self.new_packets,
+                debug=self.debug
+            )
+        else:
+            self.sniffer = self.PacketSniffer(
+                self.interface,
+                self.new_packets,
+                mac_exclusions=self.mac_exclusions,
+                mac_filters=self.mac_filters,
+                debug=self.debug
+            )
 
     def new_parser(self):
         """
@@ -206,6 +213,82 @@ class ProbeRequestSniffer:
         def should_stop_sniffer(self, packet):
             """
             Returns true if the sniffer should be stopped and false otherwise.
+            """
+
+            return self.stop_sniffer.isSet()
+
+        def get_exception(self):
+            """
+            Returns the raised exception if any, otherwise returns none.
+            """
+            return self.exception
+
+    class FakePacketSniffer(Thread):
+        """
+        A fake packet sniffing thread.
+
+        This thread returns fake Wi-Fi ESSIDs for development
+        and test purposes.
+        """
+
+
+        def __init__(self, new_packets, **kwargs):
+            super().__init__()
+
+            self.new_packets = new_packets
+            self.stop_sniffer = Event()
+            self.exception = None
+
+            self.debug = kwargs.get("debug", False)
+
+            from faker import Faker
+            from faker_wifi_essid import WifiESSID
+
+            self.fake = Faker()
+            self.fake.add_provider(WifiESSID)
+
+        def run(self):
+            from time import sleep
+
+            try:
+                while not self.stop_sniffer.isSet():
+                    sleep(1)
+                    self.new_packet()
+            except Exception as e:
+                self.exception = e
+
+                if self.debug:
+                    print("[!] Exception: " + str(e))
+
+        def join(self, timeout=None):
+            """
+            Stops the fake packet sniffer.
+            """
+
+            self.stop_sniffer.set()
+            super().join(timeout)
+
+        def new_packet(self):
+            """
+            Adds a new fake packet to the queue to be processed.
+            """
+
+            fake_probe_req = RadioTap() \
+                / Dot11(
+                    addr1="ff:ff:ff:ff:ff:ff",
+                    addr2=self.fake.mac_address(),
+                    addr3=self.fake.mac_address()
+                ) \
+                / Dot11ProbeReq() \
+                / Dot11Elt(
+                    info=self.fake.wifi_essid()
+                )
+
+            self.new_packets.put(fake_probe_req)
+
+        def should_stop_sniffer(self, packet):
+            """
+            Returns true if the fake sniffer should be stopped and false otherwise.
             """
 
             return self.stop_sniffer.isSet()
