@@ -84,7 +84,7 @@ if __name__ == "__main__":
         from probequest.ui.pnl import PNLViewer
 
         try:
-            pnl_viewer = PNLViewer(interface)
+            pnl_viewer = PNLViewer(interface, **args)
             pnl_viewer.main()
         except OSError:
             sys_exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))

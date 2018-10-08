@@ -17,17 +17,22 @@ class RawProbeRequestViewer:
             outfile = writer(self.output, delimiter=";")
 
             def write_csv(probe_req):
-                outfile.writerow([probe_req.timestamp, probe_req.s_mac, probe_req.s_mac_oui, probe_req.essid])
-
-            kwargs["storage_func"] = write_csv
+                outfile.writerow([
+                    probe_req.timestamp,
+                    probe_req.s_mac,
+                    probe_req.s_mac_oui,
+                    probe_req.essid
+                ])
+        else:
+            write_csv = lambda p: None
 
         def display_probe_req(probe_req):
             print(probe_req)
 
-        kwargs["display_func"] = display_probe_req
-
         self.sniffer = ProbeRequestSniffer(
             interface,
+            display_func=display_probe_req,
+            storage_func=write_csv,
             **kwargs
         )
 

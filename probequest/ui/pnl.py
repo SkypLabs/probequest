@@ -25,13 +25,14 @@ class PNLViewer:
         ("key", "Q"), " quit",
     ])
 
-    def __init__(self, interface):
+    def __init__(self, interface, **kwargs):
         self.interface = interface
         self.stations = dict()
 
         self.sniffer = ProbeRequestSniffer(
             self.interface,
-            display_func=self.new_probe_req
+            display_func=self.new_probe_req,
+            **kwargs
         )
 
         self.view = self.setup_view()
