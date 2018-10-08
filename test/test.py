@@ -3,6 +3,7 @@ from datetime import datetime
 from netaddr.core import AddrFormatError
 from probequest.probe_request import ProbeRequest
 from probequest.probe_request_sniffer import ProbeRequestSniffer
+from scapy.all import *
 
 class TestProbeRequest(unittest.TestCase):
     def test_without_parameters(self):
@@ -66,3 +67,28 @@ class TestProbeRequestSniffer(unittest.TestCase):
     def test_stop_before_start(self):
         sniffer = ProbeRequestSniffer("wlan0")
         sniffer.stop()
+
+class TestProbeRequestParser(unittest.TestCase):
+    def test_no_probe_request_layer(self):
+        packet = RadioTap() \
+            / Dot11(
+                addr1="ff:ff:ff:ff:ff:ff",
+                addr2="aa:bb:cc:11:22:33",
+                addr3="dd:ee:ff:11:22:33"
+            )
+
+        ProbeRequestSniffer.ProbeRequestParser.parse(packet)
+
+    def test_empty_essid(self):
+        packet = RadioTap() \
+            / Dot11(
+                addr1="ff:ff:ff:ff:ff:ff",
+                addr2="aa:bb:cc:11:22:33",
+                addr3="dd:ee:ff:11:22:33"
+            ) \
+            / Dot11ProbeReq() \
+            / Dot11Elt(
+                info=""
+            )
+
+        ProbeRequestSniffer.ProbeRequestParser.parse(packet)
