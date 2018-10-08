@@ -368,7 +368,7 @@ class ProbeRequestSniffer:
         @staticmethod
         def parse(packet):
             """
-            Parses the packet and returns a probe request object.
+            Parses the raw packet and returns a probe request object.
             """
 
             if packet.haslayer(Dot11ProbeReq):
