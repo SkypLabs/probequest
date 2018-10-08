@@ -16,6 +16,10 @@ previously been connected to is in range, leaking personal information.
 Further details are discussed in `this
 paper <https://brambonne.com/docs/bonne14sasquatch.pdf>`__.
 
+.. image:: docs/_static/img/probequest_demo.gif
+   :target: https://asciinema.org/a/205172
+   :alt: ProbeQuest - Demo
+
 Installation
 ============
 
