@@ -92,3 +92,8 @@ class TestProbeRequestParser(unittest.TestCase):
             )
 
         ProbeRequestSniffer.ProbeRequestParser.parse(packet)
+
+    def test_fuzz_packets(self):
+        for i in range(0,100):
+            packet = RadioTap()/fuzz(Dot11()/Dot11ProbeReq()/Dot11Elt())
+            ProbeRequestSniffer.ProbeRequestParser.parse(packet)
