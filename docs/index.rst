@@ -10,6 +10,10 @@ ProbeQuest is a toolkit allowing to sniff and display the Wi-Fi probe requests p
 
 This project has been inspired by `this paper`_.
 
+.. image:: _static/img/probequest_demo.gif
+   :target: https://asciinema.org/a/205172
+   :alt: ProbeQuest - Demo
+
 .. toctree::
     :caption: Table of Contents
 
