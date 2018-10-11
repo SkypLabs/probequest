@@ -371,11 +371,15 @@ class ProbeRequestSniffer:
             Parses the raw packet and returns a probe request object.
             """
 
-            if packet.haslayer(Dot11ProbeReq):
-                timestamp = packet.getlayer(RadioTap).time
-                s_mac = packet.getlayer(RadioTap).addr2
-                essid = packet.getlayer(Dot11ProbeReq).info.decode("utf-8")
+            try:
+                if packet.haslayer(Dot11ProbeReq):
+                    timestamp = packet.getlayer(RadioTap).time
+                    s_mac = packet.getlayer(RadioTap).addr2
+                    essid = packet.getlayer(Dot11ProbeReq).info.decode("utf-8")
 
-                return ProbeRequest(timestamp, s_mac, essid)
-            else:
+                    return ProbeRequest(timestamp, s_mac, essid)
+                else:
+                    return None
+            except UnicodeDecodeError:
+                # The ESSID is not a valid UTF-8 string.
                 return None
