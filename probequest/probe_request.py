@@ -8,8 +8,8 @@ class ProbeRequest:
 
     def __init__(self, timestamp, s_mac, essid):
         self.timestamp = timestamp
-        self.s_mac = s_mac
-        self.essid = essid
+        self.s_mac = str(s_mac)
+        self.essid = str(essid)
 
         self.s_mac_oui = self.get_mac_organisation()
 
