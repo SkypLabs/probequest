@@ -1,3 +1,4 @@
+import pylint.lint
 import unittest
 from datetime import datetime
 from netaddr.core import AddrFormatError
@@ -97,3 +98,10 @@ class TestProbeRequestParser(unittest.TestCase):
         for i in range(0, 1000):
             packet = RadioTap()/fuzz(Dot11()/Dot11ProbeReq()/Dot11Elt())
             ProbeRequestSniffer.ProbeRequestParser.parse(packet)
+
+class TestLinter(unittest.TestCase):
+    def test_linter(self):
+        pylint.lint.Run([
+            "probequest",
+            "test"
+        ])
