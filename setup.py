@@ -44,6 +44,9 @@ setup(
         'scapy >= 2.4.0',
         'urwid>= 2.0.1',
     ],
+    tests_require = [
+        'pylint'
+    ],
     extras_require = {
         'docs': [
             'sphinx >= 1.4.0',
