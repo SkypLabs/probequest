@@ -38,7 +38,7 @@ In the Media
 ProbeQuest has appeared in the following media:
 
 - `KitPloit <https://www.kitploit.com/2018/06/probequest-toolkit-for-playing-with-wi.html>`__
-- `Hakin9 Magazine, VOL.13, NO. 05, "Open Source Hacking Tools" <https://drive.google.com/open?id=1Jcv1gFUQ_ue1kqmUlqTy6zVfodB2HYNM>`__
+- `Hakin9 Magazine, VOL.13, NO. 05, "Open Source Hacking Tools" <https://skyplabs.keybase.pub/Papers/Magazines/Hakin9%20Magazine%2C%20VOL.13%2C%20NO.%2005%2C%20%22Open%20Source%20Hacking%20Tools%22.pdf>`__
 - `WonderHowTo <https://null-byte.wonderhowto.com/how-to/track-wi-fi-devices-connect-them-using-probequest-0186137/>`__ (including a `YouTube video <https://www.youtube.com/watch?v=Z8RHMUSYTiA>`__)
 
 License
