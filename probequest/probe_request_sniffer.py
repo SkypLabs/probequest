@@ -1,13 +1,21 @@
+"""
+A Wi-Fi probe request sniffer.
+"""
+
 from queue import Queue, Empty
 from re import compile as rcompile, match, IGNORECASE
-from scapy.all import *
 from threading import Thread, Event
+
+from scapy.config import conf
+from scapy.data import ETH_P_ALL
+from scapy.layers.dot11 import RadioTap, Dot11, Dot11ProbeReq, Dot11Elt
+from scapy.sendrecv import sniff
 
 from probequest.probe_request import ProbeRequest
 
 class ProbeRequestSniffer:
     """
-    A Wi-Fi probe request sniffer.
+    Probe request sniffer class.
     """
 
     SNIFFER_STOP_TIMEOUT = 2.0
@@ -210,7 +218,7 @@ class ProbeRequestSniffer:
 
             self.new_packets.put(packet)
 
-        def should_stop_sniffer(self, packet):
+        def should_stop_sniffer(self):
             """
             Returns true if the sniffer should be stopped and false otherwise.
             """
@@ -286,7 +294,7 @@ class ProbeRequestSniffer:
 
             self.new_packets.put(fake_probe_req)
 
-        def should_stop_sniffer(self, packet):
+        def should_stop_sniffer(self):
             """
             Returns true if the fake sniffer should be stopped and false otherwise.
             """
@@ -344,10 +352,12 @@ class ProbeRequestSniffer:
                     if not probe_request.essid:
                         continue
 
-                    if self.essid_filters is not None and not probe_request.essid in self.essid_filters:
+                    if (self.essid_filters is not None
+                            and not probe_request.essid in self.essid_filters):
                         continue
 
-                    if self.essid_regex is not None and not match(self.essid_regex, probe_request.essid):
+                    if (self.essid_regex is not None
+                            and not match(self.essid_regex, probe_request.essid)):
                         continue
 
                     self.display_func(probe_request)
@@ -378,8 +388,8 @@ class ProbeRequestSniffer:
                     essid = packet.getlayer(Dot11ProbeReq).info.decode("utf-8")
 
                     return ProbeRequest(timestamp, s_mac, essid)
-                else:
-                    return None
+
+                return None
             except UnicodeDecodeError:
                 # The ESSID is not a valid UTF-8 string.
                 return None

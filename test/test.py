@@ -4,7 +4,7 @@ Unit tests written with the 'unittest' module.
 
 import unittest
 import pylint.lint
-from scapy.layers.dot11 import RadioTap, Dot11, Dot11Elt, Dot11ProbeReq
+from scapy.layers.dot11 import RadioTap, Dot11, Dot11ProbeReq, Dot11Elt
 from scapy.packet import fuzz
 from netaddr.core import AddrFormatError
 from probequest.probe_request import ProbeRequest
