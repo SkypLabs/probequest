@@ -2,7 +2,7 @@
 ProbeQuest
 ==========
 
-|PyPI Package| |Build Status| |Code Coverage| |Documentation Status|
+|PyPI Package| |PyPI Downloads| |PyPI Python Versions| |Build Status Master Branch| |Build Status Develop Branch| |Code Coverage| |Documentation Status|
 
 Toolkit allowing to sniff and display the Wi-Fi probe requests passing near
 your wireless interface.
@@ -46,9 +46,12 @@ License
 
 `GPL version 3 <https://www.gnu.org/licenses/gpl.txt>`__
 
-.. |Build Status| image:: https://travis-ci.org/SkypLabs/probequest.svg
+.. |Build Status Master Branch| image:: https://img.shields.io/travis/SkypLabs/probequest/master.svg?label=master&logo=travis&style=flat
    :target: https://travis-ci.org/SkypLabs/probequest
-   :alt: Build Status
+   :alt: Build Status Master Branch
+.. |Build Status Develop Branch| image:: https://img.shields.io/travis/SkypLabs/probequest/develop.svg?label=develop&logo=travis&style=flat
+   :target: https://travis-ci.org/SkypLabs/probequest
+   :alt: Build Status Develop Branch
 .. |Code Coverage| image:: https://api.codacy.com/project/badge/Grade/16b9e70e51744256b37099ae8fe9132d
    :target: https://www.codacy.com/app/skyper/probequest?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=SkypLabs/probequest&amp;utm_campaign=Badge_Grade
    :alt: Code Coverage
@@ -58,6 +61,12 @@ License
 .. |Known Vulnerabilities| image:: https://snyk.io/test/github/SkypLabs/probequest/badge.svg
    :target: https://snyk.io/test/github/SkypLabs/probequest
    :alt: Known Vulnerabilities
-.. |PyPI Package| image:: https://badge.fury.io/py/probequest.svg
-   :target: https://badge.fury.io/py/probequest
-   :alt: PyPI Package
+.. |PyPI Downloads| image:: https://img.shields.io/pypi/dm/probequest.svg?style=flat
+   :target: https://pypi.org/project/probequest/
+   :alt: PyPI Package Downloads Per Month
+.. |PyPI Package| image:: https://img.shields.io/pypi/v/probequest.svg?style=flat
+   :target: https://pypi.org/project/probequest/
+   :alt: PyPI Package Latest Release
+.. |PyPI Python Versions| image:: https://img.shields.io/pypi/pyversions/probequest.svg?logo=python&style=flat
+   :target: https://pypi.org/project/probequest/
+   :alt: PyPI Package Python Versions
