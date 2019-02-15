@@ -26,3 +26,7 @@ jobs:
           branch: master
           tags: true
           repo: SkypLabs/probequest
+
+notifications:
+  email:
+    on_success: never
