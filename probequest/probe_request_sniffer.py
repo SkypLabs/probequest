@@ -14,11 +14,11 @@ class ProbeRequestSniffer:
 
     def __init__(self, interface, **kwargs):
         self.interface = interface
-        self.essid_filters = kwargs.get("essid_filters", None)
-        self.essid_regex = kwargs.get("essid_regex", None)
+        self.essid_filters = kwargs.get("essid", None)
+        self.essid_regex = kwargs.get("regex", None)
         self.ignore_case = kwargs.get("ignore_case", None)
-        self.mac_exclusions = kwargs.get("mac_exclusions", None)
-        self.mac_filters = kwargs.get("mac_filters", None)
+        self.mac_exclusions = kwargs.get("exclude", None)
+        self.mac_filters = kwargs.get("station", None)
         self.display_func = kwargs.get("display_func", lambda p: None)
         self.storage_func = kwargs.get("storage_func", lambda p: None)
         self.fake = kwargs.get("fake", False)
