@@ -55,11 +55,11 @@ if __name__ == "__main__":
     from os import geteuid
     from sys import exit as sys_exit
 
-    if not geteuid() == 0:
-        sys_exit("[!] You must be root")
-
     args = vars(get_arg_parser().parse_args())
     interface = args.pop("interface")
+
+    if not geteuid() == 0:
+        sys_exit("[!] You must be root")
 
     # Default mode.
     if args["mode"] == Mode.RAW:
