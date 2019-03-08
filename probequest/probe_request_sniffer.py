@@ -82,7 +82,7 @@ class ProbeRequestSniffer:
             # stop() has been called before start().
             pass
         finally:
-            if self.sniffer.isAlive():
+            if self.sniffer.is_alive():
                 self.sniffer.socket.close()
 
         try:
