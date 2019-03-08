@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+Raw probe request viewer.
+"""
+
 from probequest.probe_request_sniffer import ProbeRequestSniffer
 
 class RawProbeRequestViewer:
@@ -37,9 +41,17 @@ class RawProbeRequestViewer:
         )
 
     def start(self):
+        """
+        Starts the probe request sniffer.
+        """
+
         self.sniffer.start()
 
     def stop(self):
+        """
+        Stops the probe request sniffer.
+        """
+
         self.sniffer.stop()
 
         if self.output is not None:

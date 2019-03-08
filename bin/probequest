@@ -28,28 +28,63 @@ def get_arg_parser():
     Returns the argument parser.
     """
 
-    ap = ArgumentParser(description="Toolkit for Playing with Wi-Fi Probe Requests")
-    ap.add_argument("--debug", action="store_true", help="debug mode")
-    ap.add_argument("--fake", action="store_true", help="display only fake ESSIDs")
-    ap.add_argument("-i", "--interface", required=True, help="wireless interface to use (must be in monitor mode)")
-    ap.add_argument("--ignore-case", action="store_true", help="ignore case distinctions in the regex pattern (default: false)")
-    ap.add_argument("--mode", type=Mode, choices=Mode.__members__.values(), help="set the mode to use")
-    ap.add_argument("-o", "--output", type=FileType("a"), help="output file to save the captured data (CSV format)")
-    ap.add_argument("--version", action="version", version=VERSION)
-    ap.set_defaults(debug=False)
-    ap.set_defaults(fake=False)
-    ap.set_defaults(ignore_case=False)
-    ap.set_defaults(mode=Mode.RAW)
+    arg_parser = ArgumentParser(description="Toolkit for Playing with Wi-Fi Probe Requests")
+    arg_parser.add_argument(
+        "--debug", action="store_true",
+        help="debug mode"
+    )
+    arg_parser.add_argument(
+        "--fake", action="store_true",
+        help="display only fake ESSIDs")
+    arg_parser.add_argument(
+        "-i", "--interface",
+        required=True,
+        help="wireless interface to use (must be in monitor mode)"
+    )
+    arg_parser.add_argument(
+        "--ignore-case", action="store_true",
+        help="ignore case distinctions in the regex pattern (default: false)"
+    )
+    arg_parser.add_argument(
+        "--mode",
+        type=Mode, choices=Mode.__members__.values(),
+        help="set the mode to use"
+    )
+    arg_parser.add_argument(
+        "-o", "--output",
+        type=FileType("a"),
+        help="output file to save the captured data (CSV format)"
+    )
+    arg_parser.add_argument("--version", action="version", version=VERSION)
+    arg_parser.set_defaults(debug=False)
+    arg_parser.set_defaults(fake=False)
+    arg_parser.set_defaults(ignore_case=False)
+    arg_parser.set_defaults(mode=Mode.RAW)
 
-    essid_arguments = ap.add_mutually_exclusive_group()
-    essid_arguments.add_argument("-e", "--essid", nargs="+", help="ESSID of the APs to filter (space-separated list)")
-    essid_arguments.add_argument("-r", "--regex", help="regex to filter the ESSIDs")
+    essid_arguments = arg_parser.add_mutually_exclusive_group()
+    essid_arguments.add_argument(
+        "-e", "--essid",
+        nargs="+",
+        help="ESSID of the APs to filter (space-separated list)"
+    )
+    essid_arguments.add_argument(
+        "-r", "--regex",
+        help="regex to filter the ESSIDs"
+    )
 
-    station_arguments = ap.add_mutually_exclusive_group()
-    station_arguments.add_argument("--exclude", nargs="+", help="MAC addresses of the stations to exclude (space-separated list)")
-    station_arguments.add_argument("-s", "--station", nargs="+", help="MAC addresses of the stations to filter (space-separated list)")
+    station_arguments = arg_parser.add_mutually_exclusive_group()
+    station_arguments.add_argument(
+        "--exclude",
+        nargs="+",
+        help="MAC addresses of the stations to exclude (space-separated list)"
+    )
+    station_arguments.add_argument(
+        "-s", "--station",
+        nargs="+",
+        help="MAC addresses of the stations to filter (space-separated list)"
+    )
 
-    return ap
+    return arg_parser
 
 if __name__ == "__main__":
     from os import geteuid

@@ -1,9 +1,13 @@
-from netaddr import EUI, NotRegisteredError
+"""
+A Wi-Fi probe request.
+"""
+
 from time import localtime, strftime
+from netaddr import EUI, NotRegisteredError
 
 class ProbeRequest:
     """
-    A Wi-Fi probe request.
+    Probe request class.
     """
 
     def __init__(self, timestamp, s_mac, essid):
