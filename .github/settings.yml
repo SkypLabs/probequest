@@ -54,13 +54,9 @@ branches:
           - continuous-integration/travis-ci
       enforce_admins: true
       restrictions:
-        users: []
-        teams: []
   - name: develop
     protection:
       required_pull_request_reviews:
       required_status_checks:
       enforce_admins: false
       restrictions:
-        users: []
-        teams: []
