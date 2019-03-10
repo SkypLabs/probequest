@@ -1,14 +1,17 @@
 repository:
   # See https://developer.github.com/v3/repos/#edit for all available settings.
 
-  # The name of the repository. Changing this will rename the repository
+  # The name of the repository. Changing this will rename the repository.
   name: probequest
 
-  # A short description of the repository that will show up on GitHub
+  # A short description of the repository that will show up on GitHub.
   description: Toolkit for Playing with Wi-Fi Probe Requests
 
-  # A URL with more information about the repository
+  # A URL with more information about the repository.
   homepage: https://probequest.readthedocs.io/en/latest/
+
+  # List of topics.
+  topics: python, python3, scapy, wifi-security, sniffer, dot11, network-attacks, monitoring, security, wireless, wifi, toolkit
 
   # Either `true` to make the repository private, or `false` to make it public.
   private: false
@@ -37,7 +40,7 @@ repository:
   # rebase-merging.
   allow_rebase_merge: true
 
-# Labels: define labels for Issues and Pull Requests
+# Labels: define labels for Issues and Pull Requests.
 labels:
   - name: bug
     description: New bug
