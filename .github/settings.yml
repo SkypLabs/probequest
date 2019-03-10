@@ -7,6 +7,7 @@ repository:
   topics: python, python3, scapy, wifi-security, sniffer, dot11, network-attacks, monitoring, security, wireless, wifi, toolkit
   private: false
   has_issues: true
+  has_projects: true
   has_wiki: false
   has_downloads: true
   default_branch: develop
