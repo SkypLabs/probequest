@@ -36,3 +36,33 @@ repository:
   # Either `true` to allow rebase-merging pull requests, or `false` to prevent
   # rebase-merging.
   allow_rebase_merge: true
+
+# Labels: define labels for Issues and Pull Requests
+labels:
+  - name: bug
+    description: New bug
+    color: ee0701
+  - name: documentation
+    color: 2d2de2
+  - name: duplicate
+    color: cccccc
+  - name: enhancement
+    color: 84b6eb
+  - name: featue request
+    color: 96f7c3
+  - name: good first issue
+    color: 7057ff
+  - name: help wanted
+    color: 33aa3f
+  - name: invalid
+    color: e6e6e6
+  - name: question
+    color: cc317c
+  - name: regression
+    description: Software regression
+    color: ee0701
+  - name: security
+    description: Security issue
+    color: ee0701
+  - name: wontfix
+    color: ffffff
