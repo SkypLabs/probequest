@@ -39,7 +39,7 @@ labels:
     color: 33aa3f
   - name: invalid
     description: Invalid issue
-    color: e6e6e6
+    color: cccccc
   - name: question
     description: General question
     color: cc317c
@@ -51,7 +51,7 @@ labels:
     color: ee0701
   - name: wontfix
     description: The issue won't be fixed
-    color: ffffff
+    color: cccccc
 
 branches:
   - name: master
