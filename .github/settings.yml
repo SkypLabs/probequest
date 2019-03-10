@@ -1,46 +1,19 @@
+# See https://github.com/probot/settings for more information.
+
 repository:
-  # See https://developer.github.com/v3/repos/#edit for all available settings.
-
-  # The name of the repository. Changing this will rename the repository.
   name: probequest
-
-  # A short description of the repository that will show up on GitHub.
   description: Toolkit for Playing with Wi-Fi Probe Requests
-
-  # A URL with more information about the repository.
   homepage: https://probequest.readthedocs.io/en/latest/
-
-  # List of topics.
   topics: python, python3, scapy, wifi-security, sniffer, dot11, network-attacks, monitoring, security, wireless, wifi, toolkit
-
-  # Either `true` to make the repository private, or `false` to make it public.
   private: false
-
-  # Either `true` to enable issues for this repository, `false` to disable them.
   has_issues: true
-
-  # Either `true` to enable the wiki for this repository, `false` to disable it.
   has_wiki: false
-
-  # Either `true` to enable downloads for this repository, `false` to disable them.
   has_downloads: true
-
-  # Updates the default branch for this repository.
   default_branch: develop
-
-  # Either `true` to allow squash-merging pull requests, or `false` to prevent
-  # squash-merging.
   allow_squash_merge: true
-
-  # Either `true` to allow merging pull requests with a merge commit, or `false`
-  # to prevent merging pull requests with merge commits.
   allow_merge_commit: true
-
-  # Either `true` to allow rebase-merging pull requests, or `false` to prevent
-  # rebase-merging.
   allow_rebase_merge: true
 
-# Labels: define labels for Issues and Pull Requests.
 labels:
   - name: bug
     description: New bug
@@ -72,35 +45,21 @@ labels:
 
 branches:
   - name: master
-    # https://developer.github.com/v3/repos/branches/#update-branch-protection
-    # Branch Protection settings. Set to null to disable
     protection:
-      # Required. Require at least one approving review on a pull request, before merging. Set to null to disable.
       required_pull_request_reviews:
-      # Required. Require status checks to pass before merging. Set to null to disable
       required_status_checks:
-        # Required. Require branches to be up to date before merging.
         strict: false
-        # Required. The list of status checks to require in order to merge into this branch
         contexts:
           - continuous-integration/travis-ci
-      # Required. Enforce all configured restrictions for administrators. Set to true to enforce required status checks for repository administrators. Set to null to disable.
       enforce_admins: true
-      # Required. Restrict who can push to this branch. Team and user restrictions are only available for organization-owned repositories. Set to null to disable.
       restrictions:
         users: []
         teams: []
   - name: develop
-    # https://developer.github.com/v3/repos/branches/#update-branch-protection
-    # Branch Protection settings. Set to null to disable
     protection:
-      # Required. Require at least one approving review on a pull request, before merging. Set to null to disable.
       required_pull_request_reviews:
-      # Required. Require status checks to pass before merging. Set to null to disable
       required_status_checks:
-      # Required. Enforce all configured restrictions for administrators. Set to true to enforce required status checks for repository administrators. Set to null to disable.
       enforce_admins: false
-      # Required. Restrict who can push to this branch. Team and user restrictions are only available for organization-owned repositories. Set to null to disable.
       restrictions:
         users: []
         teams: []
