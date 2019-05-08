@@ -2,6 +2,9 @@
 Unit tests written with the 'unittest' module.
 """
 
+# pylint: disable=import-error
+# pylint: disable=unused-variable
+
 import unittest
 import pylint.lint
 from scapy.layers.dot11 import RadioTap, Dot11, Dot11ProbeReq, Dot11Elt
@@ -10,7 +13,6 @@ from netaddr.core import AddrFormatError
 from probequest.probe_request import ProbeRequest
 from probequest.probe_request_sniffer import ProbeRequestSniffer
 
-# pylint: disable=unused-variable
 
 class TestProbeRequest(unittest.TestCase):
     """
@@ -26,7 +28,7 @@ class TestProbeRequest(unittest.TestCase):
         # pylint: disable=no-value-for-parameter
 
         with self.assertRaises(TypeError):
-            probe_req = ProbeRequest()
+            probe_req = ProbeRequest()  # noqa: F841
 
     def test_with_only_one_parameter(self):
         """
@@ -39,7 +41,7 @@ class TestProbeRequest(unittest.TestCase):
         timestamp = 1517872027.0
 
         with self.assertRaises(TypeError):
-            probe_req = ProbeRequest(timestamp)
+            probe_req = ProbeRequest(timestamp)  # noqa: F841
 
     def test_with_only_two_parameters(self):
         """
@@ -53,7 +55,7 @@ class TestProbeRequest(unittest.TestCase):
         s_mac = "aa:bb:cc:dd:ee:ff"
 
         with self.assertRaises(TypeError):
-            probe_req = ProbeRequest(timestamp, s_mac)
+            probe_req = ProbeRequest(timestamp, s_mac)  # noqa: F841
 
     def test_create_a_probe_request(self):
         """
@@ -67,7 +69,7 @@ class TestProbeRequest(unittest.TestCase):
         s_mac = "aa:bb:cc:dd:ee:ff"
         essid = "Test ESSID"
 
-        probe_req = ProbeRequest(timestamp, s_mac, essid)
+        probe_req = ProbeRequest(timestamp, s_mac, essid)  # noqa: F841
 
     def test_bad_mac_address(self):
         """
@@ -80,7 +82,7 @@ class TestProbeRequest(unittest.TestCase):
         essid = "Test ESSID"
 
         with self.assertRaises(AddrFormatError):
-            probe_req = ProbeRequest(timestamp, s_mac, essid)
+            probe_req = ProbeRequest(timestamp, s_mac, essid)  # noqa: F841
 
     def test_print_a_probe_request(self):
         """
@@ -94,8 +96,15 @@ class TestProbeRequest(unittest.TestCase):
 
         probe_req = ProbeRequest(timestamp, s_mac, essid)
 
-        self.assertNotEqual(str(probe_req).find("Mon, 05 Feb 2018 23:07:07"), -1)
-        self.assertNotEqual(str(probe_req).find("aa:bb:cc:dd:ee:ff (None) -> Test ESSID"), -1)
+        self.assertNotEqual(
+            str(probe_req).find("Mon, 05 Feb 2018 23:07:07"),
+            -1
+        )
+        self.assertNotEqual(
+            str(probe_req).find("aa:bb:cc:dd:ee:ff (None) -> Test ESSID"),
+            -1
+        )
+
 
 class TestProbeRequestSniffer(unittest.TestCase):
     """
@@ -111,7 +120,7 @@ class TestProbeRequestSniffer(unittest.TestCase):
         # pylint: disable=no-value-for-parameter
 
         with self.assertRaises(TypeError):
-            sniffer = ProbeRequestSniffer()
+            sniffer = ProbeRequestSniffer()  # noqa: F841
 
     def test_bad_display_function(self):
         """
@@ -120,7 +129,10 @@ class TestProbeRequestSniffer(unittest.TestCase):
         """
 
         with self.assertRaises(TypeError):
-            sniffer = ProbeRequestSniffer("wlan0", display_func="Test")
+            sniffer = ProbeRequestSniffer(  # noqa: F841
+                "wlan0",
+                display_func="Test"
+            )
 
     def test_bad_storage_function(self):
         """
@@ -129,7 +141,10 @@ class TestProbeRequestSniffer(unittest.TestCase):
         """
 
         with self.assertRaises(TypeError):
-            sniffer = ProbeRequestSniffer("wlan0", storage_func="Test")
+            sniffer = ProbeRequestSniffer(  # noqa: F841
+                "wlan0",
+                storage_func="Test"
+            )
 
     def test_create_sniffer(self):
         """
@@ -138,7 +153,7 @@ class TestProbeRequestSniffer(unittest.TestCase):
 
         # pylint: disable=no-self-use
 
-        sniffer = ProbeRequestSniffer("wlan0")
+        sniffer = ProbeRequestSniffer("wlan0")  # noqa: F841
 
     def test_stop_before_start(self):
         """
@@ -151,6 +166,7 @@ class TestProbeRequestSniffer(unittest.TestCase):
 
         sniffer = ProbeRequestSniffer("wlan0")
         sniffer.stop()
+
 
 class TestProbeRequestParser(unittest.TestCase):
     """
@@ -210,6 +226,7 @@ class TestProbeRequestParser(unittest.TestCase):
         for i in range(0, 1000):
             packet = RadioTap()/fuzz(Dot11()/Dot11ProbeReq()/Dot11Elt())
             ProbeRequestSniffer.ProbeRequestParser.parse(packet)
+
 
 class TestLinter(unittest.TestCase):
     """
