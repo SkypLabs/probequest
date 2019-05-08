@@ -7,6 +7,7 @@ Raw probe request viewer.
 
 from probequest.probe_request_sniffer import ProbeRequestSniffer
 
+
 class RawProbeRequestViewer:
     """
     Displays the raw probe requests passing near the Wi-Fi interface.
@@ -28,7 +29,7 @@ class RawProbeRequestViewer:
                     probe_req.essid
                 ])
         else:
-            write_csv = lambda p: None
+            write_csv = lambda p: None  # noqa: E731
 
         def display_probe_req(probe_req):
             print(probe_req)
