@@ -2,7 +2,7 @@
 ProbeQuest
 ==========
 
-|PyPI Package| |PyPI Downloads| |PyPI Python Versions| |Build Status Master Branch| |Build Status Develop Branch| |Code Coverage| |Documentation Status|
+|PyPI Package| |PyPI Downloads| |PyPI Python Versions| |Build Status Master Branch| |Build Status Develop Branch| |Code Coverage| |LGTM Grade| |LGTM Alerts| |Documentation Status|
 
 Toolkit allowing to sniff and display the Wi-Fi probe requests passing near
 your wireless interface.
@@ -61,6 +61,12 @@ License
 .. |Known Vulnerabilities| image:: https://snyk.io/test/github/SkypLabs/probequest/badge.svg
    :target: https://snyk.io/test/github/SkypLabs/probequest
    :alt: Known Vulnerabilities
+.. |LGTM Alerts| image:: https://img.shields.io/lgtm/alerts/g/SkypLabs/probequest.svg?logo=lgtm&logoWidth=18
+   :target: https://lgtm.com/projects/g/SkypLabs/probequest/alerts/
+   :alt: LGTM Alerts
+.. |LGTM Grade| image:: https://img.shields.io/lgtm/grade/python/g/SkypLabs/probequest.svg?logo=lgtm&logoWidth=18
+   :target: https://lgtm.com/projects/g/SkypLabs/probequest/context:python
+   :alt: LGTM Grade
 .. |PyPI Downloads| image:: https://img.shields.io/pypi/dm/probequest.svg?style=flat
    :target: https://pypi.org/project/probequest/
    :alt: PyPI Package Downloads Per Month
