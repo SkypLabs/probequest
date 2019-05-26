@@ -6,10 +6,13 @@ Toolkit allowing to sniff and display the Wi-Fi
 probe requests passing near your wireless interface.
 """
 
+# pylint: disable=no-name-in-module
+
 from argparse import ArgumentParser, FileType
 from enum import Enum
 
 from probequest.version import VERSION
+
 
 class Mode(Enum):
     """
@@ -23,12 +26,15 @@ class Mode(Enum):
     def __str__(self):
         return self.value
 
+
 def get_arg_parser():
     """
     Returns the argument parser.
     """
 
-    arg_parser = ArgumentParser(description="Toolkit for Playing with Wi-Fi Probe Requests")
+    arg_parser = ArgumentParser(
+        description="Toolkit for Playing with Wi-Fi Probe Requests"
+    )
     arg_parser.add_argument(
         "--debug", action="store_true",
         help="debug mode"
@@ -86,7 +92,12 @@ def get_arg_parser():
 
     return arg_parser
 
-if __name__ == "__main__":
+
+def main():
+    """
+    Main function.
+    """
+
     from os import geteuid
     from sys import exit as sys_exit
 
@@ -110,7 +121,11 @@ if __name__ == "__main__":
                 sleep(100)
         except OSError:
             raw_viewer.stop()
-            sys_exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))
+            sys_exit(
+                "[!] Interface {interface} doesn't exist".format(
+                    interface=args["interface"]
+                )
+            )
         except KeyboardInterrupt:
             print("[*] Stopping the threads...")
             raw_viewer.stop()
@@ -122,8 +137,16 @@ if __name__ == "__main__":
             pnl_viewer = PNLViewer(interface, **args)
             pnl_viewer.main()
         except OSError:
-            sys_exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))
+            sys_exit(
+                "[!] Interface {interface} doesn't exist".format(
+                    interface=args["interface"]
+                )
+            )
         except KeyboardInterrupt:
             pnl_viewer.sniffer.stop()
     else:
         sys_exit("[x] Invalid mode")
+
+
+if __name__ == "__main__":
+    main()
