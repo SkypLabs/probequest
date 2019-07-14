@@ -12,18 +12,20 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+
+# pylint: skip-file
+
 import os
 import sys
-sys.path.insert(0, os.path.abspath('..'))
+from probequest.version import VERSION
 
+sys.path.insert(0, os.path.abspath('..'))
 
 # -- Project information -----------------------------------------------------
 
 project = 'ProbeQuest'
 copyright = '2018, Paul-Emmanuel Raoul'
 author = 'Paul-Emmanuel Raoul'
-
-from probequest.version import VERSION
 
 # The short X.Y version
 version = ".".join(VERSION.split(".")[:2])
@@ -200,9 +202,9 @@ seqdiag_fontpath = '/usr/share/fonts/truetype/ipafont/ipagp.ttf'
 # -- Options for GitHub integration ------------------------------------------
 
 html_context = {
-    'display_github': True, # Integrate GitHub
-    'github_user': 'SkypLabs', # Username
-    'github_repo': 'probequest', # Repo name
-    'github_version': 'master', # Version
-    'conf_py_path': '/docs/', # Path in the checkout to the docs root
+    'display_github': True,         # Integrate GitHub
+    'github_user': 'SkypLabs',      # Username
+    'github_repo': 'probequest',    # Repo name
+    'github_version': 'master',     # Version
+    'conf_py_path': '/docs/',       # Path in the checkout to the docs root
 }
