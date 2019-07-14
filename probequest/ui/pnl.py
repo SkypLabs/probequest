@@ -9,11 +9,13 @@ import urwid
 
 from probequest.probe_request_sniffer import ProbeRequestSniffer
 
+
 class PNLViewer:
     """
-    TUI used to display the PNL of the nearby devices sending
-    probe requests.
+    TUI used to display the PNL of the nearby devices sending probe requests.
     """
+
+    # pylint: disable=too-many-instance-attributes
 
     palette = [
         ("header_running", "white", "dark green", "bold"),
@@ -88,8 +90,8 @@ class PNLViewer:
 
     def setup_menu(self, title, choices):
         """
-        Creates and returns a dynamic ListBox object containing
-        a title and the choices given as parameters.
+        Creates and returns a dynamic ListBox object containing a title and the
+        choices given as parameters.
         """
 
         body = [urwid.Text(title), urwid.Divider()]
@@ -110,7 +112,8 @@ class PNLViewer:
             self.stations[probe_req.s_mac] = []
             self.add_station(probe_req.s_mac)
 
-        if not any(essid.text == probe_req.essid for essid in self.stations[probe_req.s_mac]):
+        if not any(essid.text == probe_req.essid
+                   for essid in self.stations[probe_req.s_mac]):
             self.stations[probe_req.s_mac].append(urwid.Text(probe_req.essid))
 
         if len(self.stations.keys()) == 1:
@@ -126,12 +129,13 @@ class PNLViewer:
 
         button = urwid.Button(name)
         urwid.connect_signal(button, "click", self.station_chosen, name)
-        self.station_list.body.append(urwid.AttrMap(button, None, focus_map="selected"))
+        self.station_list.body.append(
+            urwid.AttrMap(button, None, focus_map="selected")
+        )
 
     def station_chosen(self, button, choice):
         """
-        Callback method called when a station is selected
-        in the stations list.
+        Callback method called when a station is selected in the station list.
         """
 
         # pylint: disable=unused-argument
@@ -189,8 +193,8 @@ class PNLViewer:
 
     def unhandled_keypress(self, key):
         """
-        Contains handlers for each keypress that is not handled
-        by the widgets being displayed.
+        Contains handlers for each keypress that is not handled by the widgets
+        being displayed.
         """
 
         if key in ("q", "Q"):
