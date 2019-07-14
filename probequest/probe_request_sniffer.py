@@ -13,10 +13,13 @@ from scapy.sendrecv import sniff
 
 from probequest.probe_request import ProbeRequest
 
+
 class ProbeRequestSniffer:
     """
     Probe request sniffer class.
     """
+
+    # pylint: disable=too-many-instance-attributes
 
     SNIFFER_STOP_TIMEOUT = 2.0
 
@@ -33,9 +36,13 @@ class ProbeRequestSniffer:
         self.debug = kwargs.get("debug", False)
 
         if not hasattr(self.display_func, "__call__"):
-            raise TypeError("The display function parameter is not a callable object")
+            raise TypeError(
+                "The display function parameter is not a callable object"
+            )
         if not hasattr(self.storage_func, "__call__"):
-            raise TypeError("The storage function parameter is not a callable object")
+            raise TypeError(
+                "The storage function parameter is not a callable object"
+            )
 
         self.new_packets = Queue()
         self.new_sniffer()
@@ -62,10 +69,10 @@ class ProbeRequestSniffer:
             self.new_parser()
             self.parser.start()
 
-        e = self.sniffer.get_exception()
+        exception = self.sniffer.get_exception()
 
-        if e is not None:
-            raise e
+        if exception is not None:
+            raise exception
 
         self.sniffer_running = True
 
@@ -163,9 +170,13 @@ class ProbeRequestSniffer:
 
                 for i, station in enumerate(self.mac_exclusions):
                     if i == 0:
-                        self.frame_filters += "ether src host {s_mac}".format(s_mac=station)
+                        self.frame_filters += "\
+                            ether src host {s_mac}".format(
+                                s_mac=station)
                     else:
-                        self.frame_filters += " || ether src host {s_mac}".format(s_mac=station)
+                        self.frame_filters += "\
+                            || ether src host {s_mac}".format(
+                                s_mac=station)
 
                 self.frame_filters += ")"
 
@@ -174,9 +185,13 @@ class ProbeRequestSniffer:
 
                 for i, station in enumerate(self.mac_filters):
                     if i == 0:
-                        self.frame_filters += "ether src host {s_mac}".format(s_mac=station)
+                        self.frame_filters += "\
+                            ether src host {s_mac}".format(
+                                s_mac=station)
                     else:
-                        self.frame_filters += " || ether src host {s_mac}".format(s_mac=station)
+                        self.frame_filters += "\
+                            || ether src host {s_mac}".format(
+                                s_mac=station)
 
                 self.frame_filters += ")"
 
@@ -197,11 +212,12 @@ class ProbeRequestSniffer:
                     prn=self.new_packet,
                     stop_filter=self.should_stop_sniffer
                 )
-            except Exception as e:
-                self.exception = e
+            # pylint: disable=broad-except
+            except Exception as exception:
+                self.exception = exception
 
                 if self.debug:
-                    print("[!] Exception: " + str(e))
+                    print("[!] Exception: " + str(exception))
 
         def join(self, timeout=None):
             """
@@ -239,7 +255,6 @@ class ProbeRequestSniffer:
         and test purposes.
         """
 
-
         def __init__(self, new_packets, **kwargs):
             super().__init__()
 
@@ -262,11 +277,12 @@ class ProbeRequestSniffer:
                 while not self.stop_sniffer.isSet():
                     sleep(1)
                     self.new_packet()
-            except Exception as e:
-                self.exception = e
+            # pylint: disable=broad-except
+            except Exception as exception:
+                self.exception = exception
 
                 if self.debug:
-                    print("[!] Exception: " + str(e))
+                    print("[!] Exception: " + str(exception))
 
         def join(self, timeout=None):
             """
@@ -280,6 +296,8 @@ class ProbeRequestSniffer:
             """
             Adds a new fake packet to the queue to be processed.
             """
+
+            # pylint: disable=no-member
 
             fake_probe_req = RadioTap() \
                 / Dot11(
@@ -296,7 +314,8 @@ class ProbeRequestSniffer:
 
         def should_stop_sniffer(self):
             """
-            Returns true if the fake sniffer should be stopped and false otherwise.
+            Returns true if the fake sniffer should be stopped
+            and false otherwise.
             """
 
             return self.stop_sniffer.isSet()
@@ -353,11 +372,12 @@ class ProbeRequestSniffer:
                         continue
 
                     if (self.essid_filters is not None
-                            and not probe_request.essid in self.essid_filters):
+                            and probe_request.essid not in self.essid_filters):
                         continue
 
                     if (self.essid_regex is not None
-                            and not match(self.essid_regex, probe_request.essid)):
+                            and not
+                            match(self.essid_regex, probe_request.essid)):
                         continue
 
                     self.display_func(probe_request)
