@@ -11,3 +11,5 @@ repos:
     rev: 135c0cb79ced730834391aa6eeb5a27b6f5867ff # v2.3.1
     hooks:
       - id: pylint
+        entry: python3 -m pylint.__main__
+        language: system
