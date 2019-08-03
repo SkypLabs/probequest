@@ -39,16 +39,16 @@ labels:
 
   - name: android
     description: Android platform support issues
-    color: 047277
+    color: 04727a
   - name: linux
     description: Linux platform support issues
-    color: 047277
+    color: 04727a
   - name: macos
     description: Apple macOS platform support issues
-    color: 047277
+    color: 04727a
   - name: windows
     description: Microsoft Windows platform support issues
-    color: 047277
+    color: 04727a
 
   - name: bug
     description: New bug
