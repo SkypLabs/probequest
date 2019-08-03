@@ -23,6 +23,9 @@ labels:
   - name: optimisation
     description: Optimisation
     color: 84b6eb
+  - name: refactor
+    description: Refactoring
+    color: 84b6eb
 
   - name: sniffer
     description: Related to the sniffer
@@ -33,6 +36,19 @@ labels:
   - name: ui
     description: Related to the user interface
     color: 1d76db
+
+  - name: android
+    description: Android platform support issues
+    color: #047277
+  - name: linux
+    description: Linux platform support issues
+    color: #047277
+  - name: macos
+    description: Apple macOS platform support issues
+    color: #047277
+  - name: windows
+    description: Microsoft Windows platform support issues
+    color: #047277
 
   - name: bug
     description: New bug
