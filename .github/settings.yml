@@ -23,6 +23,9 @@ labels:
   - name: optimisation
     description: Optimisation
     color: 84b6eb
+  - name: refactor
+    description: Refactoring
+    color: 84b6eb
 
   - name: sniffer
     description: Related to the sniffer
