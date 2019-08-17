@@ -10,6 +10,7 @@ import pylint.lint
 from scapy.layers.dot11 import RadioTap, Dot11, Dot11ProbeReq, Dot11Elt
 from scapy.packet import fuzz
 from netaddr.core import AddrFormatError
+from probequest.config import Config
 from probequest.probe_request import ProbeRequest
 from probequest.probe_request_sniffer import ProbeRequestSniffer
 
@@ -106,15 +107,39 @@ class TestProbeRequest(unittest.TestCase):
         )
 
 
+class TestConfig(unittest.TestCase):
+    """
+    Unit tests for the 'Config' class.
+    """
+
+    def test_bad_display_function(self):
+        """
+        Assigns a non-callable object to the display callback function.
+        """
+
+        with self.assertRaises(TypeError):
+            config = Config()
+            config.display_func = "test"
+
+    def test_bad_storage_function(self):
+        """
+        Assigns a non-callable object to the storage callback function.
+        """
+
+        with self.assertRaises(TypeError):
+            config = Config()
+            config.storage_func = "test"
+
+
 class TestProbeRequestSniffer(unittest.TestCase):
     """
-    Unit tests for the ProbeRequestSniffer class.
+    Unit tests for the 'ProbeRequestSniffer' class.
     """
 
     def test_without_parameters(self):
         """
         Initialises a ProbeRequestSniffer object
-        without parameters.
+        with a non-callable storage function.
         """
 
         # pylint: disable=no-value-for-parameter
@@ -122,29 +147,15 @@ class TestProbeRequestSniffer(unittest.TestCase):
         with self.assertRaises(TypeError):
             sniffer = ProbeRequestSniffer()  # noqa: F841
 
-    def test_bad_display_function(self):
+    def test_bad_parameter(self):
         """
-        Initialises a ProbeRequestSniffer object
-        with a non-callable display function.
-        """
-
-        with self.assertRaises(TypeError):
-            sniffer = ProbeRequestSniffer(  # noqa: F841
-                "wlan0",
-                display_func="Test"
-            )
-
-    def test_bad_storage_function(self):
-        """
-        Initialises a ProbeRequestSniffer object
-        with a non-callable storage function.
+        Initialises a 'ProbeRequestSniffer' object with a bad parameter.
         """
 
-        with self.assertRaises(TypeError):
-            sniffer = ProbeRequestSniffer(  # noqa: F841
-                "wlan0",
-                storage_func="Test"
-            )
+        # pylint: disable=no-value-for-parameter
+
+        with self.assertRaises(AttributeError):
+            sniffer = ProbeRequestSniffer("test")  # noqa: F841
 
     def test_create_sniffer(self):
         """
@@ -153,7 +164,8 @@ class TestProbeRequestSniffer(unittest.TestCase):
 
         # pylint: disable=no-self-use
 
-        sniffer = ProbeRequestSniffer("wlan0")  # noqa: F841
+        config = Config()
+        sniffer = ProbeRequestSniffer(config)  # noqa: F841
 
     def test_stop_before_start(self):
         """
@@ -164,7 +176,8 @@ class TestProbeRequestSniffer(unittest.TestCase):
 
         # pylint: disable=no-self-use
 
-        sniffer = ProbeRequestSniffer("wlan0")
+        config = Config()
+        sniffer = ProbeRequestSniffer(config)
         sniffer.stop()
 
 
