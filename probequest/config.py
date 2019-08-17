@@ -92,13 +92,11 @@ class Config:
 
             for i, station in enumerate(self.mac_exclusions):
                 if i == 0:
-                    frame_filter += "\
-                        ether src host {s_mac}".format(
-                            s_mac=station)
+                    frame_filter += "ether src host {s_mac}".format(
+                        s_mac=station)
                 else:
-                    frame_filter += "\
-                        || ether src host {s_mac}".format(
-                            s_mac=station)
+                    frame_filter += "|| ether src host {s_mac}".format(
+                        s_mac=station)
 
             frame_filter += ")"
 
@@ -107,13 +105,11 @@ class Config:
 
             for i, station in enumerate(self.mac_filters):
                 if i == 0:
-                    frame_filter += "\
-                        ether src host {s_mac}".format(
-                            s_mac=station)
+                    frame_filter += "ether src host {s_mac}".format(
+                        s_mac=station)
                 else:
-                    frame_filter += "\
-                        || ether src host {s_mac}".format(
-                            s_mac=station)
+                    frame_filter += "|| ether src host {s_mac}".format(
+                        s_mac=station)
 
             frame_filter += ")"
 
