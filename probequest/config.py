@@ -6,6 +6,7 @@ ProbeQuest configuration.
 """
 
 from enum import Enum
+from re import compile as rcompile, IGNORECASE
 
 
 class Mode(Enum):
@@ -117,3 +118,19 @@ class Config:
             frame_filter += ")"
 
         return frame_filter
+
+    def complile_essid_regex(self):
+        """
+        Returns the compiled version of the ESSID regex.
+        """
+
+        if self.essid_regex is not None:
+            if self.ignore_case:
+                return rcompile(
+                    self.essid_regex,
+                    IGNORECASE
+                )
+
+            return rcompile(self.essid_regex)
+
+        return None

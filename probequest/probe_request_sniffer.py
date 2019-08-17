@@ -3,7 +3,7 @@ A Wi-Fi probe request sniffer.
 """
 
 from queue import Queue, Empty
-from re import compile as rcompile, match, IGNORECASE
+from re import match
 from threading import Thread, Event
 
 from scapy.config import conf as sconf
@@ -276,23 +276,14 @@ class ProbeRequestSniffer:
             self.config = config
             self.new_packets = new_packets
 
+            self.cregex = self.config.complile_essid_regex()
+
             self.stop_parser = Event()
 
             if self.config.debug:
                 print("[!] ESSID filters: " + str(self.config.essid_filters))
                 print("[!] ESSID regex: " + str(self.config.essid_regex))
                 print("[!] Ignore case: " + str(self.config.ignore_case))
-
-            if self.config.essid_regex is not None:
-                if self.config.ignore_case:
-                    self.cregex = rcompile(
-                        self.config.essid_regex,
-                        IGNORECASE
-                    )
-                else:
-                    self.cregex = rcompile(self.config.essid_regex)
-            else:
-                self.cregex = None
 
         def run(self):
             # The parser continues to do its job even after the call of the
