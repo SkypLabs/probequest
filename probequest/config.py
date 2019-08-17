@@ -77,3 +77,43 @@ class Config:
             )
 
         self._storage_func = func
+
+    def generate_frame_filter(self):
+        """
+        Generates and returns the frame filter according to the different
+        options set of the current 'Config' object.
+        """
+
+        frame_filter = "type mgt subtype probe-req"
+
+        if self.mac_exclusions is not None:
+            frame_filter += " and not ("
+
+            for i, station in enumerate(self.mac_exclusions):
+                if i == 0:
+                    frame_filter += "\
+                        ether src host {s_mac}".format(
+                            s_mac=station)
+                else:
+                    frame_filter += "\
+                        || ether src host {s_mac}".format(
+                            s_mac=station)
+
+            frame_filter += ")"
+
+        if self.mac_filters is not None:
+            frame_filter += " and ("
+
+            for i, station in enumerate(self.mac_filters):
+                if i == 0:
+                    frame_filter += "\
+                        ether src host {s_mac}".format(
+                            s_mac=station)
+                else:
+                    frame_filter += "\
+                        || ether src host {s_mac}".format(
+                            s_mac=station)
+
+            frame_filter += ")"
+
+        return frame_filter

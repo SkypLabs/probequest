@@ -127,51 +127,22 @@ class ProbeRequestSniffer:
             self.config = config
             self.new_packets = new_packets
 
-            self.frame_filters = "type mgt subtype probe-req"
+            self.frame_filter = self.config.generate_frame_filter()
+
             self.socket = None
             self.stop_sniffer = Event()
 
             self.exception = None
 
-            if self.config.mac_exclusions is not None:
-                self.frame_filters += " and not ("
-
-                for i, station in enumerate(self.config.mac_exclusions):
-                    if i == 0:
-                        self.frame_filters += "\
-                            ether src host {s_mac}".format(
-                                s_mac=station)
-                    else:
-                        self.frame_filters += "\
-                            || ether src host {s_mac}".format(
-                                s_mac=station)
-
-                self.frame_filters += ")"
-
-            if self.config.mac_filters is not None:
-                self.frame_filters += " and ("
-
-                for i, station in enumerate(self.config.mac_filters):
-                    if i == 0:
-                        self.frame_filters += "\
-                            ether src host {s_mac}".format(
-                                s_mac=station)
-                    else:
-                        self.frame_filters += "\
-                            || ether src host {s_mac}".format(
-                                s_mac=station)
-
-                self.frame_filters += ")"
-
             if self.config.debug:
-                print("[!] Frame filters: " + self.frame_filters)
+                print("[!] Frame filter: " + self.frame_filter)
 
         def run(self):
             try:
                 self.socket = sconf.L2listen(
                     type=ETH_P_ALL,
                     iface=self.config.interface,
-                    filter=self.frame_filters
+                    filter=self.frame_filter
                 )
 
                 sniff(
