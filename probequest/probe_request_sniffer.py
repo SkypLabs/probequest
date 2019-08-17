@@ -6,10 +6,9 @@ from queue import Queue, Empty
 from re import match
 from threading import Thread, Event
 
-from scapy.config import conf as sconf
-from scapy.data import ETH_P_ALL
 from scapy.layers.dot11 import RadioTap, Dot11, Dot11ProbeReq, Dot11Elt
-from scapy.sendrecv import sniff
+from scapy.sendrecv import AsyncSniffer
+from scapy.error import Scapy_Exception
 
 from probequest.probe_request import ProbeRequest
 
@@ -19,16 +18,12 @@ class ProbeRequestSniffer:
     Probe request sniffer class.
     """
 
-    SNIFFER_STOP_TIMEOUT = 2.0
-
     def __init__(self, config):
         self.config = config
 
         self.new_packets = Queue()
         self.new_sniffer()
         self.new_parser()
-
-        self.sniffer_running = False
 
     def start(self):
         """
@@ -37,24 +32,13 @@ class ProbeRequestSniffer:
         This method will start the sniffing and parsing threads.
         """
 
-        try:
-            self.sniffer.start()
-        except RuntimeError:
-            self.new_sniffer()
-            self.sniffer.start()
+        self.sniffer.start()
 
         try:
             self.parser.start()
         except RuntimeError:
             self.new_parser()
             self.parser.start()
-
-        exception = self.sniffer.get_exception()
-
-        if exception is not None:
-            raise exception
-
-        self.sniffer_running = True
 
     def stop(self):
         """
@@ -64,21 +48,16 @@ class ProbeRequestSniffer:
         """
 
         try:
-            self.sniffer.join(timeout=ProbeRequestSniffer.SNIFFER_STOP_TIMEOUT)
-        except RuntimeError:
-            # stop() has been called before start().
+            self.sniffer.stop()
+        except Scapy_Exception:
+            # The sniffer was not running.
             pass
-        finally:
-            if self.sniffer.is_alive():
-                self.sniffer.socket.close()
 
         try:
             self.parser.join()
         except RuntimeError:
             # stop() has been called before start().
             pass
-
-        self.sniffer_running = False
 
     def new_sniffer(self):
         """
@@ -91,9 +70,11 @@ class ProbeRequestSniffer:
                 self.new_packets
             )
         else:
-            self.sniffer = self.PacketSniffer(
-                self.config,
-                self.new_packets
+            self.sniffer = AsyncSniffer(
+                iface=self.config.interface,
+                filter=self.config.generate_frame_filter(),
+                store=False,
+                prn=self.new_packet
             )
 
     def new_parser(self):
@@ -112,81 +93,14 @@ class ProbeRequestSniffer:
         false otherwise.
         """
 
-        return self.sniffer_running
+        return self.sniffer.running
 
-    class PacketSniffer(Thread):
+    def new_packet(self, packet):
         """
-        A packet sniffing thread.
+        Adds a new packet to the queue to be processed.
         """
 
-        def __init__(self, config, new_packets):
-            super().__init__()
-
-            self.daemon = True
-
-            self.config = config
-            self.new_packets = new_packets
-
-            self.frame_filter = self.config.generate_frame_filter()
-
-            self.socket = None
-            self.stop_sniffer = Event()
-
-            self.exception = None
-
-            if self.config.debug:
-                print("[!] Frame filter: " + self.frame_filter)
-
-        def run(self):
-            try:
-                self.socket = sconf.L2listen(
-                    type=ETH_P_ALL,
-                    iface=self.config.interface,
-                    filter=self.frame_filter
-                )
-
-                sniff(
-                    opened_socket=self.socket,
-                    store=False,
-                    prn=self.new_packet,
-                    stop_filter=self.should_stop_sniffer
-                )
-            # pylint: disable=broad-except
-            except Exception as exception:
-                self.exception = exception
-
-                if self.config.debug:
-                    print("[!] Exception: " + str(exception))
-
-        def join(self, timeout=None):
-            """
-            Stops the packet sniffer.
-            """
-
-            self.stop_sniffer.set()
-            super().join(timeout)
-
-        def new_packet(self, packet):
-            """
-            Adds a new packet to the queue to be processed.
-            """
-
-            self.new_packets.put(packet)
-
-        def should_stop_sniffer(self, packet):
-            """
-            Returns true if the sniffer should be stopped and false otherwise.
-            """
-
-            # pylint: disable=unused-argument
-
-            return self.stop_sniffer.isSet()
-
-        def get_exception(self):
-            """
-            Returns the raised exception if any, otherwise returns none.
-            """
-            return self.exception
+        self.new_packets.put(packet)
 
     class FakePacketSniffer(Thread):
         """
