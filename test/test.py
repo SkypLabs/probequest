@@ -10,19 +10,19 @@ import pylint.lint
 from scapy.layers.dot11 import RadioTap, Dot11, Dot11ProbeReq, Dot11Elt
 from scapy.packet import fuzz
 from netaddr.core import AddrFormatError
+from probequest.config import Config
 from probequest.probe_request import ProbeRequest
 from probequest.probe_request_sniffer import ProbeRequestSniffer
 
 
 class TestProbeRequest(unittest.TestCase):
     """
-    Unit tests for the ProbeRequest class.
+    Unit tests for the 'ProbeRequest' class.
     """
 
     def test_without_parameters(self):
         """
-        Initialises a ProbeRequest object
-        without any parameter.
+        Initialises a 'ProbeRequest' object without any parameter.
         """
 
         # pylint: disable=no-value-for-parameter
@@ -32,8 +32,7 @@ class TestProbeRequest(unittest.TestCase):
 
     def test_with_only_one_parameter(self):
         """
-        Initialises a ProbeRequest object
-        with only one parameter.
+        Initialises a 'ProbeRequest' object with only one parameter.
         """
 
         # pylint: disable=no-value-for-parameter
@@ -45,8 +44,7 @@ class TestProbeRequest(unittest.TestCase):
 
     def test_with_only_two_parameters(self):
         """
-        Initialises a ProbeRequest object
-        with only two parameters.
+        Initialises a 'ProbeRequest' object with only two parameters.
         """
 
         # pylint: disable=no-value-for-parameter
@@ -59,8 +57,7 @@ class TestProbeRequest(unittest.TestCase):
 
     def test_create_a_probe_request(self):
         """
-        Creates a new ProbeRequest with all
-        the required parameters.
+        Creates a new 'ProbeRequest' with all the required parameters.
         """
 
         # pylint: disable=no-self-use
@@ -73,8 +70,7 @@ class TestProbeRequest(unittest.TestCase):
 
     def test_bad_mac_address(self):
         """
-        Initialises a ProbeRequest object
-        with a malformed MAC address.
+        Initialises a 'ProbeRequest' object with a malformed MAC address.
         """
 
         timestamp = 1517872027.0
@@ -86,8 +82,7 @@ class TestProbeRequest(unittest.TestCase):
 
     def test_print_a_probe_request(self):
         """
-        Initialises a ProbeRequest object
-        and prints it.
+        Initialises a 'ProbeRequest' object and prints it.
         """
 
         timestamp = 1517872027.0
@@ -106,15 +101,121 @@ class TestProbeRequest(unittest.TestCase):
         )
 
 
+class TestConfig(unittest.TestCase):
+    """
+    Unit tests for the 'Config' class.
+    """
+
+    def test_bad_display_function(self):
+        """
+        Assigns a non-callable object to the display callback function.
+        """
+
+        with self.assertRaises(TypeError):
+            config = Config()
+            config.display_func = "test"
+
+    def test_bad_storage_function(self):
+        """
+        Assigns a non-callable object to the storage callback function.
+        """
+
+        with self.assertRaises(TypeError):
+            config = Config()
+            config.storage_func = "test"
+
+    def test_default_frame_filter(self):
+        """
+        Tests the default frame filter.
+        """
+
+        config = Config()
+        frame_filter = config.generate_frame_filter()
+
+        self.assertEqual(
+            frame_filter,
+            "type mgt subtype probe-req"
+        )
+
+    def test_frame_filter_with_mac_filtering(self):
+        """
+        Tests the frame filter when some MAC addresses need to be filtered.
+        """
+
+        config = Config()
+        config.mac_filters = ["a4:77:33:9a:73:5c", "b0:05:94:5d:5a:4d"]
+        frame_filter = config.generate_frame_filter()
+
+        self.assertEqual(
+            frame_filter,
+            "type mgt subtype probe-req" +
+            " and (ether src host a4:77:33:9a:73:5c" +
+            "|| ether src host b0:05:94:5d:5a:4d)"
+        )
+
+    def test_frame_filter_with_mac_exclusion(self):
+        """
+        Tests the frame filter when some MAC addresses need to be excluded.
+        """
+
+        config = Config()
+        config.mac_exclusions = ["a4:77:33:9a:73:5c", "b0:05:94:5d:5a:4d"]
+        frame_filter = config.generate_frame_filter()
+
+        self.assertEqual(
+            frame_filter,
+            "type mgt subtype probe-req" +
+            " and not (ether src host a4:77:33:9a:73:5c" +
+            "|| ether src host b0:05:94:5d:5a:4d)"
+        )
+
+    def test_compile_essid_regex_with_an_empty_regex(self):
+        """
+        Tests 'complile_essid_regex' with an empty regex.
+        """
+
+        config = Config()
+        compiled_regex = config.complile_essid_regex()
+
+        self.assertEqual(compiled_regex, None)
+
+    def test_compile_essid_regex_with_a_case_sensitive_regex(self):
+        """
+        Tests 'complile_essid_regex' with a case-sensitive regex.
+        """
+
+        from re import compile as rcompile
+
+        config = Config()
+        config.essid_regex = "Free Wi-Fi"
+        compiled_regex = config.complile_essid_regex()
+
+        self.assertEqual(compiled_regex, rcompile(config.essid_regex))
+
+    def test_compile_essid_regex_with_a_case_insensitive_regex(self):
+        """
+        Tests 'complile_essid_regex' with a case-insensitive regex.
+        """
+
+        from re import compile as rcompile, IGNORECASE
+
+        config = Config()
+        config.essid_regex = "Free Wi-Fi"
+        config.ignore_case = True
+        compiled_regex = config.complile_essid_regex()
+
+        self.assertEqual(compiled_regex, rcompile(
+            config.essid_regex, IGNORECASE))
+
+
 class TestProbeRequestSniffer(unittest.TestCase):
     """
-    Unit tests for the ProbeRequestSniffer class.
+    Unit tests for the 'ProbeRequestSniffer' class.
     """
 
     def test_without_parameters(self):
         """
-        Initialises a ProbeRequestSniffer object
-        without parameters.
+        Initialises a 'ProbeRequestSniffer' object without parameters.
         """
 
         # pylint: disable=no-value-for-parameter
@@ -122,61 +223,47 @@ class TestProbeRequestSniffer(unittest.TestCase):
         with self.assertRaises(TypeError):
             sniffer = ProbeRequestSniffer()  # noqa: F841
 
-    def test_bad_display_function(self):
+    def test_bad_parameter(self):
         """
-        Initialises a ProbeRequestSniffer object
-        with a non-callable display function.
-        """
-
-        with self.assertRaises(TypeError):
-            sniffer = ProbeRequestSniffer(  # noqa: F841
-                "wlan0",
-                display_func="Test"
-            )
-
-    def test_bad_storage_function(self):
-        """
-        Initialises a ProbeRequestSniffer object
-        with a non-callable storage function.
+        Initialises a 'ProbeRequestSniffer' object with a bad parameter.
         """
 
-        with self.assertRaises(TypeError):
-            sniffer = ProbeRequestSniffer(  # noqa: F841
-                "wlan0",
-                storage_func="Test"
-            )
+        # pylint: disable=no-value-for-parameter
+
+        with self.assertRaises(AttributeError):
+            sniffer = ProbeRequestSniffer("test")  # noqa: F841
 
     def test_create_sniffer(self):
         """
-        Creates a ProbeRequestSniffer object.
+        Creates a 'ProbeRequestSniffer' object with the correct parameter.
         """
 
         # pylint: disable=no-self-use
 
-        sniffer = ProbeRequestSniffer("wlan0")  # noqa: F841
+        config = Config()
+        sniffer = ProbeRequestSniffer(config)  # noqa: F841
 
     def test_stop_before_start(self):
         """
-        Creates a ProbeRequestSniffer object
-        and stops the sniffer before starting
-        it.
+        Creates a 'ProbeRequestSniffer' object and stops the sniffer before
+        starting it.
         """
 
         # pylint: disable=no-self-use
 
-        sniffer = ProbeRequestSniffer("wlan0")
+        config = Config()
+        sniffer = ProbeRequestSniffer(config)
         sniffer.stop()
 
 
 class TestProbeRequestParser(unittest.TestCase):
     """
-    Unit tests for the ProbeRequestParser class.
+    Unit tests for the 'ProbeRequestParser' class.
     """
 
     def test_no_probe_request_layer(self):
         """
-        Creates a non-probe-request Wi-Fi
-        packet and parses it with the
+        Creates a non-probe-request Wi-Fi packet and parses it with the
         'ProbeRequestParser.parse()' function.
         """
 
@@ -193,10 +280,8 @@ class TestProbeRequestParser(unittest.TestCase):
 
     def test_empty_essid(self):
         """
-        Creates a probe request packet
-        with an empty ESSID field and
-        parses it with the
-        'ProbeRequestParser.parse()' function.
+        Creates a probe request packet with an empty ESSID field and parses
+        it with the 'ProbeRequestParser.parse()' function.
         """
 
         # pylint: disable=no-self-use
@@ -216,9 +301,8 @@ class TestProbeRequestParser(unittest.TestCase):
 
     def test_fuzz_packets(self):
         """
-        Parses 1000 randomly-generated probe
-        requests with the ProbeRequestParser.parse()
-        function.
+        Parses 1000 randomly-generated probe requests with the
+        'ProbeRequestParser.parse()' function.
         """
 
         # pylint: disable=no-self-use

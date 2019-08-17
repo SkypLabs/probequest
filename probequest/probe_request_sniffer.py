@@ -3,10 +3,10 @@ A Wi-Fi probe request sniffer.
 """
 
 from queue import Queue, Empty
-from re import compile as rcompile, match, IGNORECASE
+from re import match
 from threading import Thread, Event
 
-from scapy.config import conf
+from scapy.config import conf as sconf
 from scapy.data import ETH_P_ALL
 from scapy.layers.dot11 import RadioTap, Dot11, Dot11ProbeReq, Dot11Elt
 from scapy.sendrecv import sniff
@@ -19,30 +19,10 @@ class ProbeRequestSniffer:
     Probe request sniffer class.
     """
 
-    # pylint: disable=too-many-instance-attributes
-
     SNIFFER_STOP_TIMEOUT = 2.0
 
-    def __init__(self, interface, **kwargs):
-        self.interface = interface
-        self.essid_filters = kwargs.get("essid", None)
-        self.essid_regex = kwargs.get("regex", None)
-        self.ignore_case = kwargs.get("ignore_case", None)
-        self.mac_exclusions = kwargs.get("exclude", None)
-        self.mac_filters = kwargs.get("station", None)
-        self.display_func = kwargs.get("display_func", lambda p: None)
-        self.storage_func = kwargs.get("storage_func", lambda p: None)
-        self.fake = kwargs.get("fake", False)
-        self.debug = kwargs.get("debug", False)
-
-        if not hasattr(self.display_func, "__call__"):
-            raise TypeError(
-                "The display function parameter is not a callable object"
-            )
-        if not hasattr(self.storage_func, "__call__"):
-            raise TypeError(
-                "The storage function parameter is not a callable object"
-            )
+    def __init__(self, config):
+        self.config = config
 
         self.new_packets = Queue()
         self.new_sniffer()
@@ -105,18 +85,15 @@ class ProbeRequestSniffer:
         Creates a new sniffing thread.
         """
 
-        if self.fake:
+        if self.config.fake:
             self.sniffer = self.FakePacketSniffer(
-                self.new_packets,
-                debug=self.debug
+                self.config,
+                self.new_packets
             )
         else:
             self.sniffer = self.PacketSniffer(
-                self.interface,
-                self.new_packets,
-                mac_exclusions=self.mac_exclusions,
-                mac_filters=self.mac_filters,
-                debug=self.debug
+                self.config,
+                self.new_packets
             )
 
     def new_parser(self):
@@ -125,13 +102,8 @@ class ProbeRequestSniffer:
         """
 
         self.parser = self.ProbeRequestParser(
-            self.new_packets,
-            essid_filters=self.essid_filters,
-            essid_regex=self.essid_regex,
-            ignore_case=self.ignore_case,
-            display_func=self.display_func,
-            storage_func=self.storage_func,
-            debug=self.debug
+            self.config,
+            self.new_packets
         )
 
     def is_running(self):
@@ -147,63 +119,30 @@ class ProbeRequestSniffer:
         A packet sniffing thread.
         """
 
-        def __init__(self, interface, new_packets, **kwargs):
+        def __init__(self, config, new_packets):
             super().__init__()
 
             self.daemon = True
 
-            self.interface = interface
+            self.config = config
             self.new_packets = new_packets
 
-            self.mac_exclusions = kwargs.get("mac_exclusions", None)
-            self.mac_filters = kwargs.get("mac_filters", None)
-            self.debug = kwargs.get("debug", False)
+            self.frame_filter = self.config.generate_frame_filter()
 
-            self.frame_filters = "type mgt subtype probe-req"
             self.socket = None
             self.stop_sniffer = Event()
 
             self.exception = None
 
-            if self.mac_exclusions is not None:
-                self.frame_filters += " and not ("
-
-                for i, station in enumerate(self.mac_exclusions):
-                    if i == 0:
-                        self.frame_filters += "\
-                            ether src host {s_mac}".format(
-                                s_mac=station)
-                    else:
-                        self.frame_filters += "\
-                            || ether src host {s_mac}".format(
-                                s_mac=station)
-
-                self.frame_filters += ")"
-
-            if self.mac_filters is not None:
-                self.frame_filters += " and ("
-
-                for i, station in enumerate(self.mac_filters):
-                    if i == 0:
-                        self.frame_filters += "\
-                            ether src host {s_mac}".format(
-                                s_mac=station)
-                    else:
-                        self.frame_filters += "\
-                            || ether src host {s_mac}".format(
-                                s_mac=station)
-
-                self.frame_filters += ")"
-
-            if self.debug:
-                print("[!] Frame filters: " + self.frame_filters)
+            if self.config.debug:
+                print("[!] Frame filter: " + self.frame_filter)
 
         def run(self):
             try:
-                self.socket = conf.L2listen(
+                self.socket = sconf.L2listen(
                     type=ETH_P_ALL,
-                    iface=self.interface,
-                    filter=self.frame_filters
+                    iface=self.config.interface,
+                    filter=self.frame_filter
                 )
 
                 sniff(
@@ -216,7 +155,7 @@ class ProbeRequestSniffer:
             except Exception as exception:
                 self.exception = exception
 
-                if self.debug:
+                if self.config.debug:
                     print("[!] Exception: " + str(exception))
 
         def join(self, timeout=None):
@@ -234,10 +173,12 @@ class ProbeRequestSniffer:
 
             self.new_packets.put(packet)
 
-        def should_stop_sniffer(self):
+        def should_stop_sniffer(self, packet):
             """
             Returns true if the sniffer should be stopped and false otherwise.
             """
+
+            # pylint: disable=unused-argument
 
             return self.stop_sniffer.isSet()
 
@@ -255,14 +196,14 @@ class ProbeRequestSniffer:
         and test purposes.
         """
 
-        def __init__(self, new_packets, **kwargs):
+        def __init__(self, config, new_packets):
             super().__init__()
 
+            self.config = config
             self.new_packets = new_packets
+
             self.stop_sniffer = Event()
             self.exception = None
-
-            self.debug = kwargs.get("debug", False)
 
             from faker import Faker
             from faker_wifi_essid import WifiESSID
@@ -281,7 +222,7 @@ class ProbeRequestSniffer:
             except Exception as exception:
                 self.exception = exception
 
-                if self.debug:
+                if self.config.debug:
                     print("[!] Exception: " + str(exception))
 
         def join(self, timeout=None):
@@ -312,11 +253,13 @@ class ProbeRequestSniffer:
 
             self.new_packets.put(fake_probe_req)
 
-        def should_stop_sniffer(self):
+        def should_stop_sniffer(self, packet):
             """
             Returns true if the fake sniffer should be stopped
             and false otherwise.
             """
+
+            # pylint: disable=unused-argument
 
             return self.stop_sniffer.isSet()
 
@@ -331,31 +274,20 @@ class ProbeRequestSniffer:
         A Wi-Fi probe request parsing thread.
         """
 
-        def __init__(self, new_packets, **kwargs):
+        def __init__(self, config, new_packets):
             super().__init__()
 
+            self.config = config
             self.new_packets = new_packets
-            self.essid_filters = kwargs.get("essid_filters", None)
-            self.essid_regex = kwargs.get("essid_regex", None)
-            self.ignore_case = kwargs.get("ignore_case", False)
-            self.display_func = kwargs.get("display_func", lambda p: None)
-            self.storage_func = kwargs.get("storage_func", lambda p: None)
-            self.debug = kwargs.get("debug", False)
+
+            self.cregex = self.config.complile_essid_regex()
 
             self.stop_parser = Event()
 
-            if self.debug:
-                print("[!] ESSID filters: " + str(self.essid_filters))
-                print("[!] ESSID regex: " + str(self.essid_regex))
-                print("[!] Ignore case: " + str(self.ignore_case))
-
-            if self.essid_regex is not None:
-                if self.ignore_case:
-                    self.essid_regex = rcompile(self.essid_regex, IGNORECASE)
-                else:
-                    self.essid_regex = rcompile(self.essid_regex)
-            else:
-                self.essid_regex = None
+            if self.config.debug:
+                print("[!] ESSID filters: " + str(self.config.essid_filters))
+                print("[!] ESSID regex: " + str(self.config.essid_regex))
+                print("[!] Ignore case: " + str(self.config.ignore_case))
 
         def run(self):
             # The parser continues to do its job even after the call of the
@@ -371,17 +303,18 @@ class ProbeRequestSniffer:
                     if not probe_request.essid:
                         continue
 
-                    if (self.essid_filters is not None
-                            and probe_request.essid not in self.essid_filters):
+                    if (self.config.essid_filters is not None
+                            and probe_request.essid
+                            not in self.config.essid_filters):
                         continue
 
-                    if (self.essid_regex is not None
+                    if (self.cregex is not None
                             and not
-                            match(self.essid_regex, probe_request.essid)):
+                            match(self.cregex, probe_request.essid)):
                         continue
 
-                    self.display_func(probe_request)
-                    self.storage_func(probe_request)
+                    self.config.display_func(probe_request)
+                    self.config.storage_func(probe_request)
 
                     self.new_packets.task_done()
                 except Empty:

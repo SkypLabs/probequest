@@ -31,16 +31,14 @@ class PNLViewer:
         ("key", "Q"), " quit",
     ])
 
-    def __init__(self, interface, **kwargs):
-        self.interface = interface
+    def __init__(self, config):
+        self.config = config
+
         self.stations = dict()
         self.loop = None
 
-        self.sniffer = ProbeRequestSniffer(
-            self.interface,
-            display_func=self.new_probe_req,
-            **kwargs
-        )
+        self.config.display_func = self.new_probe_req
+        self.sniffer = ProbeRequestSniffer(config)
 
         self.view = self.setup_view()
 
@@ -49,7 +47,7 @@ class PNLViewer:
         Returns the root widget.
         """
 
-        self.interface_text = urwid.Text(self.interface)
+        self.interface_text = urwid.Text(self.config.interface)
         self.sniffer_state_text = urwid.Text("Stopped")
 
         self.header = urwid.AttrWrap(urwid.Columns([
@@ -139,6 +137,7 @@ class PNLViewer:
         """
 
         # pylint: disable=unused-argument
+
         # 'button' is the widget object passed by Urwid.
 
         self.pnl_list.body = self.stations[choice]
