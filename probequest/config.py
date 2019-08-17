@@ -30,7 +30,7 @@ class Config:
 
     essid_filters = None
     essid_regex = None
-    ignore_case = True
+    ignore_case = False
 
     mac_exclusions = None
     mac_filters = None
