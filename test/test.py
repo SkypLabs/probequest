@@ -17,13 +17,12 @@ from probequest.probe_request_sniffer import ProbeRequestSniffer
 
 class TestProbeRequest(unittest.TestCase):
     """
-    Unit tests for the ProbeRequest class.
+    Unit tests for the 'ProbeRequest' class.
     """
 
     def test_without_parameters(self):
         """
-        Initialises a ProbeRequest object
-        without any parameter.
+        Initialises a 'ProbeRequest' object without any parameter.
         """
 
         # pylint: disable=no-value-for-parameter
@@ -33,8 +32,7 @@ class TestProbeRequest(unittest.TestCase):
 
     def test_with_only_one_parameter(self):
         """
-        Initialises a ProbeRequest object
-        with only one parameter.
+        Initialises a 'ProbeRequest' object with only one parameter.
         """
 
         # pylint: disable=no-value-for-parameter
@@ -46,8 +44,7 @@ class TestProbeRequest(unittest.TestCase):
 
     def test_with_only_two_parameters(self):
         """
-        Initialises a ProbeRequest object
-        with only two parameters.
+        Initialises a 'ProbeRequest' object with only two parameters.
         """
 
         # pylint: disable=no-value-for-parameter
@@ -60,8 +57,7 @@ class TestProbeRequest(unittest.TestCase):
 
     def test_create_a_probe_request(self):
         """
-        Creates a new ProbeRequest with all
-        the required parameters.
+        Creates a new 'ProbeRequest' with all the required parameters.
         """
 
         # pylint: disable=no-self-use
@@ -74,8 +70,7 @@ class TestProbeRequest(unittest.TestCase):
 
     def test_bad_mac_address(self):
         """
-        Initialises a ProbeRequest object
-        with a malformed MAC address.
+        Initialises a 'ProbeRequest' object with a malformed MAC address.
         """
 
         timestamp = 1517872027.0
@@ -87,8 +82,7 @@ class TestProbeRequest(unittest.TestCase):
 
     def test_print_a_probe_request(self):
         """
-        Initialises a ProbeRequest object
-        and prints it.
+        Initialises a 'ProbeRequest' object and prints it.
         """
 
         timestamp = 1517872027.0
@@ -138,8 +132,7 @@ class TestProbeRequestSniffer(unittest.TestCase):
 
     def test_without_parameters(self):
         """
-        Initialises a ProbeRequestSniffer object
-        with a non-callable storage function.
+        Initialises a 'ProbeRequestSniffer' object without parameters.
         """
 
         # pylint: disable=no-value-for-parameter
@@ -159,7 +152,7 @@ class TestProbeRequestSniffer(unittest.TestCase):
 
     def test_create_sniffer(self):
         """
-        Creates a ProbeRequestSniffer object.
+        Creates a 'ProbeRequestSniffer' object with the correct parameter.
         """
 
         # pylint: disable=no-self-use
@@ -169,9 +162,8 @@ class TestProbeRequestSniffer(unittest.TestCase):
 
     def test_stop_before_start(self):
         """
-        Creates a ProbeRequestSniffer object
-        and stops the sniffer before starting
-        it.
+        Creates a 'ProbeRequestSniffer' object and stops the sniffer before
+        starting it.
         """
 
         # pylint: disable=no-self-use
@@ -183,13 +175,12 @@ class TestProbeRequestSniffer(unittest.TestCase):
 
 class TestProbeRequestParser(unittest.TestCase):
     """
-    Unit tests for the ProbeRequestParser class.
+    Unit tests for the 'ProbeRequestParser' class.
     """
 
     def test_no_probe_request_layer(self):
         """
-        Creates a non-probe-request Wi-Fi
-        packet and parses it with the
+        Creates a non-probe-request Wi-Fi packet and parses it with the
         'ProbeRequestParser.parse()' function.
         """
 
@@ -206,10 +197,8 @@ class TestProbeRequestParser(unittest.TestCase):
 
     def test_empty_essid(self):
         """
-        Creates a probe request packet
-        with an empty ESSID field and
-        parses it with the
-        'ProbeRequestParser.parse()' function.
+        Creates a probe request packet with an empty ESSID field and parses
+        it with the 'ProbeRequestParser.parse()' function.
         """
 
         # pylint: disable=no-self-use
@@ -229,9 +218,8 @@ class TestProbeRequestParser(unittest.TestCase):
 
     def test_fuzz_packets(self):
         """
-        Parses 1000 randomly-generated probe
-        requests with the ProbeRequestParser.parse()
-        function.
+        Parses 1000 randomly-generated probe requests with the
+        'ProbeRequestParser.parse()' function.
         """
 
         # pylint: disable=no-self-use
