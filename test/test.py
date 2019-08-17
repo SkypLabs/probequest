@@ -169,6 +169,44 @@ class TestConfig(unittest.TestCase):
             "|| ether src host b0:05:94:5d:5a:4d)"
         )
 
+    def test_compile_essid_regex_with_an_empty_regex(self):
+        """
+        Tests 'complile_essid_regex' with an empty regex.
+        """
+
+        config = Config()
+        compiled_regex = config.complile_essid_regex()
+
+        self.assertEqual(compiled_regex, None)
+
+    def test_compile_essid_regex_with_a_case_sensitive_regex(self):
+        """
+        Tests 'complile_essid_regex' with a case-sensitive regex.
+        """
+
+        from re import compile as rcompile
+
+        config = Config()
+        config.essid_regex = "Free Wi-Fi"
+        compiled_regex = config.complile_essid_regex()
+
+        self.assertEqual(compiled_regex, rcompile(config.essid_regex))
+
+    def test_compile_essid_regex_with_a_case_insensitive_regex(self):
+        """
+        Tests 'complile_essid_regex' with a case-insensitive regex.
+        """
+
+        from re import compile as rcompile, IGNORECASE
+
+        config = Config()
+        config.essid_regex = "Free Wi-Fi"
+        config.ignore_case = True
+        compiled_regex = config.complile_essid_regex()
+
+        self.assertEqual(compiled_regex, rcompile(
+            config.essid_regex, IGNORECASE))
+
 
 class TestProbeRequestSniffer(unittest.TestCase):
     """
