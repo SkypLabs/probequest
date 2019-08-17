@@ -173,10 +173,12 @@ class ProbeRequestSniffer:
 
             self.new_packets.put(packet)
 
-        def should_stop_sniffer(self):
+        def should_stop_sniffer(self, packet):
             """
             Returns true if the sniffer should be stopped and false otherwise.
             """
+
+            # pylint: disable=unused-argument
 
             return self.stop_sniffer.isSet()
 
@@ -251,11 +253,13 @@ class ProbeRequestSniffer:
 
             self.new_packets.put(fake_probe_req)
 
-        def should_stop_sniffer(self):
+        def should_stop_sniffer(self, packet):
             """
             Returns true if the fake sniffer should be stopped
             and false otherwise.
             """
+
+            # pylint: disable=unused-argument
 
             return self.stop_sniffer.isSet()
 
