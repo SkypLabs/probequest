@@ -13,8 +13,8 @@ class RawProbeRequestViewer:
     Displays the raw probe requests passing near the Wi-Fi interface.
     """
 
-    def __init__(self, interface, **kwargs):
-        self.output = kwargs.get("output", None)
+    def __init__(self, config):
+        self.output = config.output_file
 
         if self.output is not None:
             from csv import writer
@@ -29,17 +29,15 @@ class RawProbeRequestViewer:
                     probe_req.essid
                 ])
         else:
-            write_csv = lambda p: None  # noqa: E731
+            write_csv = lambda *args: None  # noqa: E731
 
         def display_probe_req(probe_req):
             print(probe_req)
 
-        self.sniffer = ProbeRequestSniffer(
-            interface,
-            display_func=display_probe_req,
-            storage_func=write_csv,
-            **kwargs
-        )
+        config.display_func = display_probe_req
+        config.storage_func = write_csv
+
+        self.sniffer = ProbeRequestSniffer(config)
 
     def start(self):
         """
