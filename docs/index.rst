@@ -24,5 +24,6 @@ This project has been inspired by `this paper`_.
     mitigation
     modules
     development
+    security
 
 .. _this paper: https://brambonne.com/docs/bonne14sasquatch.pdf
