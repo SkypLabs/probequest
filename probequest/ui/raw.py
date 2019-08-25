@@ -10,7 +10,7 @@ from probequest.probe_request_sniffer import ProbeRequestSniffer
 
 class RawProbeRequestViewer:
     """
-    Displays the raw probe requests passing near the Wi-Fi interface.
+    Displays the raw probe requests passing nearby the Wi-Fi interface.
     """
 
     def __init__(self, config):

@@ -4,14 +4,9 @@ ProbeQuest
 
 |PyPI Package| |PyPI Downloads| |PyPI Python Versions| |Build Status Master Branch| |Build Status Develop Branch| |Code Coverage| |LGTM Grade| |LGTM Alerts| |Documentation Status|
 
-Toolkit allowing to sniff and display the Wi-Fi probe requests passing near
-your wireless interface.
+Toolkit allowing to sniff and display the Wi-Fi probe requests passing nearby your wireless interface.
 
-Probe requests are sent by a station to elicit information about access
-points, in particular to determine if an access point is present or not
-in the nearby environment. Some devices (mostly smartphones and tablets)
-use these requests to determine if one of the networks they have
-previously been connected to is in range, leaking personal information.
+Probe requests are sent by a station to elicit information about access points, in particular to determine if an access point is present or not in the nearby environment. Some devices (mostly smartphones and tablets) use these requests to determine if one of the networks they have previously been connected to is in range, leaking personal information.
 
 Further details are discussed in `this
 paper <https://brambonne.com/docs/bonne14sasquatch.pdf>`__.

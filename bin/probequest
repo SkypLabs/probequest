@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 """
-Toolkit allowing to sniff and display the Wi-Fi
-probe requests passing near your wireless interface.
+Toolkit allowing to sniff and display the Wi-Fi probe requests passing nearby
+your wireless interface.
 """
 
 # pylint: disable=no-name-in-module
