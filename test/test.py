@@ -7,12 +7,16 @@ Unit tests written with the 'unittest' module.
 
 import unittest
 import pylint.lint
+
+from netaddr.core import AddrFormatError
+
 from scapy.layers.dot11 import RadioTap, Dot11, Dot11ProbeReq, Dot11Elt
 from scapy.packet import fuzz
-from netaddr.core import AddrFormatError
+
 from probequest.config import Config
 from probequest.probe_request import ProbeRequest
 from probequest.probe_request_sniffer import ProbeRequestSniffer
+from probequest.probe_request_parser import ProbeRequestParser
 
 
 class TestProbeRequest(unittest.TestCase):
@@ -276,7 +280,7 @@ class TestProbeRequestParser(unittest.TestCase):
                 addr3="dd:ee:ff:11:22:33"
             )
 
-        ProbeRequestSniffer.ProbeRequestParser.parse(packet)
+        ProbeRequestParser.parse(packet)
 
     def test_empty_essid(self):
         """
@@ -297,7 +301,7 @@ class TestProbeRequestParser(unittest.TestCase):
                 info=""
             )
 
-        ProbeRequestSniffer.ProbeRequestParser.parse(packet)
+        ProbeRequestParser.parse(packet)
 
     def test_fuzz_packets(self):
         """
@@ -309,7 +313,7 @@ class TestProbeRequestParser(unittest.TestCase):
 
         for i in range(0, 1000):
             packet = RadioTap()/fuzz(Dot11()/Dot11ProbeReq()/Dot11Elt())
-            ProbeRequestSniffer.ProbeRequestParser.parse(packet)
+            ProbeRequestParser.parse(packet)
 
 
 class TestLinter(unittest.TestCase):
