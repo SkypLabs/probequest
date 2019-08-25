@@ -5,14 +5,21 @@ Unit tests written with the 'unittest' module.
 # pylint: disable=import-error
 # pylint: disable=unused-variable
 
+from queue import Queue
 import unittest
 import pylint.lint
+from netaddr.core import AddrFormatError
+
 from scapy.layers.dot11 import RadioTap, Dot11, Dot11ProbeReq, Dot11Elt
 from scapy.packet import fuzz
-from netaddr.core import AddrFormatError
+from scapy.error import Scapy_Exception
+
 from probequest.config import Config
 from probequest.probe_request import ProbeRequest
 from probequest.probe_request_sniffer import ProbeRequestSniffer
+from probequest.packet_sniffer import PacketSniffer
+from probequest.fake_packet_sniffer import FakePacketSniffer
+from probequest.probe_request_parser import ProbeRequestParser
 
 
 class TestProbeRequest(unittest.TestCase):
@@ -256,6 +263,118 @@ class TestProbeRequestSniffer(unittest.TestCase):
         sniffer.stop()
 
 
+class TestPacketSniffer(unittest.TestCase):
+    """
+    Unit tests for the 'PacketSniffer' class.
+    """
+
+    def test_new_packet(self):
+        """
+        Tests the 'new_packet' method.
+        """
+
+        config = Config()
+        new_packets = Queue()
+        sniffer = PacketSniffer(config, new_packets)
+
+        self.assertEqual(sniffer.new_packets.qsize(), 0)
+
+        packet = RadioTap() \
+            / Dot11(
+                addr1="ff:ff:ff:ff:ff:ff",
+                addr2="aa:bb:cc:11:22:33",
+                addr3="dd:ee:ff:11:22:33"
+            ) \
+            / Dot11ProbeReq() \
+            / Dot11Elt(
+                info="Test"
+            )
+
+        sniffer.new_packet(packet)
+        self.assertEqual(sniffer.new_packets.qsize(), 1)
+
+        ProbeRequestParser.parse(sniffer.new_packets.get(timeout=1))
+
+    def test_stop_before_start(self):
+        """
+        Creates a 'PacketSniffer' object and stops the sniffer before starting
+        it.
+        """
+
+        config = Config()
+        new_packets = Queue()
+        sniffer = PacketSniffer(config, new_packets)
+
+        with self.assertRaises(Scapy_Exception):
+            sniffer.stop()
+
+    def test_is_running_before_start(self):
+        """
+        Creates a 'PacketSniffer' object and runs 'is_running' before starting
+        the sniffer.
+        """
+
+        config = Config()
+        new_packets = Queue()
+        sniffer = PacketSniffer(config, new_packets)
+
+        self.assertFalse(sniffer.is_running())
+
+
+class TestFakePacketSniffer(unittest.TestCase):
+    """
+    Unit tests for the 'FakePacketSniffer' class.
+    """
+
+    def test_new_packet(self):
+        """
+        Tests the 'new_packet' method.
+        """
+
+        config = Config()
+        new_packets = Queue()
+        sniffer = FakePacketSniffer(config, new_packets)
+
+        self.assertEqual(sniffer.new_packets.qsize(), 0)
+
+        sniffer.new_packet()
+        self.assertEqual(sniffer.new_packets.qsize(), 1)
+        sniffer.new_packet()
+        self.assertEqual(sniffer.new_packets.qsize(), 2)
+        sniffer.new_packet()
+        self.assertEqual(sniffer.new_packets.qsize(), 3)
+
+        ProbeRequestParser.parse(sniffer.new_packets.get(timeout=1))
+        ProbeRequestParser.parse(sniffer.new_packets.get(timeout=1))
+        ProbeRequestParser.parse(sniffer.new_packets.get(timeout=1))
+
+    def test_stop_before_start(self):
+        """
+        Creates a 'FakePacketSniffer' object and stops the sniffer before
+        starting it.
+        """
+
+        config = Config()
+        new_packets = Queue()
+        sniffer = FakePacketSniffer(config, new_packets)
+
+        with self.assertRaises(RuntimeError):
+            sniffer.stop()
+
+    def test_stop_before_start_using_join(self):
+        """
+        Creates a 'FakePacketSniffer' object and stops the sniffer before
+        starting it.
+        """
+
+        config = Config()
+        new_packets = Queue()
+        sniffer = FakePacketSniffer(config, new_packets)
+
+        with self.assertRaises(RuntimeError):
+            sniffer.join()
+
+
 class TestProbeRequestParser(unittest.TestCase):
     """
     Unit tests for the 'ProbeRequestParser' class.
@@ -276,7 +395,7 @@ class TestProbeRequestParser(unittest.TestCase):
                 addr3="dd:ee:ff:11:22:33"
             )
 
-        ProbeRequestSniffer.ProbeRequestParser.parse(packet)
+        ProbeRequestParser.parse(packet)
 
     def test_empty_essid(self):
         """
@@ -297,7 +416,7 @@ class TestProbeRequestParser(unittest.TestCase):
                 info=""
             )
 
-        ProbeRequestSniffer.ProbeRequestParser.parse(packet)
+        ProbeRequestParser.parse(packet)
 
     def test_fuzz_packets(self):
         """
@@ -309,7 +428,7 @@ class TestProbeRequestParser(unittest.TestCase):
 
         for i in range(0, 1000):
             packet = RadioTap()/fuzz(Dot11()/Dot11ProbeReq()/Dot11Elt())
-            ProbeRequestSniffer.ProbeRequestParser.parse(packet)
+            ProbeRequestParser.parse(packet)
 
 
 class TestLinter(unittest.TestCase):
