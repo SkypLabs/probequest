@@ -1,1 +1,5 @@
-VERSION = "0.7.1"
+"""
+Actual version number of ProbeQuest.
+"""
+
+VERSION = "0.7.2"

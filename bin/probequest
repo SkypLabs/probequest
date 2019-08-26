@@ -2,93 +2,148 @@
 # -*- coding: utf-8 -*-
 
 """
-Toolkit allowing to sniff and display the Wi-Fi
-probe requests passing near your wireless interface.
+Toolkit allowing to sniff and display the Wi-Fi probe requests passing nearby
+your wireless interface.
 """
 
-from argparse import ArgumentParser, FileType
-from enum import Enum
+# pylint: disable=no-name-in-module
 
+from argparse import ArgumentParser, FileType
+
+from probequest.config import Config, Mode
 from probequest.version import VERSION
 
-class Mode(Enum):
-    """
-    Enumeration of the different operational modes
-    supported by this software.
-    """
-
-    RAW = "raw"
-    PNL = "pnl"
-
-    def __str__(self):
-        return self.value
 
 def get_arg_parser():
     """
     Returns the argument parser.
     """
 
-    ap = ArgumentParser(description="Toolkit for Playing with Wi-Fi Probe Requests")
-    ap.add_argument("--debug", action="store_true", help="debug mode")
-    ap.add_argument("--fake", action="store_true", help="display only fake ESSIDs")
-    ap.add_argument("-i", "--interface", required=True, help="wireless interface to use (must be in monitor mode)")
-    ap.add_argument("--ignore-case", action="store_true", help="ignore case distinctions in the regex pattern (default: false)")
-    ap.add_argument("--mode", type=Mode, choices=Mode.__members__.values(), help="set the mode to use")
-    ap.add_argument("-o", "--output", type=FileType("a"), help="output file to save the captured data (CSV format)")
-    ap.add_argument("--version", action="version", version=VERSION)
-    ap.set_defaults(debug=False)
-    ap.set_defaults(fake=False)
-    ap.set_defaults(ignore_case=False)
-    ap.set_defaults(mode=Mode.RAW)
+    arg_parser = ArgumentParser(
+        description="Toolkit for Playing with Wi-Fi Probe Requests"
+    )
+    arg_parser.add_argument(
+        "--debug", action="store_true",
+        dest="debug",
+        help="debug mode"
+    )
+    arg_parser.add_argument(
+        "--fake", action="store_true",
+        dest="fake",
+        help="display only fake ESSIDs")
+    arg_parser.add_argument(
+        "-i", "--interface",
+        required=True,
+        dest="interface",
+        help="wireless interface to use (must be in monitor mode)"
+    )
+    arg_parser.add_argument(
+        "--ignore-case", action="store_true",
+        dest="ignore_case",
+        help="ignore case distinctions in the regex pattern (default: false)"
+    )
+    arg_parser.add_argument(
+        "--mode",
+        type=Mode, choices=Mode.__members__.values(),
+        dest="mode",
+        help="set the mode to use"
+    )
+    arg_parser.add_argument(
+        "-o", "--output",
+        type=FileType("a"),
+        dest="output_file",
+        help="output file to save the captured data (CSV format)"
+    )
+    arg_parser.add_argument("--version", action="version", version=VERSION)
+    arg_parser.set_defaults(debug=False)
+    arg_parser.set_defaults(fake=False)
+    arg_parser.set_defaults(ignore_case=False)
+    arg_parser.set_defaults(mode=Mode.RAW)
 
-    essid_arguments = ap.add_mutually_exclusive_group()
-    essid_arguments.add_argument("-e", "--essid", nargs="+", help="ESSID of the APs to filter (space-separated list)")
-    essid_arguments.add_argument("-r", "--regex", help="regex to filter the ESSIDs")
+    essid_arguments = arg_parser.add_mutually_exclusive_group()
+    essid_arguments.add_argument(
+        "-e", "--essid",
+        nargs="+",
+        dest="essid_filters",
+        help="ESSID of the APs to filter (space-separated list)"
+    )
+    essid_arguments.add_argument(
+        "-r", "--regex",
+        dest="essid_regex",
+        help="regex to filter the ESSIDs"
+    )
 
-    station_arguments = ap.add_mutually_exclusive_group()
-    station_arguments.add_argument("--exclude", nargs="+", help="MAC addresses of the stations to exclude (space-separated list)")
-    station_arguments.add_argument("-s", "--station", nargs="+", help="MAC addresses of the stations to filter (space-separated list)")
+    station_arguments = arg_parser.add_mutually_exclusive_group()
+    station_arguments.add_argument(
+        "--exclude",
+        nargs="+",
+        dest="mac_exclusions",
+        help="MAC addresses of the stations to exclude (space-separated list)"
+    )
+    station_arguments.add_argument(
+        "-s", "--station",
+        nargs="+",
+        dest="mac_filters",
+        help="MAC addresses of the stations to filter (space-separated list)"
+    )
 
-    return ap
+    return arg_parser
 
-if __name__ == "__main__":
+
+def main():
+    """
+    Main function.
+    """
+
     from os import geteuid
     from sys import exit as sys_exit
+
+    config = Config()
+    get_arg_parser().parse_args(namespace=config)
 
     if not geteuid() == 0:
         sys_exit("[!] You must be root")
 
-    args = vars(get_arg_parser().parse_args())
-    interface = args.pop("interface")
-
     # Default mode.
-    if args["mode"] == Mode.RAW:
+    if config.mode == Mode.RAW:
         from time import sleep
         from probequest.ui.raw import RawProbeRequestViewer
 
         try:
             print("[*] Start sniffing probe requests...")
-            raw_viewer = RawProbeRequestViewer(interface, **args)
+            raw_viewer = RawProbeRequestViewer(config)
             raw_viewer.start()
 
             while True:
                 sleep(100)
         except OSError:
             raw_viewer.stop()
-            sys_exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))
+            sys_exit(
+                "[!] Interface {interface} doesn't exist".format(
+                    interface=config.interface
+                )
+            )
         except KeyboardInterrupt:
             print("[*] Stopping the threads...")
             raw_viewer.stop()
             print("[*] Bye!")
-    elif args["mode"] == Mode.PNL:
+    elif config.mode == Mode.PNL:
         from probequest.ui.pnl import PNLViewer
 
         try:
-            pnl_viewer = PNLViewer(interface, **args)
+            pnl_viewer = PNLViewer(config)
             pnl_viewer.main()
         except OSError:
-            sys_exit("[!] Interface {interface} doesn't exist".format(interface=args["interface"]))
+            sys_exit(
+                "[!] Interface {interface} doesn't exist".format(
+                    interface=config.interface
+                )
+            )
         except KeyboardInterrupt:
             pnl_viewer.sniffer.stop()
     else:
         sys_exit("[x] Invalid mode")
+
+
+if __name__ == "__main__":
+    main()

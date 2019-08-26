@@ -1,0 +1,15 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 0b70e285e369bcb24b57b74929490ea7be9c4b19 # v2.2.3
+    hooks:
+      - id: check-ast
+      - id: check-executables-have-shebangs
+      - id: check-yaml
+      - id: flake8
+      - id: trailing-whitespace
+  - repo: https://github.com/pre-commit/mirrors-pylint
+    rev: 135c0cb79ced730834391aa6eeb5a27b6f5867ff # v2.3.1
+    hooks:
+      - id: pylint
+        entry: python3 -m pylint.__main__
+        language: system

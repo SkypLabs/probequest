@@ -2,24 +2,30 @@ sudo: false
 
 language: python
 
-python:
-  - 3.3
-  - 3.4
-  - 3.5
-  - 3.6
+install:
 
 script: python setup.py test
 
 jobs:
   include:
-  - stage: PyPI release
-    python: '3.6'
-    deploy:
-      provider: pypi
-      distributions: sdist
-      user: skyplabs
-      password:
-        secure: AAdbZ/WxjoCcGV9BAvphrxNp48D3n6yt1FEWZwA2V1BK2SnVV6YwQX/r7ryat2uoYrTONnGf/P5QgXc2wThl5mzPiRMaaONOIkyrmi2ZCD86yHYy2QQPR1gO1QOYyIsx545FRB6PaGXBC99Hw30vh3HPQaCKoQ8/PY+u3QbVn47BSBPuIdBi/FLl81uYk0ZE1457TxHkYrSDheRA3JVs72oD+izeoS+JJ+1YX+2zreukk9xuNfuwtcXPAn5B8LH8yYkFp1dd2pRsQzYMB4aH3rz7QEzSZ0mLBr3/J2bFCldmT8NToRijIjZNk04ik8XlGQ7xmpYG9rYIAkWwSBYSsZbfeLBxoxxIBcUy9xVxveZSaNl7TcRchCsyVO8leuL9aLmKz3wuKhWCRxJQSUDLlo83LYoBaTifqstUO85gC8IxR/Y/yqkW8wfSfVgVaDi9ET3/7UgSZEQJFEqfiYGdnD6/IkAy2tUCRO5xNsXsOyVJ5A0CsDTTtvlEfGxf1UtQyt0BmRSGYLMTnDBStW1Oua2QfVcTKIJOdfEOyL/VWnn/f0RCJQiUkRo9OFmSywoFjgSC9Arejwsff5smEd5i/jTKk6rOoHgIMnAGxn+75BjF3vQ7usAJeEOlLzHB5puc5dKeCpn5rwxOHha1lfmr6kDs1ec5XhcgQKgvulYfjVQ=
-      on:
-        tags: true
-        repo: SkypLabs/probequest
+    - python: 3.4
+    - python: 3.5
+    - python: 3.6
+    - python: 3.7
+      dist: xenial
+    - stage: PyPI release
+      python: 3.7
+      deploy:
+        provider: pypi
+        distributions: "sdist bdist_wheel"
+        user: skyplabs
+        password:
+          secure: AAdbZ/WxjoCcGV9BAvphrxNp48D3n6yt1FEWZwA2V1BK2SnVV6YwQX/r7ryat2uoYrTONnGf/P5QgXc2wThl5mzPiRMaaONOIkyrmi2ZCD86yHYy2QQPR1gO1QOYyIsx545FRB6PaGXBC99Hw30vh3HPQaCKoQ8/PY+u3QbVn47BSBPuIdBi/FLl81uYk0ZE1457TxHkYrSDheRA3JVs72oD+izeoS+JJ+1YX+2zreukk9xuNfuwtcXPAn5B8LH8yYkFp1dd2pRsQzYMB4aH3rz7QEzSZ0mLBr3/J2bFCldmT8NToRijIjZNk04ik8XlGQ7xmpYG9rYIAkWwSBYSsZbfeLBxoxxIBcUy9xVxveZSaNl7TcRchCsyVO8leuL9aLmKz3wuKhWCRxJQSUDLlo83LYoBaTifqstUO85gC8IxR/Y/yqkW8wfSfVgVaDi9ET3/7UgSZEQJFEqfiYGdnD6/IkAy2tUCRO5xNsXsOyVJ5A0CsDTTtvlEfGxf1UtQyt0BmRSGYLMTnDBStW1Oua2QfVcTKIJOdfEOyL/VWnn/f0RCJQiUkRo9OFmSywoFjgSC9Arejwsff5smEd5i/jTKk6rOoHgIMnAGxn+75BjF3vQ7usAJeEOlLzHB5puc5dKeCpn5rwxOHha1lfmr6kDs1ec5XhcgQKgvulYfjVQ=
+        on:
+          branch: master
+          tags: true
+          repo: SkypLabs/probequest
+
+notifications:
+  email:
+    on_success: never

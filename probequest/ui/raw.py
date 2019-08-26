@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+Raw probe request viewer.
+"""
+
 from probequest.probe_request_sniffer import ProbeRequestSniffer
+
 
 class RawProbeRequestViewer:
     """
-    Displays the raw probe requests passing near the Wi-Fi interface.
+    Displays the raw probe requests passing nearby the Wi-Fi interface.
     """
 
-    def __init__(self, interface, **kwargs):
-        self.output = kwargs.get("output", None)
+    def __init__(self, config):
+        self.output = config.output_file
 
         if self.output is not None:
             from csv import writer
@@ -24,22 +29,28 @@ class RawProbeRequestViewer:
                     probe_req.essid
                 ])
         else:
-            write_csv = lambda p: None
+            write_csv = lambda *args: None  # noqa: E731
 
         def display_probe_req(probe_req):
             print(probe_req)
 
-        self.sniffer = ProbeRequestSniffer(
-            interface,
-            display_func=display_probe_req,
-            storage_func=write_csv,
-            **kwargs
-        )
+        config.display_func = display_probe_req
+        config.storage_func = write_csv
+
+        self.sniffer = ProbeRequestSniffer(config)
 
     def start(self):
+        """
+        Starts the probe request sniffer.
+        """
+
         self.sniffer.start()
 
     def stop(self):
+        """
+        Stops the probe request sniffer.
+        """
+
         self.sniffer.stop()
 
         if self.output is not None:

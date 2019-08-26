@@ -1,15 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+Preferred network list viewer.
+"""
+
 import urwid
 
 from probequest.probe_request_sniffer import ProbeRequestSniffer
 
+
 class PNLViewer:
     """
-    TUI used to display the PNL of the nearby devices sending
-    probe requests.
+    TUI used to display the PNL of the nearby devices sending probe requests.
     """
+
+    # pylint: disable=too-many-instance-attributes
 
     palette = [
         ("header_running", "white", "dark green", "bold"),
@@ -25,15 +31,14 @@ class PNLViewer:
         ("key", "Q"), " quit",
     ])
 
-    def __init__(self, interface, **kwargs):
-        self.interface = interface
-        self.stations = dict()
+    def __init__(self, config):
+        self.config = config
 
-        self.sniffer = ProbeRequestSniffer(
-            self.interface,
-            display_func=self.new_probe_req,
-            **kwargs
-        )
+        self.stations = dict()
+        self.loop = None
+
+        self.config.display_func = self.new_probe_req
+        self.sniffer = ProbeRequestSniffer(config)
 
         self.view = self.setup_view()
 
@@ -42,7 +47,7 @@ class PNLViewer:
         Returns the root widget.
         """
 
-        self.interface_text = urwid.Text(self.interface)
+        self.interface_text = urwid.Text(self.config.interface)
         self.sniffer_state_text = urwid.Text("Stopped")
 
         self.header = urwid.AttrWrap(urwid.Columns([
@@ -54,8 +59,14 @@ class PNLViewer:
         footer = urwid.AttrWrap(urwid.Text(self.footer_text), "footer")
         vline = urwid.AttrWrap(urwid.SolidFill(u"\u2502"), "line")
 
-        station_panel = urwid.Padding(self.setup_menu("List of Stations", self.stations.keys()), align="center", width=("relative", 90))
-        pnl_panel = urwid.Padding(urwid.ListBox(urwid.SimpleListWalker([])), align="center", width=("relative", 90))
+        station_panel = urwid.Padding(
+            self.setup_menu("List of Stations", self.stations.keys()),
+            align="center", width=("relative", 90)
+        )
+        pnl_panel = urwid.Padding(
+            urwid.ListBox(urwid.SimpleListWalker([])),
+            align="center", width=("relative", 90)
+        )
 
         self.station_list = station_panel.base_widget
         self.pnl_list = pnl_panel.base_widget
@@ -70,22 +81,22 @@ class PNLViewer:
             header=self.header,
             body=body,
             footer=footer,
-            focus_part = "body"
+            focus_part="body"
         )
 
         return top
 
     def setup_menu(self, title, choices):
         """
-        Creates and returns a dynamic ListBox object containing
-        a title and the choices given as parameters.
+        Creates and returns a dynamic ListBox object containing a title and the
+        choices given as parameters.
         """
 
         body = [urwid.Text(title), urwid.Divider()]
 
-        for c in choices:
-            button = urwid.Button(c)
-            urwid.connect_signal(button, "click", self.station_chosen, c)
+        for choice in choices:
+            button = urwid.Button(choice)
+            urwid.connect_signal(button, "click", self.station_chosen, choice)
             body.append(urwid.AttrMap(button, None, focus_map="selected"))
 
         return urwid.ListBox(urwid.SimpleFocusListWalker(body))
@@ -99,11 +110,12 @@ class PNLViewer:
             self.stations[probe_req.s_mac] = []
             self.add_station(probe_req.s_mac)
 
-        if not any(essid.text == probe_req.essid for essid in self.stations[probe_req.s_mac]):
+        if not any(essid.text == probe_req.essid
+                   for essid in self.stations[probe_req.s_mac]):
             self.stations[probe_req.s_mac].append(urwid.Text(probe_req.essid))
 
         if len(self.stations.keys()) == 1:
-            self.station_list.set_focus(2);
+            self.station_list.set_focus(2)
             self.station_chosen(None, probe_req.s_mac)
 
         self.loop.draw_screen()
@@ -115,13 +127,18 @@ class PNLViewer:
 
         button = urwid.Button(name)
         urwid.connect_signal(button, "click", self.station_chosen, name)
-        self.station_list.body.append(urwid.AttrMap(button, None, focus_map="selected"))
+        self.station_list.body.append(
+            urwid.AttrMap(button, None, focus_map="selected")
+        )
 
     def station_chosen(self, button, choice):
         """
-        Callback method called when a station is selected
-        in the stations list.
+        Callback method called when a station is selected in the station list.
         """
+
+        # pylint: disable=unused-argument
+
+        # 'button' is the widget object passed by Urwid.
 
         self.pnl_list.body = self.stations[choice]
 
@@ -132,7 +149,7 @@ class PNLViewer:
 
         self.sniffer.start()
         self.sniffer_state_text.set_text("Running")
-        self.header.set_attr("header_running");
+        self.header.set_attr("header_running")
 
     def stop_sniffer(self):
         """
@@ -141,7 +158,7 @@ class PNLViewer:
 
         self.sniffer.stop()
         self.sniffer_state_text.set_text("Stopped")
-        self.header.set_attr("header_stopped");
+        self.header.set_attr("header_stopped")
 
     def toggle_sniffer_state(self):
         """
@@ -158,7 +175,11 @@ class PNLViewer:
         Starts the TUI.
         """
 
-        self.loop = urwid.MainLoop(self.view, self.palette, unhandled_input=self.unhandled_keypress)
+        self.loop = urwid.MainLoop(
+            self.view,
+            self.palette,
+            unhandled_input=self.unhandled_keypress
+        )
         self.loop.run()
 
     def exit_program(self):
@@ -171,8 +192,8 @@ class PNLViewer:
 
     def unhandled_keypress(self, key):
         """
-        Contains handlers for each keypress that is not handled
-        by the widgets being displayed.
+        Contains handlers for each keypress that is not handled by the widgets
+        being displayed.
         """
 
         if key in ("q", "Q"):
@@ -180,6 +201,6 @@ class PNLViewer:
         elif key in ("p", "P"):
             self.toggle_sniffer_state()
         else:
-            return
+            return False
 
         return True

@@ -2,16 +2,11 @@
 ProbeQuest
 ==========
 
-|PyPI Package| |Build Status| |Code Coverage| |Documentation Status|
+|PyPI Package| |PyPI Downloads| |PyPI Python Versions| |Build Status Master Branch| |Build Status Develop Branch| |Code Coverage| |LGTM Grade| |LGTM Alerts| |Documentation Status|
 
-Toolkit allowing to sniff and display the Wi-Fi probe requests passing near
-your wireless interface.
+Toolkit allowing to sniff and display the Wi-Fi probe requests passing nearby your wireless interface.
 
-Probe requests are sent by a station to elicit information about access
-points, in particular to determine if an access point is present or not
-in the nearby environment. Some devices (mostly smartphones and tablets)
-use these requests to determine if one of the networks they have
-previously been connected to is in range, leaking personal information.
+Probe requests are sent by a station to elicit information about access points, in particular to determine if an access point is present or not in the nearby environment. Some devices (mostly smartphones and tablets) use these requests to determine if one of the networks they have previously been connected to is in range, leaking personal information.
 
 Further details are discussed in `this
 paper <https://brambonne.com/docs/bonne14sasquatch.pdf>`__.
@@ -38,17 +33,22 @@ In the Media
 ProbeQuest has appeared in the following media:
 
 - `KitPloit <https://www.kitploit.com/2018/06/probequest-toolkit-for-playing-with-wi.html>`__
-- `Hakin9 Magazine, VOL.13, NO. 05, "Open Source Hacking Tools" <https://drive.google.com/open?id=1Jcv1gFUQ_ue1kqmUlqTy6zVfodB2HYNM>`__
+- `Hakin9 Magazine, VOL.13, NO. 05, "Open Source Hacking Tools" <https://skyplabs.keybase.pub/Papers/Magazines/Hakin9%20Magazine%2C%20VOL.13%2C%20NO.%2005%2C%20%22Open%20Source%20Hacking%20Tools%22.pdf>`__
 - `WonderHowTo <https://null-byte.wonderhowto.com/how-to/track-wi-fi-devices-connect-them-using-probequest-0186137/>`__ (including a `YouTube video <https://www.youtube.com/watch?v=Z8RHMUSYTiA>`__)
+- `ShellVoide <https://www.shellvoide.com/wifi/wifi-karma-a-brief-guid-on-probe-response-frames/>`__
+- `Cyber Pi Projects <https://www.cyberpiprojects.com/student-designed-projects>`__ (`Worksheet <https://www.cyberpiprojects.com/s/Probequest-Sniffing-Student.pdf>`__)
 
 License
 =======
 
 `GPL version 3 <https://www.gnu.org/licenses/gpl.txt>`__
 
-.. |Build Status| image:: https://travis-ci.org/SkypLabs/probequest.svg
+.. |Build Status Master Branch| image:: https://img.shields.io/travis/SkypLabs/probequest/master.svg?label=master&logo=travis&style=flat
    :target: https://travis-ci.org/SkypLabs/probequest
-   :alt: Build Status
+   :alt: Build Status Master Branch
+.. |Build Status Develop Branch| image:: https://img.shields.io/travis/SkypLabs/probequest/develop.svg?label=develop&logo=travis&style=flat
+   :target: https://travis-ci.org/SkypLabs/probequest
+   :alt: Build Status Develop Branch
 .. |Code Coverage| image:: https://api.codacy.com/project/badge/Grade/16b9e70e51744256b37099ae8fe9132d
    :target: https://www.codacy.com/app/skyper/probequest?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=SkypLabs/probequest&amp;utm_campaign=Badge_Grade
    :alt: Code Coverage
@@ -58,6 +58,18 @@ License
 .. |Known Vulnerabilities| image:: https://snyk.io/test/github/SkypLabs/probequest/badge.svg
    :target: https://snyk.io/test/github/SkypLabs/probequest
    :alt: Known Vulnerabilities
-.. |PyPI Package| image:: https://badge.fury.io/py/probequest.svg
-   :target: https://badge.fury.io/py/probequest
-   :alt: PyPI Package
+.. |LGTM Alerts| image:: https://img.shields.io/lgtm/alerts/g/SkypLabs/probequest.svg?logo=lgtm&logoWidth=18
+   :target: https://lgtm.com/projects/g/SkypLabs/probequest/alerts/
+   :alt: LGTM Alerts
+.. |LGTM Grade| image:: https://img.shields.io/lgtm/grade/python/g/SkypLabs/probequest.svg?logo=lgtm&logoWidth=18
+   :target: https://lgtm.com/projects/g/SkypLabs/probequest/context:python
+   :alt: LGTM Grade
+.. |PyPI Downloads| image:: https://img.shields.io/pypi/dm/probequest.svg?style=flat
+   :target: https://pypi.org/project/probequest/
+   :alt: PyPI Package Downloads Per Month
+.. |PyPI Package| image:: https://img.shields.io/pypi/v/probequest.svg?style=flat
+   :target: https://pypi.org/project/probequest/
+   :alt: PyPI Package Latest Release
+.. |PyPI Python Versions| image:: https://img.shields.io/pypi/pyversions/probequest.svg?logo=python&style=flat
+   :target: https://pypi.org/project/probequest/
+   :alt: PyPI Package Python Versions
