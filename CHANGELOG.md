@@ -1,3 +1,18 @@
+## v0.7.2 - Aug 26, 2019
+
+### Improvements
+
+* Use the new [Scapy built-in asynchronous sniffer](https://scapy.readthedocs.io/en/latest/usage.html#asynchronous-sniffing)
+* Introduce the new `Config` object containing the configuration of ProbeQuest
+
+### Fixes
+
+* Fix all linting and style errors
+
+### Misc.
+
+* Drop support for Python 3.3
+
 ## v0.7.1 - Mar 6, 2019
 
 ### Fixes
