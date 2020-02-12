@@ -57,6 +57,7 @@ setup(
     ],
     packages=find_packages(),
     scripts=["bin/probequest"],
+    python_requires=">=3.4, <4",
     install_requires=[
         "argparse >= 1.4.0",
         "faker_wifi_essid",
