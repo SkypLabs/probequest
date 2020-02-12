@@ -37,6 +37,10 @@ setup(
     url="https://github.com/SkypLabs/probequest",
     download_url="https://github.com/SkypLabs/probequest/archive/v{0}.zip"
     .format(VERSION),
+    project_urls={
+        "Documentation": "https://probequest.readthedocs.io",
+        "Source Code": "https://github.com/SkypLabs/probequest",
+    },
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",
