@@ -8,9 +8,14 @@ for ProbeQuest.
 See https://setuptools.readthedocs.io.
 """
 
+try:
+    from setuptools import setup, find_packages
+except Exception:
+    raise ImportError("Setuptools is required to install ProbeQuest!")
+
+
 from codecs import open as fopen
 from os.path import dirname, abspath, join
-from setuptools import setup, find_packages
 
 from probequest.version import VERSION
 
