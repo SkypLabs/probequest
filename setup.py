@@ -34,8 +34,10 @@ setup(
     .format(VERSION),
     classifiers=[
         "Development Status :: 4 - Beta",
-        "Intended Audience :: Developers",
-        "Topic :: Software Development :: Libraries :: Python Modules",
+        "Environment :: Console",
+        "Intended Audience :: Information Technology",
+        "Natural Language :: English",
+        "Topic :: Security",
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
