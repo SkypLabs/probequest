@@ -47,6 +47,8 @@ setup(
         "Intended Audience :: Information Technology",
         "Natural Language :: English",
         "Topic :: Security",
+        "Topic :: System :: Networking",
+        "Topic :: System :: Networking :: Monitoring",
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
