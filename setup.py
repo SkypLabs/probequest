@@ -45,16 +45,12 @@ setup(
     ],
     packages=find_packages(),
     scripts=['bin/probequest'],
-    test_suite='test',
     install_requires=[
         'argparse >= 1.4.0',
         'faker_wifi_essid',
         'netaddr >= 0.7.19',
         'scapy >= 2.4.3',
         'urwid>= 2.0.1',
-    ],
-    tests_require=[
-        'pylint'
     ],
     extras_require={
         'docs': [
