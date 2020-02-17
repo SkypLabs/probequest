@@ -5,6 +5,8 @@
 Raw probe request viewer.
 """
 
+from csv import writer
+
 from probequest.probe_request_sniffer import ProbeRequestSniffer
 
 
@@ -17,8 +19,6 @@ class RawProbeRequestViewer:
         self.output = config.output_file
 
         if self.output is not None:
-            from csv import writer
-
             outfile = writer(self.output, delimiter=";")
 
             def write_csv(probe_req):
