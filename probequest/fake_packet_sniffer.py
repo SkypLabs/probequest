@@ -2,6 +2,7 @@
 Fake packet sniffer module.
 """
 
+from time import sleep
 from threading import Thread, Event
 
 from scapy.layers.dot11 import RadioTap, Dot11, Dot11ProbeReq, Dot11Elt
@@ -29,8 +30,6 @@ class FakePacketSniffer(Thread):
         self.fake.add_provider(WifiESSID)
 
     def run(self):
-        from time import sleep
-
         while not self.stop_sniffer.isSet():
             sleep(1)
             self.new_packet()

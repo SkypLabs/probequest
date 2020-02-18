@@ -2,9 +2,9 @@ sudo: false
 
 language: python
 
-install:
+install: pip install tox-travis
 
-script: python setup.py test
+script: tox
 
 jobs:
   include:
@@ -13,6 +13,8 @@ jobs:
     - python: 3.6
     - python: 3.7
       dist: xenial
+    - python: 3.8
+      dist: bionic
     - stage: PyPI release
       python: 3.7
       deploy:

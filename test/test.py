@@ -7,7 +7,6 @@ Unit tests written with the 'unittest' module.
 
 from queue import Queue
 import unittest
-import pylint.lint
 from netaddr.core import AddrFormatError
 
 from scapy.layers.dot11 import RadioTap, Dot11, Dot11ProbeReq, Dot11Elt
@@ -429,24 +428,3 @@ class TestProbeRequestParser(unittest.TestCase):
         for i in range(0, 1000):
             packet = RadioTap()/fuzz(Dot11()/Dot11ProbeReq()/Dot11Elt())
             ProbeRequestParser.parse(packet)
-
-
-class TestLinter(unittest.TestCase):
-    """
-    Unit tests for Python linters.
-    """
-
-    # Some linting errors will be fixed while
-    # refactoring the code.
-    @unittest.expectedFailure
-    def test_pylint(self):
-        """
-        Executes Pylint.
-        """
-
-        # pylint: disable=no-self-use
-
-        pylint.lint.Run([
-            "probequest",
-            "test"
-        ])

@@ -5,11 +5,11 @@ Development
 Running the unit tests
 ----------------------
 
-To run the unit tests:
+`tox`_ is used to run the unit tests:
 
 ::
 
-    python3 setup.py test
+    tox
 
 
 Releasing a new version
@@ -29,3 +29,5 @@ Below are the different steps to do before releasing a new version:
 After having pushed the new release:
 
 - Edit the release note on GitHub
+
+.. _tox: https://tox.readthedocs.io
