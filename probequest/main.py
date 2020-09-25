@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 """
 Toolkit allowing to sniff and display the Wi-Fi probe requests passing nearby
 your wireless interface.
@@ -13,10 +10,10 @@ from os import geteuid
 from sys import exit as sys_exit
 from time import sleep
 
-from probequest.config import Config, Mode
-from probequest.version import VERSION
-from probequest.ui.pnl import PNLViewer
-from probequest.ui.raw import RawProbeRequestViewer
+from .config import Config, Mode
+from .ui.pnl import PNLViewer
+from .ui.raw import RawProbeRequestViewer
+from .version import VERSION
 
 
 def get_arg_parser():
