@@ -1,9 +1,6 @@
 """
-Toolkit allowing to sniff and display the Wi-Fi probe requests passing nearby
-your wireless interface.
+Main module.
 """
-
-# pylint: disable=no-name-in-module
 
 from argparse import ArgumentParser, FileType
 from os import geteuid
@@ -94,7 +91,7 @@ def get_arg_parser():
 
 def main():
     """
-    Main function.
+    Entry point of the command-line tool.
     """
 
     config = Config()
@@ -137,7 +134,3 @@ def main():
             pnl_viewer.sniffer.stop()
     else:
         sys_exit("[x] Invalid mode")
-
-
-if __name__ == "__main__":
-    main()
