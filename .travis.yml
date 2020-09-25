@@ -15,6 +15,7 @@ jobs:
     - python: 3.8
       dist: bionic
     - stage: PyPI release
+      if: (branch = master) AND (tag IS present)
       python: 3.7
       deploy:
         provider: pypi
