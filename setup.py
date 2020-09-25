@@ -52,7 +52,6 @@ setup(
         "Topic :: System :: Networking",
         "Topic :: System :: Networking :: Monitoring",
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
@@ -65,7 +64,7 @@ setup(
             "probequest = probequest.main:main",
         ]
     },
-    python_requires=">=3.4, <4",
+    python_requires=">=3.5, <4",
     install_requires=[
         "argparse >= 1.4.0",
         "faker_wifi_essid",
