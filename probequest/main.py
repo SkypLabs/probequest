@@ -1,17 +1,16 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 """
-Toolkit allowing to sniff and display the Wi-Fi probe requests passing nearby
-your wireless interface.
+Main module.
 """
-
-# pylint: disable=no-name-in-module
 
 from argparse import ArgumentParser, FileType
+from os import geteuid
+from sys import exit as sys_exit
+from time import sleep
 
-from probequest.config import Config, Mode
-from probequest.version import VERSION
+from .config import Config, Mode
+from .ui.pnl import PNLViewer
+from .ui.raw import RawProbeRequestViewer
+from .version import VERSION
 
 
 def get_arg_parser():
@@ -92,11 +91,8 @@ def get_arg_parser():
 
 def main():
     """
-    Main function.
+    Entry point of the command-line tool.
     """
-
-    from os import geteuid
-    from sys import exit as sys_exit
 
     config = Config()
     get_arg_parser().parse_args(namespace=config)
@@ -106,9 +102,6 @@ def main():
 
     # Default mode.
     if config.mode == Mode.RAW:
-        from time import sleep
-        from probequest.ui.raw import RawProbeRequestViewer
-
         try:
             print("[*] Start sniffing probe requests...")
             raw_viewer = RawProbeRequestViewer(config)
@@ -128,8 +121,6 @@ def main():
             raw_viewer.stop()
             print("[*] Bye!")
     elif config.mode == Mode.PNL:
-        from probequest.ui.pnl import PNLViewer
-
         try:
             pnl_viewer = PNLViewer(config)
             pnl_viewer.main()
@@ -143,7 +134,3 @@ def main():
             pnl_viewer.sniffer.stop()
     else:
         sys_exit("[x] Invalid mode")
-
-
-if __name__ == "__main__":
-    main()

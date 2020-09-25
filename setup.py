@@ -10,8 +10,10 @@ See https://setuptools.readthedocs.io.
 
 try:
     from setuptools import setup, find_packages
-except Exception:
-    raise ImportError("Setuptools is required to install ProbeQuest!")
+except Exception as setuptools_not_present:
+    raise ImportError(
+        "Setuptools is required to install ProbeQuest!"
+    ) from setuptools_not_present
 
 
 from codecs import open as fopen
@@ -50,7 +52,6 @@ setup(
         "Topic :: System :: Networking",
         "Topic :: System :: Networking :: Monitoring",
         "Programming Language :: Python :: 3 :: Only",
-        "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
@@ -58,8 +59,12 @@ setup(
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     ],
     packages=find_packages(),
-    scripts=["bin/probequest"],
-    python_requires=">=3.4, <4",
+    entry_points={
+        "console_scripts": [
+            "probequest = probequest.main:main",
+        ]
+    },
+    python_requires=">=3.5, <4",
     install_requires=[
         "argparse >= 1.4.0",
         "faker_wifi_essid",

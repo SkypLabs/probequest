@@ -19,7 +19,7 @@ class Mode(Enum):
     PNL = "pnl"
 
     def __str__(self):
-        return self.value
+        return str(self.value)
 
 
 class Config:
