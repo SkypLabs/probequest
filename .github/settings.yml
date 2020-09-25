@@ -84,6 +84,10 @@ labels:
     description: Documentation-related issue
     color: 2d2de2
 
+  - name: ci/cd
+    description: CI/CD-related issue
+    color: e85733
+
   - name: good first issue
     description: Good first issue
     color: 7057ff
