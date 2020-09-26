@@ -49,7 +49,7 @@ Command line arguments
 ----------------------
 
 .. argparse::
-   :filename: ../bin/probequest
+   :module: probequest.main
    :func: get_arg_parser
    :prog: probequest
 
