@@ -35,6 +35,9 @@ labels:
   - name: ui
     description: Related to the user interface
     color: 1d76db
+  - name: exporters
+    description: Related to the exporters
+    color: 1d76db
 
   - name: android
     description: Android platform support issues
