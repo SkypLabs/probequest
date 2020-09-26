@@ -15,17 +15,15 @@ except Exception as setuptools_not_present:
         "Setuptools is required to install ProbeQuest!"
     ) from setuptools_not_present
 
-
 from codecs import open as fopen
 from os.path import dirname, abspath, join
 
-from probequest.version import VERSION
-
 DIR = dirname(abspath(__file__))
+
+VERSION = "0.7.2"
 
 with fopen(join(DIR, "README.rst"), encoding="utf-8") as f:
     LONG_DESCRIPTION = f.read()
-
 
 setup(
     name="probequest",

@@ -7,10 +7,10 @@ from os import geteuid
 from sys import exit as sys_exit
 from time import sleep
 
+from . import __version__ as VERSION
 from .config import Config, Mode
 from .ui.pnl import PNLViewer
 from .ui.raw import RawProbeRequestViewer
-from .version import VERSION
 
 
 def get_arg_parser():
