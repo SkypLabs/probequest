@@ -6,13 +6,18 @@ script: tox
 
 jobs:
   include:
+    - stage: "Unit Tests"
     - python: 3.5
     - python: 3.6
     - python: 3.7
       dist: xenial
     - python: 3.8
       dist: bionic
-    - stage: PyPI release
+    - stage: "Documentation"
+      python: 3.8
+      install: pip install .[docs]
+      script: cd docs; make html
+    - stage: "PyPI release"
       if: (branch = master) AND (tag IS present)
       python: 3.7
       deploy:
