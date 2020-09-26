@@ -17,11 +17,11 @@ repository:
 
 labels:
   - name: feature
-    oldname: enhancement
     description: New feature
     color: 84b6eb
-  - name: optimisation
-    description: Optimisation
+  - name: enhancement
+    oldname: optimisation
+    description: Enhancement
     color: 84b6eb
   - name: refactor
     description: Refactoring
