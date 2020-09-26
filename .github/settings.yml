@@ -83,7 +83,7 @@ labels:
     color: 33aa3f
 
   - name: documentation
-    description: Documentation-related issue
+    description: Related to the documentation
     color: 2d2de2
 
   - name: packaging
@@ -95,7 +95,7 @@ labels:
     color: efa5ef
 
   - name: ci/cd
-    description: CI/CD-related issue
+    description: Related to CI/CD
     color: e85733
 
   - name: good first issue
