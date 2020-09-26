@@ -38,6 +38,9 @@ labels:
   - name: exporters
     description: Related to the exporters
     color: 1d76db
+  - name: cli
+    description: Related to the CLI tool
+    color: 1d76db
 
   - name: android
     description: Android platform support issues
