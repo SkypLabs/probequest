@@ -10,9 +10,7 @@ jobs:
       python: 3.5
     - python: 3.6
     - python: 3.7
-      dist: xenial
     - python: 3.8
-      dist: bionic
     - stage: "Documentation"
       python: 3.8
       install: pip install .[docs]
