@@ -17,7 +17,8 @@
 
 import os
 import sys
-from probequest.version import VERSION
+
+from probequest import __version__ as VERSION
 
 sys.path.insert(0, os.path.abspath('..'))
 
