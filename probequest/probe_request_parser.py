@@ -8,7 +8,7 @@ from re import match
 
 from scapy.layers.dot11 import RadioTap, Dot11ProbeReq
 
-from probequest.probe_request import ProbeRequest
+from .probe_request import ProbeRequest
 
 
 class ProbeRequestParser(Thread):

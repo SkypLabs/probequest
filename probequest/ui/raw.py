@@ -4,7 +4,7 @@ Raw probe request viewer.
 
 from csv import writer
 
-from probequest.probe_request_sniffer import ProbeRequestSniffer
+from ..probe_request_sniffer import ProbeRequestSniffer
 
 
 class RawProbeRequestViewer:

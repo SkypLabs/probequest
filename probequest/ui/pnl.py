@@ -4,7 +4,7 @@ Preferred network list viewer.
 
 import urwid
 
-from probequest.probe_request_sniffer import ProbeRequestSniffer
+from ..probe_request_sniffer import ProbeRequestSniffer
 
 
 class PNLViewer:
