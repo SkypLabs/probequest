@@ -1,5 +1,5 @@
 """
-Unit tests for the main module.
+Unit tests for the cli module.
 """
 
 import unittest
@@ -11,7 +11,7 @@ from os import remove
 from os.path import isfile
 
 from probequest import __version__ as VERSION
-from probequest.main import get_arg_parser
+from probequest.cli import get_arg_parser
 from probequest.config import Mode
 
 

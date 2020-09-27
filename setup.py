@@ -59,7 +59,7 @@ setup(
     packages=find_packages(),
     entry_points={
         "console_scripts": [
-            "probequest = probequest.main:main",
+            "probequest = probequest.cli:main",
         ]
     },
     python_requires=">=3.5, <4",

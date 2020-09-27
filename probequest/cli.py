@@ -1,5 +1,5 @@
 """
-Main module.
+CLI module.
 """
 
 from argparse import ArgumentParser, FileType
