@@ -7,9 +7,9 @@ from queue import Queue
 from scapy.arch import get_if_hwaddr
 from scapy.error import Scapy_Exception
 
-from probequest.packet_sniffer import PacketSniffer
-from probequest.fake_packet_sniffer import FakePacketSniffer
-from probequest.probe_request_parser import ProbeRequestParser
+from .packet_sniffer import PacketSniffer
+from .fake_packet_sniffer import FakePacketSniffer
+from .probe_request_parser import ProbeRequestParser
 
 
 class ProbeRequestSniffer:
