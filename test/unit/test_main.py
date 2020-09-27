@@ -7,6 +7,8 @@ import unittest
 from argparse import Namespace
 from contextlib import redirect_stdout, redirect_stderr
 from io import StringIO, TextIOWrapper
+from os import remove
+from os.path import isfile
 
 from probequest import __version__ as VERSION
 from probequest.main import get_arg_parser
@@ -20,12 +22,22 @@ class TestArgParse(unittest.TestCase):
 
     # pylint: disable=too-many-public-methods
 
+    output_test_file = "probequest_test_output.txt"
+
     def setUp(self):
         """
         Instanciates a new argument parser.
         """
 
         self.arg_parser = get_arg_parser()
+
+    def tearDown(self):
+        """
+        Removes test files if any.
+        """
+
+        if isfile(self.output_test_file):
+            remove(self.output_test_file)
 
     def test_without_parameters(self):
         """
@@ -208,7 +220,7 @@ class TestArgParse(unittest.TestCase):
 
         config = Namespace()
         self.arg_parser.parse_args([
-            "-i", "wlan0", "-o", "output.txt"
+            "-i", "wlan0", "-o", self.output_test_file
         ], namespace=config)
 
         self.assertIsInstance(config.output_file, TextIOWrapper)
@@ -223,7 +235,7 @@ class TestArgParse(unittest.TestCase):
 
         config = Namespace()
         self.arg_parser.parse_args([
-            "-i", "wlan0", "--output", "output.txt"
+            "-i", "wlan0", "--output", self.output_test_file
         ], namespace=config)
 
         self.assertIsInstance(config.output_file, TextIOWrapper)
