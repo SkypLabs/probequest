@@ -18,6 +18,8 @@ class TestArgParse(unittest.TestCase):
     Tests the argument parser.
     """
 
+    # pylint: disable=too-many-public-methods
+
     def setUp(self):
         """
         Instanciates a new argument parser.
@@ -226,3 +228,158 @@ class TestArgParse(unittest.TestCase):
 
         self.assertIsInstance(config.output_file, TextIOWrapper)
         config.output_file.close()
+
+    def test_short_essid_option(self):
+        """
+        Calls the argument parser with the '-e' option.
+        """
+
+        # pylint: disable=no-member
+
+        config = Namespace()
+        self.arg_parser.parse_args([
+            "-i", "wlan0", "-e", "essid_1", "essid_2", "essid_3"
+        ], namespace=config)
+
+        self.assertListEqual(config.essid_filters, [
+            "essid_1", "essid_2", "essid_3"
+        ])
+
+    def test_long_essid_option(self):
+        """
+        Calls the argument parser with the '--essid' option.
+        """
+
+        # pylint: disable=no-member
+
+        config = Namespace()
+        self.arg_parser.parse_args([
+            "-i", "wlan0", "--essid", "essid_1", "essid_2", "essid_3"
+        ], namespace=config)
+
+        self.assertListEqual(config.essid_filters, [
+            "essid_1", "essid_2", "essid_3"
+        ])
+
+    def test_short_regex_option(self):
+        """
+        Calls the argument parser with the '-r' option.
+        """
+
+        # pylint: disable=no-member
+
+        config = Namespace()
+        self.arg_parser.parse_args([
+            "-i", "wlan0", "-r", "test_regex"
+        ], namespace=config)
+
+        self.assertEqual(config.essid_regex, "test_regex")
+
+    def test_long_regex_option(self):
+        """
+        Calls the argument parser with the '--regex' option.
+        """
+
+        # pylint: disable=no-member
+
+        config = Namespace()
+        self.arg_parser.parse_args([
+            "-i", "wlan0", "--regex", "test_regex"
+        ], namespace=config)
+
+        self.assertEqual(config.essid_regex, "test_regex")
+
+    def test_essid_regex_mutual_exclusivity(self):
+        """
+        Calls the argument parser with both '--essid' and '--regex' options,
+        which must fail as they are in the same mutually exclusive group.
+        """
+
+        # pylint: disable=no-member
+
+        with self.assertRaises(SystemExit) as error_code:
+            error_output = StringIO()
+
+            with redirect_stderr(error_output):
+                config = Namespace()
+                self.arg_parser.parse_args([
+                    "-i", "wlan0", "--essid", "essid_1",
+                    "--regex", "test_regex"
+                ], namespace=config)
+
+        self.assertEqual(error_code.exception.code, 2)
+
+    def test_exclude_option(self):
+        """
+        Calls the argument parser with the '--exclude' option.
+        """
+
+        # pylint: disable=no-member
+
+        config = Namespace()
+        self.arg_parser.parse_args([
+            "-i", "wlan0", "--exclude", "aa:bb:cc:dd:ee:ff",
+            "ff:ee:dd:cc:bb:aa"
+        ], namespace=config)
+
+        self.assertListEqual(config.mac_exclusions, [
+            "aa:bb:cc:dd:ee:ff",
+            "ff:ee:dd:cc:bb:aa",
+        ])
+
+    def test_short_station_option(self):
+        """
+        Calls the argument parser with the '-s' option.
+        """
+
+        # pylint: disable=no-member
+
+        config = Namespace()
+        self.arg_parser.parse_args([
+            "-i", "wlan0", "-s", "aa:bb:cc:dd:ee:ff",
+            "ff:ee:dd:cc:bb:aa"
+        ], namespace=config)
+
+        self.assertListEqual(config.mac_filters, [
+            "aa:bb:cc:dd:ee:ff",
+            "ff:ee:dd:cc:bb:aa",
+        ])
+
+    def test_long_station_option(self):
+        """
+        Calls the argument parser with the '--station' option.
+        """
+
+        # pylint: disable=no-member
+
+        config = Namespace()
+        self.arg_parser.parse_args([
+            "-i", "wlan0", "--station", "aa:bb:cc:dd:ee:ff",
+            "ff:ee:dd:cc:bb:aa"
+        ], namespace=config)
+
+        self.assertListEqual(config.mac_filters, [
+            "aa:bb:cc:dd:ee:ff",
+            "ff:ee:dd:cc:bb:aa",
+        ])
+
+    def test_exclude_station_mutual_exclusivity(self):
+        """
+        Calls the argument parser with both '--exclude' and '--station'
+        options, which must fail as they are in the same mutually exclusive
+        group.
+        """
+
+        # pylint: disable=no-member
+
+        with self.assertRaises(SystemExit) as error_code:
+            error_output = StringIO()
+
+            with redirect_stderr(error_output):
+                config = Namespace()
+                self.arg_parser.parse_args([
+                    "-i", "wlan0", "--exclude", "aa:bb:cc:dd:ee:ff",
+                    "--station", "ff:ee:dd:cc:bb:aa"
+                ], namespace=config)
+
+        self.assertEqual(error_code.exception.code, 2)
