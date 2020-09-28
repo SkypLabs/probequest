@@ -71,6 +71,11 @@ setup(
         "urwid>= 2.0.1",
     ],
     extras_require={
+        "tests": [
+            "flake8",
+            "pylint",
+            "tox"
+        ],
         "docs": [
             "sphinx >= 1.4.0",
             "sphinxcontrib-seqdiag >= 0.8.5",
