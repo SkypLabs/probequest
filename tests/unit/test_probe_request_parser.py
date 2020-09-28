@@ -15,21 +15,19 @@ class TestProbeRequestParser(unittest.TestCase):
     Unit tests for the 'ProbeRequestParser' class.
     """
 
+    dot11_layer = Dot11(
+        addr1="ff:ff:ff:ff:ff:ff",
+        addr2="aa:bb:cc:11:22:33",
+        addr3="dd:ee:ff:11:22:33",
+    )
+
     def test_no_probe_request_layer(self):
         """
         Creates a non-probe-request Wi-Fi packet and parses it with the
         'ProbeRequestParser.parse()' function.
         """
 
-        # pylint: disable=no-self-use
-
-        packet = RadioTap() \
-            / Dot11(
-                addr1="ff:ff:ff:ff:ff:ff",
-                addr2="aa:bb:cc:11:22:33",
-                addr3="dd:ee:ff:11:22:33"
-            )
-
+        packet = RadioTap() / self.dot11_layer
         ProbeRequestParser.parse(packet)
 
     def test_empty_essid(self):
@@ -38,14 +36,8 @@ class TestProbeRequestParser(unittest.TestCase):
         it with the 'ProbeRequestParser.parse()' function.
         """
 
-        # pylint: disable=no-self-use
-
         packet = RadioTap() \
-            / Dot11(
-                addr1="ff:ff:ff:ff:ff:ff",
-                addr2="aa:bb:cc:11:22:33",
-                addr3="dd:ee:ff:11:22:33"
-            ) \
+            / self.dot11_layer \
             / Dot11ProbeReq() \
             / Dot11Elt(
                 info=""
