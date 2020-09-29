@@ -77,10 +77,10 @@ setup(
             "tox"
         ],
         "docs": [
-            "sphinx >= 1.4.0",
-            "sphinxcontrib-seqdiag >= 0.8.5",
+            "sphinx >= 3.2.0",
+            "sphinxcontrib-seqdiag >= 2.0.0",
             "sphinx-argparse >= 0.2.2",
-            "sphinx_rtd_theme",
+            "sphinx_rtd_theme >= 0.5.0",
         ],
     },
 )
