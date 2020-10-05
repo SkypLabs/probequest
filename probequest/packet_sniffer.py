@@ -2,6 +2,8 @@
 Packet sniffer module.
 """
 
+import logging
+
 from scapy.sendrecv import AsyncSniffer
 
 
@@ -11,6 +13,8 @@ class PacketSniffer:
     """
 
     def __init__(self, config, new_packets):
+        self.logger = logging.getLogger(__name__)
+
         self.config = config
         self.new_packets = new_packets
 
@@ -26,6 +30,7 @@ class PacketSniffer:
         Starts the packet sniffer.
         """
 
+        self.logger.debug("Starting the packet sniffer")
         self.sniffer.start()
 
     def stop(self):
@@ -33,6 +38,7 @@ class PacketSniffer:
         Stops the packet sniffer.
         """
 
+        self.logger.debug("Stopping the packet sniffer")
         self.sniffer.stop()
 
     def is_running(self):

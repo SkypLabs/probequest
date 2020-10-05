@@ -2,6 +2,7 @@
 Wi-Fi probe request sniffer.
 """
 
+import logging
 from queue import Queue
 
 from scapy.arch import get_if_hwaddr
@@ -21,6 +22,8 @@ class ProbeRequestSniffer:
     """
 
     def __init__(self, config):
+        self.logger = logging.getLogger(__name__)
+
         self.config = config
 
         self.new_packets = Queue()
@@ -33,6 +36,8 @@ class ProbeRequestSniffer:
 
         This method will start the sniffing and parsing threads.
         """
+
+        self.logger.debug("Starting the probe request sniffer")
 
         try:
             # Test if the interface exists.
@@ -55,6 +60,8 @@ class ProbeRequestSniffer:
         This method will stop the sniffing and parsing threads.
         """
 
+        self.logger.debug("Stopping the probe request sniffer")
+
         try:
             self.sniffer.stop()
         except Scapy_Exception:
@@ -75,11 +82,13 @@ class ProbeRequestSniffer:
         """
 
         if self.config.fake:
+            self.logger.debug("Creating a new fake probe request sniffer")
             self.sniffer = FakePacketSniffer(
                 self.config,
                 self.new_packets
             )
         else:
+            self.logger.debug("Creating a new probe request sniffer")
             self.sniffer = PacketSniffer(
                 self.config,
                 self.new_packets
@@ -89,6 +98,8 @@ class ProbeRequestSniffer:
         """
         Creates a new parsing thread.
         """
+
+        self.logger.debug("Creating a new probe request parser")
 
         self.parser = ProbeRequestParser(
             self.config,
