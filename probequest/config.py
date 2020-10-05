@@ -116,7 +116,7 @@ class Config:
 
             frame_filter += ")"
 
-        self.logger.debug("Frame filter: %s", frame_filter)
+        self.logger.debug("Frame filter: \"%s\"", frame_filter)
 
         return frame_filter
 
