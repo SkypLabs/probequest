@@ -2,6 +2,7 @@
 ProbeQuest configuration.
 """
 
+import logging
 from enum import Enum
 from re import compile as rcompile, IGNORECASE
 
@@ -42,6 +43,9 @@ class Config:
     _display_func = lambda *args: None  # noqa: E731
     _storage_func = lambda *args: None  # noqa: E731
 
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+
     @property
     def display_func(self):
         """
@@ -66,6 +70,7 @@ class Config:
             )
 
         self._display_func = func
+        self.logger.debug("Display function set")
 
     @storage_func.setter
     def storage_func(self, func):
@@ -75,6 +80,7 @@ class Config:
             )
 
         self._storage_func = func
+        self.logger.debug("Storage function set")
 
     def generate_frame_filter(self):
         """
@@ -110,6 +116,8 @@ class Config:
 
             frame_filter += ")"
 
+        self.logger.debug("Frame filter: %s", frame_filter)
+
         return frame_filter
 
     def complile_essid_regex(self):
@@ -118,7 +126,11 @@ class Config:
         """
 
         if self.essid_regex is not None:
+            self.logger.debug("Compiling ESSID regex")
+
             if self.ignore_case:
+                self.logger.debug("Ignoring case in ESSID regex")
+
                 return rcompile(
                     self.essid_regex,
                     IGNORECASE
