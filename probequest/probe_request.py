@@ -16,27 +16,33 @@ class ProbeRequest:
         self.s_mac = str(s_mac)
         self.essid = str(essid)
 
-        self.s_mac_oui = self.get_mac_organisation()
+        self._s_mac_oui = None
 
     def __str__(self):
-        return "{timestamp} - {s_mac} ({mac_org}) -> {essid}".format(
+        return "{timestamp} - {s_mac} ({s_mac_oui}) -> {essid}".format(
             timestamp=strftime(
                 "%a, %d %b %Y %H:%M:%S %Z",
                 localtime(self.timestamp)
             ),
             s_mac=self.s_mac,
-            mac_org=self.s_mac_oui,
+            s_mac_oui=self.s_mac_oui,
             essid=self.essid
         )
 
-    def get_mac_organisation(self):
+    @property
+    def s_mac_oui(self):
         """
-        Returns the OUI of the MAC address as a string.
+        OUI of the station's MAC address as a string.
+
+        The value is cached once already computed.
         """
 
         # pylint: disable=no-member
 
-        try:
-            return EUI(self.s_mac).oui.registration().org
-        except NotRegisteredError:
-            return None
+        if self._s_mac_oui is None:
+            try:
+                self._s_mac_oui = EUI(self.s_mac).oui.registration().org
+            except NotRegisteredError:
+                self._s_mac_oui = "Unknown OUI"
+
+        return self._s_mac_oui

@@ -71,7 +71,8 @@ class TestProbeRequest(unittest.TestCase):
         essid = "Test ESSID"
 
         with self.assertRaises(AddrFormatError):
-            _ = ProbeRequest(timestamp, s_mac, essid)
+            probe_req = ProbeRequest(timestamp, s_mac, essid)
+            _ = probe_req.s_mac_oui
 
     def test_print_a_probe_request(self):
         """
@@ -89,6 +90,8 @@ class TestProbeRequest(unittest.TestCase):
             -1
         )
         self.assertNotEqual(
-            str(probe_req).find("aa:bb:cc:dd:ee:ff (None) -> Test ESSID"),
+            str(probe_req).find(
+                "aa:bb:cc:dd:ee:ff (Unknown OUI) -> Test ESSID"
+            ),
             -1
         )
