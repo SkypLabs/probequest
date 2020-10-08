@@ -2,6 +2,7 @@
 Unit tests for the configuration module.
 """
 
+import logging
 import unittest
 from re import compile as rcompile, IGNORECASE
 
@@ -13,23 +14,33 @@ class TestConfig(unittest.TestCase):
     Unit tests for the 'Config' class.
     """
 
+    def setUp(self):
+        """
+        Creates a fake package logger.
+        """
+
+        self.logger = logging.getLogger("probequest")
+        self.logger.setLevel(logging.DEBUG)
+
     def test_bad_display_function(self):
         """
         Assigns a non-callable object to the display callback function.
         """
 
-        with self.assertRaises(TypeError):
-            config = Config()
-            config.display_func = "test"
+        with self.assertLogs(self.logger, level=logging.ERROR):
+            with self.assertRaises(TypeError):
+                config = Config()
+                config.display_func = "test"
 
     def test_bad_storage_function(self):
         """
         Assigns a non-callable object to the storage callback function.
         """
 
-        with self.assertRaises(TypeError):
-            config = Config()
-            config.storage_func = "test"
+        with self.assertLogs(self.logger, level=logging.ERROR):
+            with self.assertRaises(TypeError):
+                config = Config()
+                config.storage_func = "test"
 
     def test_default_frame_filter(self):
         """
@@ -37,7 +48,9 @@ class TestConfig(unittest.TestCase):
         """
 
         config = Config()
-        frame_filter = config.generate_frame_filter()
+
+        with self.assertLogs(self.logger, level=logging.DEBUG):
+            frame_filter = config.generate_frame_filter()
 
         self.assertEqual(
             frame_filter,
@@ -51,7 +64,9 @@ class TestConfig(unittest.TestCase):
 
         config = Config()
         config.mac_filters = ["a4:77:33:9a:73:5c", "b0:05:94:5d:5a:4d"]
-        frame_filter = config.generate_frame_filter()
+
+        with self.assertLogs(self.logger, level=logging.DEBUG):
+            frame_filter = config.generate_frame_filter()
 
         self.assertEqual(
             frame_filter,
@@ -67,7 +82,9 @@ class TestConfig(unittest.TestCase):
 
         config = Config()
         config.mac_exclusions = ["a4:77:33:9a:73:5c", "b0:05:94:5d:5a:4d"]
-        frame_filter = config.generate_frame_filter()
+
+        with self.assertLogs(self.logger, level=logging.DEBUG):
+            frame_filter = config.generate_frame_filter()
 
         self.assertEqual(
             frame_filter,
@@ -93,7 +110,9 @@ class TestConfig(unittest.TestCase):
 
         config = Config()
         config.essid_regex = "Free Wi-Fi"
-        compiled_regex = config.complile_essid_regex()
+
+        with self.assertLogs(self.logger, level=logging.DEBUG):
+            compiled_regex = config.complile_essid_regex()
 
         self.assertEqual(compiled_regex, rcompile(config.essid_regex))
 
@@ -105,7 +124,9 @@ class TestConfig(unittest.TestCase):
         config = Config()
         config.essid_regex = "Free Wi-Fi"
         config.ignore_case = True
-        compiled_regex = config.complile_essid_regex()
+
+        with self.assertLogs(self.logger, level=logging.DEBUG):
+            compiled_regex = config.complile_essid_regex()
 
         self.assertEqual(compiled_regex, rcompile(
             config.essid_regex, IGNORECASE))
