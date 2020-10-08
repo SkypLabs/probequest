@@ -2,6 +2,7 @@
 Unit tests for the probe request sniffer module.
 """
 
+import logging
 import unittest
 
 from probequest.config import Config
@@ -12,6 +13,14 @@ class TestProbeRequestSniffer(unittest.TestCase):
     """
     Unit tests for the 'ProbeRequestSniffer' class.
     """
+
+    def setUp(self):
+        """
+        Creates a fake package logger.
+        """
+
+        self.logger = logging.getLogger("probequest")
+        self.logger.setLevel(logging.DEBUG)
 
     def test_without_parameters(self):
         """
@@ -53,4 +62,6 @@ class TestProbeRequestSniffer(unittest.TestCase):
 
         config = Config()
         sniffer = ProbeRequestSniffer(config)
-        sniffer.stop()
+
+        with self.assertLogs(self.logger, level=logging.DEBUG):
+            sniffer.stop()

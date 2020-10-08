@@ -2,6 +2,7 @@
 Unit tests for the fake packet sniffer module.
 """
 
+import logging
 import unittest
 from queue import Queue
 
@@ -14,6 +15,14 @@ class TestFakePacketSniffer(unittest.TestCase):
     """
     Unit tests for the 'FakePacketSniffer' class.
     """
+
+    def setUp(self):
+        """
+        Creates a fake package logger.
+        """
+
+        self.logger = logging.getLogger("probequest")
+        self.logger.setLevel(logging.DEBUG)
 
     def test_new_packet(self):
         """
@@ -47,8 +56,9 @@ class TestFakePacketSniffer(unittest.TestCase):
         new_packets = Queue()
         sniffer = FakePacketSniffer(config, new_packets)
 
-        with self.assertRaises(RuntimeError):
-            sniffer.stop()
+        with self.assertLogs(self.logger, level=logging.DEBUG):
+            with self.assertRaises(RuntimeError):
+                sniffer.stop()
 
     def test_stop_before_start_using_join(self):
         """
@@ -60,5 +70,6 @@ class TestFakePacketSniffer(unittest.TestCase):
         new_packets = Queue()
         sniffer = FakePacketSniffer(config, new_packets)
 
-        with self.assertRaises(RuntimeError):
-            sniffer.join()
+        with self.assertLogs(self.logger, level=logging.DEBUG):
+            with self.assertRaises(RuntimeError):
+                sniffer.join()

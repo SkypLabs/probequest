@@ -2,6 +2,7 @@
 Fake packet sniffer module.
 """
 
+import logging
 from time import sleep
 from threading import Thread, Event
 
@@ -19,7 +20,11 @@ class FakePacketSniffer(Thread):
     """
 
     def __init__(self, config, new_packets):
+        # pylint: disable=duplicate-code
+
         super().__init__()
+
+        self.logger = logging.getLogger(__name__)
 
         self.config = config
         self.new_packets = new_packets
@@ -30,6 +35,8 @@ class FakePacketSniffer(Thread):
         self.fake.add_provider(WifiESSID)
 
     def run(self):
+        self.logger.debug("Starting the fake probe request sniffer")
+
         while not self.stop_sniffer.isSet():
             sleep(1)
             self.new_packet()
@@ -38,6 +45,8 @@ class FakePacketSniffer(Thread):
         """
         Stops the fake packet sniffer.
         """
+
+        self.logger.debug("Stopping the fake probe request sniffer")
 
         self.stop_sniffer.set()
         super().join(timeout)

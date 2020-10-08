@@ -2,6 +2,7 @@
 Unit tests for the packet sniffer module.
 """
 
+import logging
 import unittest
 from queue import Queue
 
@@ -18,13 +19,21 @@ class TestPacketSniffer(unittest.TestCase):
     Unit tests for the 'PacketSniffer' class.
     """
 
+    def setUp(self):
+        """
+        Creates a fake package logger.
+        """
+
+        self.logger = logging.getLogger("probequest")
+        self.logger.setLevel(logging.DEBUG)
+
     def test_new_packet(self):
         """
         Tests the 'new_packet' method.
         """
 
-        config = Config()
         new_packets = Queue()
+        config = Config()
         sniffer = PacketSniffer(config, new_packets)
 
         self.assertEqual(sniffer.new_packets.qsize(), 0)
@@ -55,8 +64,9 @@ class TestPacketSniffer(unittest.TestCase):
         new_packets = Queue()
         sniffer = PacketSniffer(config, new_packets)
 
-        with self.assertRaises(Scapy_Exception):
-            sniffer.stop()
+        with self.assertLogs(self.logger, level=logging.DEBUG):
+            with self.assertRaises(Scapy_Exception):
+                sniffer.stop()
 
     def test_is_running_before_start(self):
         """
