@@ -65,8 +65,9 @@ class Config:
     @display_func.setter
     def display_func(self, func):
         if not hasattr(func, "__call__"):
+            self.logger.error("Not a callable object: %s", func)
             raise TypeError(
-                "The display function property is not a callable object"
+                "The display function property must be a callable object"
             )
 
         self._display_func = func
@@ -75,8 +76,9 @@ class Config:
     @storage_func.setter
     def storage_func(self, func):
         if not hasattr(func, "__call__"):
+            self.logger.error("Not a callable object: %s", func)
             raise TypeError(
-                "The storage function property is not a callable object"
+                "The storage function property must be a callable object"
             )
 
         self._storage_func = func
