@@ -42,6 +42,7 @@ class Config:
 
     _display_func = lambda *args: None  # noqa: E731
     _storage_func = lambda *args: None  # noqa: E731
+    _compiled_essid_regex = None
     _frame_filter = None
 
     def __init__(self):
@@ -127,22 +128,27 @@ class Config:
 
         return self._frame_filter
 
-    def complile_essid_regex(self):
+    @property
+    def compiled_essid_regex(self):
         """
         Returns the compiled version of the ESSID regex.
+
+        The value is cached once computed.
         """
 
-        if self.essid_regex is not None:
+        # If there is a regex in the configuration and it hasn't been compiled
+        # yet.
+        if self._compiled_essid_regex is None and self.essid_regex is not None:
             self.logger.debug("Compiling ESSID regex")
 
             if self.ignore_case:
                 self.logger.debug("Ignoring case in ESSID regex")
 
-                return rcompile(
+                self._compiled_essid_regex = rcompile(
                     self.essid_regex,
                     IGNORECASE
                 )
+            else:
+                self._compiled_essid_regex = rcompile(self.essid_regex)
 
-            return rcompile(self.essid_regex)
-
-        return None
+        return self._compiled_essid_regex

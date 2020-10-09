@@ -105,32 +105,32 @@ class TestConfig(unittest.TestCase):
                 "|| ether src host b0:05:94:5d:5a:4d)"
             )
 
-    def test_compile_essid_regex_with_an_empty_regex(self):
+    def test_compiled_essid_regex_with_an_empty_regex(self):
         """
-        Tests 'complile_essid_regex' with an empty regex.
+        Tests 'compiled_essid_regex' with an empty regex.
         """
 
         config = Config()
-        compiled_regex = config.complile_essid_regex()
+        compiled_regex = config.compiled_essid_regex
 
         self.assertEqual(compiled_regex, None)
 
-    def test_compile_essid_regex_with_a_case_sensitive_regex(self):
+    def test_compiled_essid_regex_with_a_case_sensitive_regex(self):
         """
-        Tests 'complile_essid_regex' with a case-sensitive regex.
+        Tests 'compiled_essid_regex' with a case-sensitive regex.
         """
 
         config = Config()
         config.essid_regex = "Free Wi-Fi"
 
         with self.assertLogs(self.logger, level=logging.DEBUG):
-            compiled_regex = config.complile_essid_regex()
+            compiled_regex = config.compiled_essid_regex
 
         self.assertEqual(compiled_regex, rcompile(config.essid_regex))
 
-    def test_compile_essid_regex_with_a_case_insensitive_regex(self):
+    def test_compiled_essid_regex_with_a_case_insensitive_regex(self):
         """
-        Tests 'complile_essid_regex' with a case-insensitive regex.
+        Tests 'compiled_essid_regex' with a case-insensitive regex.
         """
 
         config = Config()
@@ -138,7 +138,7 @@ class TestConfig(unittest.TestCase):
         config.ignore_case = True
 
         with self.assertLogs(self.logger, level=logging.DEBUG):
-            compiled_regex = config.complile_essid_regex()
+            compiled_regex = config.compiled_essid_regex
 
         self.assertEqual(compiled_regex, rcompile(
             config.essid_regex, IGNORECASE))

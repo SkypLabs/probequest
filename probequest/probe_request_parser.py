@@ -25,7 +25,7 @@ class ProbeRequestParser(Thread):
         self.config = config
         self.new_packets = new_packets
 
-        self.cregex = self.config.complile_essid_regex()
+        self.cregex = self.config.compiled_essid_regex
 
         self.stop_parser = Event()
 
