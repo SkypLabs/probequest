@@ -9,9 +9,10 @@ from queue import Queue
 from scapy.error import Scapy_Exception
 from scapy.layers.dot11 import RadioTap, Dot11, Dot11ProbeReq, Dot11Elt
 
-from probequest.config import Config
 from probequest.packet_sniffer import PacketSniffer
 from probequest.probe_request_parser import ProbeRequestParser
+
+from .utils import create_fake_config
 
 
 class TestPacketSniffer(unittest.TestCase):
@@ -33,7 +34,7 @@ class TestPacketSniffer(unittest.TestCase):
         """
 
         new_packets = Queue()
-        config = Config()
+        config = create_fake_config()
         sniffer = PacketSniffer(config, new_packets)
 
         self.assertEqual(sniffer.new_packets.qsize(), 0)
@@ -60,7 +61,7 @@ class TestPacketSniffer(unittest.TestCase):
         it.
         """
 
-        config = Config()
+        config = create_fake_config()
         new_packets = Queue()
         sniffer = PacketSniffer(config, new_packets)
 
@@ -74,7 +75,7 @@ class TestPacketSniffer(unittest.TestCase):
         the sniffer.
         """
 
-        config = Config()
+        config = create_fake_config()
         new_packets = Queue()
         sniffer = PacketSniffer(config, new_packets)
 

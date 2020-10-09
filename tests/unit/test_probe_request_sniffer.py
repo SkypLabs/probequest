@@ -5,8 +5,9 @@ Unit tests for the probe request sniffer module.
 import logging
 import unittest
 
-from probequest.config import Config
 from probequest.probe_request_sniffer import ProbeRequestSniffer
+
+from .utils import create_fake_config
 
 
 class TestProbeRequestSniffer(unittest.TestCase):
@@ -49,7 +50,7 @@ class TestProbeRequestSniffer(unittest.TestCase):
 
         # pylint: disable=no-self-use
 
-        config = Config()
+        config = create_fake_config()
         _ = ProbeRequestSniffer(config)
 
     def test_stop_before_start(self):
@@ -60,7 +61,7 @@ class TestProbeRequestSniffer(unittest.TestCase):
 
         # pylint: disable=no-self-use
 
-        config = Config()
+        config = create_fake_config()
         sniffer = ProbeRequestSniffer(config)
 
         with self.assertLogs(self.logger, level=logging.DEBUG):

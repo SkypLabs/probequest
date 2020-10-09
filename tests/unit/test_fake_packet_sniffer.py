@@ -6,9 +6,10 @@ import logging
 import unittest
 from queue import Queue
 
-from probequest.config import Config
 from probequest.fake_packet_sniffer import FakePacketSniffer
 from probequest.probe_request_parser import ProbeRequestParser
+
+from .utils import create_fake_config
 
 
 class TestFakePacketSniffer(unittest.TestCase):
@@ -29,7 +30,7 @@ class TestFakePacketSniffer(unittest.TestCase):
         Tests the 'new_packet' method.
         """
 
-        config = Config()
+        config = create_fake_config()
         new_packets = Queue()
         sniffer = FakePacketSniffer(config, new_packets)
 
@@ -52,7 +53,7 @@ class TestFakePacketSniffer(unittest.TestCase):
         starting it.
         """
 
-        config = Config()
+        config = create_fake_config()
         new_packets = Queue()
         sniffer = FakePacketSniffer(config, new_packets)
 
@@ -66,7 +67,7 @@ class TestFakePacketSniffer(unittest.TestCase):
         starting it.
         """
 
-        config = Config()
+        config = create_fake_config()
         new_packets = Queue()
         sniffer = FakePacketSniffer(config, new_packets)
 
