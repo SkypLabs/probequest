@@ -34,7 +34,7 @@ class ProbeRequest:
         """
         OUI of the station's MAC address as a string.
 
-        The value is cached once already computed.
+        The value is cached once computed.
         """
 
         # pylint: disable=no-member

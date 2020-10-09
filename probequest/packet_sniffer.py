@@ -20,7 +20,7 @@ class PacketSniffer:
 
         self.sniffer = AsyncSniffer(
             iface=self.config.interface,
-            filter=self.config.generate_frame_filter(),
+            filter=self.config.frame_filter,
             store=False,
             prn=self.new_packet
         )

@@ -42,6 +42,7 @@ class Config:
 
     _display_func = lambda *args: None  # noqa: E731
     _storage_func = lambda *args: None  # noqa: E731
+    _frame_filter = None
 
     def __init__(self):
         self.logger = logging.getLogger(__name__)
@@ -84,43 +85,47 @@ class Config:
         self._storage_func = func
         self.logger.debug("Storage function set")
 
-    def generate_frame_filter(self):
+    @property
+    def frame_filter(self):
         """
         Generates and returns the frame filter according to the different
         options set of the current 'Config' object.
+
+        The value is cached once computed.
         """
 
-        frame_filter = "type mgt subtype probe-req"
+        if self._frame_filter is None:
+            self._frame_filter = "type mgt subtype probe-req"
 
-        if self.mac_exclusions is not None:
-            frame_filter += " and not ("
+            if self.mac_exclusions is not None:
+                self._frame_filter += " and not ("
 
-            for i, station in enumerate(self.mac_exclusions):
-                if i == 0:
-                    frame_filter += "ether src host {s_mac}".format(
-                        s_mac=station)
-                else:
-                    frame_filter += "|| ether src host {s_mac}".format(
-                        s_mac=station)
+                for i, station in enumerate(self.mac_exclusions):
+                    if i == 0:
+                        self._frame_filter += \
+                            "ether src host {s_mac}".format(s_mac=station)
+                    else:
+                        self._frame_filter += \
+                            "|| ether src host {s_mac}".format(s_mac=station)
 
-            frame_filter += ")"
+                self._frame_filter += ")"
 
-        if self.mac_filters is not None:
-            frame_filter += " and ("
+            if self.mac_filters is not None:
+                self._frame_filter += " and ("
 
-            for i, station in enumerate(self.mac_filters):
-                if i == 0:
-                    frame_filter += "ether src host {s_mac}".format(
-                        s_mac=station)
-                else:
-                    frame_filter += "|| ether src host {s_mac}".format(
-                        s_mac=station)
+                for i, station in enumerate(self.mac_filters):
+                    if i == 0:
+                        self._frame_filter += \
+                            "ether src host {s_mac}".format(s_mac=station)
+                    else:
+                        self._frame_filter += \
+                            "|| ether src host {s_mac}".format(s_mac=station)
 
-            frame_filter += ")"
+                self._frame_filter += ")"
 
-        self.logger.debug("Frame filter: \"%s\"", frame_filter)
+            self.logger.debug("Frame filter: \"%s\"", self._frame_filter)
 
-        return frame_filter
+        return self._frame_filter
 
     def complile_essid_regex(self):
         """
