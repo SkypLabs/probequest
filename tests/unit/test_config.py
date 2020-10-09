@@ -6,7 +6,7 @@ import logging
 import unittest
 from re import compile as rcompile, IGNORECASE
 
-from probequest.config import Config
+from probequest.config import Config, Mode
 
 
 class TestConfig(unittest.TestCase):
@@ -21,6 +21,31 @@ class TestConfig(unittest.TestCase):
 
         self.logger = logging.getLogger("probequest")
         self.logger.setLevel(logging.DEBUG)
+
+    def test_default_values(self):
+        """
+        Tests the default values.
+        """
+
+        config = Config()
+
+        self.assertIsNone(config.interface)
+
+        self.assertIsNone(config.essid_filters)
+        self.assertIsNone(config.essid_regex)
+        self.assertFalse(config.ignore_case)
+
+        self.assertIsNone(config.mac_exclusions)
+        self.assertIsNone(config.mac_filters)
+
+        self.assertIsNone(config.output_file)
+
+        self.assertEqual(config.mode, Mode.RAW)
+        self.assertFalse(config.fake)
+        self.assertFalse(config.debug)
+
+        self.assertTrue(hasattr(config.display_func, "__call__"))
+        self.assertTrue(hasattr(config.storage_func, "__call__"))
 
     def test_bad_display_function(self):
         """
