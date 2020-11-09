@@ -168,6 +168,7 @@ class TestArgParse(unittest.TestCase):
         ], namespace=config)
 
         self.assertTrue(config.debug)
+        self.assertEqual(config.interface, "wlan0")
 
     def test_fake_option(self):
         """
@@ -182,6 +183,7 @@ class TestArgParse(unittest.TestCase):
         ], namespace=config)
 
         self.assertTrue(config.fake)
+        self.assertEqual(config.interface, "wlan0")
 
     def test_ignore_case_option(self):
         """
@@ -196,6 +198,7 @@ class TestArgParse(unittest.TestCase):
         ], namespace=config)
 
         self.assertTrue(config.ignore_case)
+        self.assertEqual(config.interface, "wlan0")
 
     def test_short_output_option(self):
         """
@@ -211,6 +214,7 @@ class TestArgParse(unittest.TestCase):
 
         self.assertIsInstance(config.output_file, TextIOWrapper)
         config.output_file.close()
+        self.assertEqual(config.interface, "wlan0")
 
     def test_long_output_option(self):
         """
@@ -226,6 +230,7 @@ class TestArgParse(unittest.TestCase):
 
         self.assertIsInstance(config.output_file, TextIOWrapper)
         config.output_file.close()
+        self.assertEqual(config.interface, "wlan0")
 
     def test_short_essid_option(self):
         """
@@ -242,6 +247,7 @@ class TestArgParse(unittest.TestCase):
         self.assertListEqual(config.essid_filters, [
             "essid_1", "essid_2", "essid_3"
         ])
+        self.assertEqual(config.interface, "wlan0")
 
     def test_long_essid_option(self):
         """
@@ -258,6 +264,7 @@ class TestArgParse(unittest.TestCase):
         self.assertListEqual(config.essid_filters, [
             "essid_1", "essid_2", "essid_3"
         ])
+        self.assertEqual(config.interface, "wlan0")
 
     def test_short_regex_option(self):
         """
@@ -272,6 +279,7 @@ class TestArgParse(unittest.TestCase):
         ], namespace=config)
 
         self.assertEqual(config.essid_regex, "test_regex")
+        self.assertEqual(config.interface, "wlan0")
 
     def test_long_regex_option(self):
         """
@@ -286,6 +294,7 @@ class TestArgParse(unittest.TestCase):
         ], namespace=config)
 
         self.assertEqual(config.essid_regex, "test_regex")
+        self.assertEqual(config.interface, "wlan0")
 
     def test_essid_regex_mutual_exclusivity(self):
         """
@@ -325,6 +334,7 @@ class TestArgParse(unittest.TestCase):
             "aa:bb:cc:dd:ee:ff",
             "ff:ee:dd:cc:bb:aa",
         ])
+        self.assertEqual(config.interface, "wlan0")
 
     def test_short_station_option(self):
         """
@@ -343,6 +353,7 @@ class TestArgParse(unittest.TestCase):
             "aa:bb:cc:dd:ee:ff",
             "ff:ee:dd:cc:bb:aa",
         ])
+        self.assertEqual(config.interface, "wlan0")
 
     def test_long_station_option(self):
         """
@@ -361,6 +372,7 @@ class TestArgParse(unittest.TestCase):
             "aa:bb:cc:dd:ee:ff",
             "ff:ee:dd:cc:bb:aa",
         ])
+        self.assertEqual(config.interface, "wlan0")
 
     def test_exclude_station_mutual_exclusivity(self):
         """
