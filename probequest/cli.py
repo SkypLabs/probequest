@@ -26,37 +26,38 @@ def get_arg_parser():
     """
 
     arg_parser = ArgumentParser(
-        description="Toolkit for Playing with Wi-Fi Probe Requests"
+        description="Toolkit for Playing with Wi-Fi Probe Requests",
     )
     arg_parser.add_argument(
         "interface",
-        help="wireless interface to use (must be in monitor mode)"
+        help="wireless interface to use (must be in monitor mode)",
     )
     arg_parser.add_argument(
         "--debug", action="store_true",
         dest="debug",
-        help="debug mode"
+        help="debug mode",
     )
     arg_parser.add_argument(
         "--fake", action="store_true",
         dest="fake",
-        help="display only fake ESSIDs")
+        help="display only fake ESSIDs",
+    )
     arg_parser.add_argument(
         "--ignore-case", action="store_true",
         dest="ignore_case",
-        help="ignore case distinctions in the regex pattern (default: false)"
+        help="ignore case distinctions in the regex pattern (default: false)",
     )
     arg_parser.add_argument(
         "--mode",
         type=Mode, choices=Mode.__members__.values(),
         dest="mode",
-        help="set the mode to use"
+        help="set the mode to use",
     )
     arg_parser.add_argument(
         "-o", "--output",
         type=FileType("a"),
         dest="output_file",
-        help="output file to save the captured data (CSV format)"
+        help="output file to save the captured data (CSV format)",
     )
     arg_parser.add_argument("--version", action="version", version=VERSION)
     arg_parser.set_defaults(debug=False)
@@ -68,27 +69,31 @@ def get_arg_parser():
     essid_arguments.add_argument(
         "-e", "--essid",
         nargs="+",
+        metavar="ESSID",
         dest="essid_filters",
-        help="ESSID of the APs to filter (space-separated list)"
+        help="ESSID of the APs to filter (space-separated list)",
     )
     essid_arguments.add_argument(
         "-r", "--regex",
+        metavar="REGEX",
         dest="essid_regex",
-        help="regex to filter the ESSIDs"
+        help="regex to filter the ESSIDs",
     )
 
     station_arguments = arg_parser.add_mutually_exclusive_group()
     station_arguments.add_argument(
         "--exclude",
         nargs="+",
+        metavar="STATION",
         dest="mac_exclusions",
-        help="MAC addresses of the stations to exclude (space-separated list)"
+        help="MAC addresses of the stations to exclude (space-separated list)",
     )
     station_arguments.add_argument(
         "-s", "--station",
         nargs="+",
+        metavar="STATION",
         dest="mac_filters",
-        help="MAC addresses of the stations to filter (space-separated list)"
+        help="MAC addresses of the stations to filter (space-separated list)",
     )
 
     return arg_parser
