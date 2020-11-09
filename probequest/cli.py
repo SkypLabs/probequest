@@ -29,6 +29,10 @@ def get_arg_parser():
         description="Toolkit for Playing with Wi-Fi Probe Requests"
     )
     arg_parser.add_argument(
+        "interface",
+        help="wireless interface to use (must be in monitor mode)"
+    )
+    arg_parser.add_argument(
         "--debug", action="store_true",
         dest="debug",
         help="debug mode"
@@ -37,12 +41,6 @@ def get_arg_parser():
         "--fake", action="store_true",
         dest="fake",
         help="display only fake ESSIDs")
-    arg_parser.add_argument(
-        "-i", "--interface",
-        required=True,
-        dest="interface",
-        help="wireless interface to use (must be in monitor mode)"
-    )
     arg_parser.add_argument(
         "--ignore-case", action="store_true",
         dest="ignore_case",
