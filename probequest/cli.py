@@ -51,7 +51,7 @@ def get_arg_parser():
         "--mode",
         type=Mode, choices=Mode.__members__.values(),
         dest="mode",
-        help="set the mode to use",
+        help="set the mode to use (default: {})".format(Mode.RAW),
     )
     arg_parser.add_argument(
         "-o", "--output",
