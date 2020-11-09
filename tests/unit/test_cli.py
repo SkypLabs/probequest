@@ -122,38 +122,24 @@ class TestArgParse(unittest.TestCase):
         self.assertFalse(config.fake)
         self.assertFalse(config.debug)
 
-    def test_short_interface_option(self):
+    def test_interface_argument(self):
         """
-        Calls the argument parser with the '-i' option.
-        """
-
-        # pylint: disable=no-member
-
-        config = Namespace()
-        self.arg_parser.parse_args([
-            "-i", "wlan0"
-        ], namespace=config)
-
-        self.assertEqual(config.interface, "wlan0")
-
-    def test_long_interface_option(self):
-        """
-        Calls the argument parser with the '--interface' option.
+        Calls the argument parser with the 'interface' argument.
         """
 
         # pylint: disable=no-member
 
         config = Namespace()
         self.arg_parser.parse_args([
-            "--interface", "wlan0"
+            "wlan0",
         ], namespace=config)
 
         self.assertEqual(config.interface, "wlan0")
 
-    def test_without_interface_option(self):
+    def test_without_interface_argument(self):
         """
         Calls the argument parser with some options but not the required
-        interface one.
+        interface argument.
         """
 
         # pylint: disable=no-member
@@ -164,7 +150,7 @@ class TestArgParse(unittest.TestCase):
             with redirect_stderr(error_output):
                 config = Namespace()
                 self.arg_parser.parse_args([
-                    "--debug", "--fake"
+                    "--debug", "--fake",
                 ], namespace=config)
 
         self.assertEqual(error_code.exception.code, 2)
@@ -178,7 +164,7 @@ class TestArgParse(unittest.TestCase):
 
         config = Namespace()
         self.arg_parser.parse_args([
-            "-i", "wlan0", "--debug"
+            "--debug", "wlan0",
         ], namespace=config)
 
         self.assertTrue(config.debug)
@@ -192,7 +178,7 @@ class TestArgParse(unittest.TestCase):
 
         config = Namespace()
         self.arg_parser.parse_args([
-            "-i", "wlan0", "--fake"
+            "--fake", "wlan0",
         ], namespace=config)
 
         self.assertTrue(config.fake)
@@ -206,7 +192,7 @@ class TestArgParse(unittest.TestCase):
 
         config = Namespace()
         self.arg_parser.parse_args([
-            "-i", "wlan0", "--ignore-case"
+            "--ignore-case", "wlan0",
         ], namespace=config)
 
         self.assertTrue(config.ignore_case)
@@ -220,7 +206,7 @@ class TestArgParse(unittest.TestCase):
 
         config = Namespace()
         self.arg_parser.parse_args([
-            "-i", "wlan0", "-o", self.output_test_file
+            "-o", self.output_test_file, "wlan0",
         ], namespace=config)
 
         self.assertIsInstance(config.output_file, TextIOWrapper)
@@ -235,7 +221,7 @@ class TestArgParse(unittest.TestCase):
 
         config = Namespace()
         self.arg_parser.parse_args([
-            "-i", "wlan0", "--output", self.output_test_file
+            "--output", self.output_test_file, "wlan0",
         ], namespace=config)
 
         self.assertIsInstance(config.output_file, TextIOWrapper)
@@ -250,7 +236,7 @@ class TestArgParse(unittest.TestCase):
 
         config = Namespace()
         self.arg_parser.parse_args([
-            "-i", "wlan0", "-e", "essid_1", "essid_2", "essid_3"
+            "-e", "essid_1", "essid_2", "essid_3", "--", "wlan0",
         ], namespace=config)
 
         self.assertListEqual(config.essid_filters, [
@@ -266,7 +252,7 @@ class TestArgParse(unittest.TestCase):
 
         config = Namespace()
         self.arg_parser.parse_args([
-            "-i", "wlan0", "--essid", "essid_1", "essid_2", "essid_3"
+            "--essid", "essid_1", "essid_2", "essid_3", "--", "wlan0",
         ], namespace=config)
 
         self.assertListEqual(config.essid_filters, [
@@ -282,7 +268,7 @@ class TestArgParse(unittest.TestCase):
 
         config = Namespace()
         self.arg_parser.parse_args([
-            "-i", "wlan0", "-r", "test_regex"
+            "-r", "test_regex", "wlan0",
         ], namespace=config)
 
         self.assertEqual(config.essid_regex, "test_regex")
@@ -296,7 +282,7 @@ class TestArgParse(unittest.TestCase):
 
         config = Namespace()
         self.arg_parser.parse_args([
-            "-i", "wlan0", "--regex", "test_regex"
+            "--regex", "test_regex", "wlan0",
         ], namespace=config)
 
         self.assertEqual(config.essid_regex, "test_regex")
@@ -315,8 +301,9 @@ class TestArgParse(unittest.TestCase):
             with redirect_stderr(error_output):
                 config = Namespace()
                 self.arg_parser.parse_args([
-                    "-i", "wlan0", "--essid", "essid_1",
-                    "--regex", "test_regex"
+                    "--essid", "essid_1",
+                    "--regex", "test_regex",
+                    "wlan0",
                 ], namespace=config)
 
         self.assertEqual(error_code.exception.code, 2)
@@ -330,8 +317,8 @@ class TestArgParse(unittest.TestCase):
 
         config = Namespace()
         self.arg_parser.parse_args([
-            "-i", "wlan0", "--exclude", "aa:bb:cc:dd:ee:ff",
-            "ff:ee:dd:cc:bb:aa"
+            "--exclude", "aa:bb:cc:dd:ee:ff", "ff:ee:dd:cc:bb:aa",
+            "--", "wlan0",
         ], namespace=config)
 
         self.assertListEqual(config.mac_exclusions, [
@@ -348,8 +335,8 @@ class TestArgParse(unittest.TestCase):
 
         config = Namespace()
         self.arg_parser.parse_args([
-            "-i", "wlan0", "-s", "aa:bb:cc:dd:ee:ff",
-            "ff:ee:dd:cc:bb:aa"
+            "-s", "aa:bb:cc:dd:ee:ff", "ff:ee:dd:cc:bb:aa",
+            "--", "wlan0",
         ], namespace=config)
 
         self.assertListEqual(config.mac_filters, [
@@ -366,8 +353,8 @@ class TestArgParse(unittest.TestCase):
 
         config = Namespace()
         self.arg_parser.parse_args([
-            "-i", "wlan0", "--station", "aa:bb:cc:dd:ee:ff",
-            "ff:ee:dd:cc:bb:aa"
+            "--station", "aa:bb:cc:dd:ee:ff", "ff:ee:dd:cc:bb:aa",
+            "--", "wlan0",
         ], namespace=config)
 
         self.assertListEqual(config.mac_filters, [
@@ -390,8 +377,9 @@ class TestArgParse(unittest.TestCase):
             with redirect_stderr(error_output):
                 config = Namespace()
                 self.arg_parser.parse_args([
-                    "-i", "wlan0", "--exclude", "aa:bb:cc:dd:ee:ff",
-                    "--station", "ff:ee:dd:cc:bb:aa"
+                    "--exclude", "aa:bb:cc:dd:ee:ff",
+                    "--station", "ff:ee:dd:cc:bb:aa",
+                    "wlan0",
                 ], namespace=config)
 
         self.assertEqual(error_code.exception.code, 2)

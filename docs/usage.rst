@@ -58,7 +58,7 @@ Example of use
 
 ::
 
-    sudo probequest -i wlan0
+    sudo probequest wlan0
 
 Here is a sample output:
 
