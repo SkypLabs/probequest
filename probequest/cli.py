@@ -224,4 +224,9 @@ def main():
         viewer.stop()
     finally:
         print("[*] Bye!")
+
+        if config.output_file is not None:
+            logger.debug("Closing output file")
+            config.output_file.close()
+
         logger.info("Program ended")
