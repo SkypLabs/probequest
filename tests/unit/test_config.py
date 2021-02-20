@@ -6,7 +6,7 @@ import logging
 import unittest
 from re import compile as rcompile, IGNORECASE
 
-from probequest.config import Config, Mode
+from probequest.config import Config
 
 
 class TestConfig(unittest.TestCase):
@@ -40,7 +40,6 @@ class TestConfig(unittest.TestCase):
 
         self.assertIsNone(config.output_file)
 
-        self.assertEqual(config.mode, Mode.RAW)
         self.assertFalse(config.fake)
         self.assertFalse(config.debug)
 

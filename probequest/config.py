@@ -3,21 +3,7 @@ ProbeQuest configuration.
 """
 
 import logging
-from enum import Enum
 from re import compile as rcompile, IGNORECASE
-
-
-class Mode(Enum):
-    """
-    Enumeration of the different operational modes
-    supported by this software.
-    """
-
-    RAW = "raw"
-    PNL = "pnl"
-
-    def __str__(self):
-        return str(self.value)
 
 
 class Config:
@@ -36,7 +22,6 @@ class Config:
 
     output_file = None
 
-    mode = Mode.RAW
     fake = False
     debug = False
 

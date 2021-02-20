@@ -4,8 +4,6 @@ Common assets for the unit tests.
 
 from argparse import Namespace
 
-from probequest.config import Mode
-
 
 def create_fake_config():
     """
@@ -25,7 +23,6 @@ def create_fake_config():
 
     config.output_file = None
 
-    config.mode = Mode.RAW
     config.fake = False
     config.debug = False
 

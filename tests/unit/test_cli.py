@@ -12,7 +12,6 @@ from os.path import isfile
 
 from probequest import __version__ as VERSION
 from probequest.cli import get_arg_parser
-from probequest.config import Mode
 
 
 class TestArgParse(unittest.TestCase):
@@ -118,7 +117,6 @@ class TestArgParse(unittest.TestCase):
         self.assertIsNone(config.mac_exclusions)
         self.assertIsNone(config.mac_filters)
         self.assertIsNone(config.output_file)
-        self.assertEqual(config.mode, Mode.RAW)
         self.assertFalse(config.fake)
         self.assertFalse(config.debug)
 
