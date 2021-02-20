@@ -4,9 +4,11 @@ Unit tests for the configuration module.
 
 import logging
 import unittest
+from unittest.mock import patch
 from re import compile as rcompile, IGNORECASE
 
 from probequest.config import Config
+from probequest.exceptions import InterfaceDoesNotExistException
 
 
 class TestConfig(unittest.TestCase):
@@ -48,6 +50,31 @@ class TestConfig(unittest.TestCase):
                 config.frame_filter,
                 "type mgt subtype probe-req"
             )
+
+    def test_non_existing_interface(self):
+        """
+        Tests if an exception is well raised when setting a non-existing
+        network interface.
+        """
+
+        with patch("probequest.config.get_if_list", return_value=("wlan0",
+                   "wlan0mon")):
+            config = Config()
+
+            with self.assertRaises(InterfaceDoesNotExistException):
+                config.interface = "wlan1"
+
+    def test_existing_interface(self):
+        """
+        Tests with an existing network interface.
+        """
+
+        # pylint: disable=no-self-use
+
+        with patch("probequest.config.get_if_list", return_value=("wlan0",
+                   "wlan0mon")):
+            config = Config()
+            config.interface = "wlan0"
 
     def test_frame_filter_with_mac_filtering(self):
         """
