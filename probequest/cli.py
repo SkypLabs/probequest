@@ -9,10 +9,16 @@ from os import geteuid
 from sys import exit as sys_exit
 from time import sleep
 
+from scapy.pipetool import PipeEngine
+
 from . import __version__ as VERSION
-from .config import Config, Mode
-from .ui.pnl import PNLViewer
-from .ui.raw import RawProbeRequestViewer
+from .config import Config
+from .probe_request_filter import ProbeRequestFilter
+from .probe_request_parser import ProbeRequestParser
+from .exporters.csv import ProbeRequestCSVExporter
+from .sniffers.fake_probe_request_sniffer import FakeProbeRequestSniffer
+from .sniffers.probe_request_sniffer import ProbeRequestSniffer
+from .ui.console import ProbeRequestConsole
 
 # Used to specify the capacity of the memory handler which will store the logs
 # in memory until the argument parser is called to know whether they need to be
@@ -48,12 +54,6 @@ def get_arg_parser():
         help="ignore case distinctions in the regex pattern (default: false)",
     )
     arg_parser.add_argument(
-        "--mode",
-        type=Mode, choices=Mode.__members__.values(),
-        dest="mode",
-        help="set the mode to use",
-    )
-    arg_parser.add_argument(
         "-o", "--output",
         type=FileType("a"),
         dest="output_file",
@@ -63,7 +63,6 @@ def get_arg_parser():
     arg_parser.set_defaults(debug=False)
     arg_parser.set_defaults(fake=False)
     arg_parser.set_defaults(ignore_case=False)
-    arg_parser.set_defaults(mode=Mode.RAW)
 
     essid_arguments = arg_parser.add_mutually_exclusive_group()
     essid_arguments.add_argument(
@@ -120,6 +119,33 @@ def set_up_root_logger(level=logging.DEBUG):
     root_logger.addHandler(memory_handler)
 
     return (root_logger, memory_handler, console)
+
+
+def build_cluster(config):
+    """
+    Build the ProbeQuest cluster.
+    """
+
+    # pylint: disable=pointless-statement
+
+    if config.fake:
+        sniffer = FakeProbeRequestSniffer(1)
+    else:
+        sniffer = ProbeRequestSniffer(config)
+
+    parser = ProbeRequestParser(config)
+    filters = ProbeRequestFilter(config)
+    console = ProbeRequestConsole()
+
+    engine = PipeEngine(sniffer)
+
+    sniffer > parser > filters > console
+
+    if config.output_file:
+        csv_exporter = ProbeRequestCSVExporter(config)
+        filters > csv_exporter
+
+    return engine
 
 
 def main():
@@ -179,37 +205,18 @@ def main():
         sys_exit("[!] You must be root")
 
     # -------------------------------------------------- #
-    # Mode selection
+    # Sniffing loop
     # -------------------------------------------------- #
+    engine = build_cluster(config)
+
     try:
-        # Default mode.
-        if config.mode == Mode.RAW:
-            logger.info("Raw mode selected")
-
-            print("[*] Start sniffing probe requests...")
-
-            logger.debug("Configuring the raw viewer")
-            viewer = RawProbeRequestViewer(config)
-
-            logger.info("Starting the raw viewer")
-            viewer.start()
-
-            while True:
-                sleep(100)
-        elif config.mode == Mode.PNL:
-            logger.info("PNL mode selected")
-
-            logger.debug("Configuring the PNL viewer")
-            viewer = PNLViewer(config)
-
-            logger.info("Starting the PNL viewer")
-            viewer.main()
-        else:
-            logger.critical("Invalid mode: %s", config.mode)
-            sys_exit("[x] Invalid mode")
+        print("[*] Start sniffing probe requests...")
+        engine.start()
+        while True:
+            sleep(100)
     except OSError as err:
-        logger.debug("Stopping the viewer")
-        viewer.stop()
+        logger.debug("Stopping the engine")
+        engine.stop()
 
         logger.critical(err, exc_info=True)
         sys_exit(
@@ -219,9 +226,8 @@ def main():
         )
     except KeyboardInterrupt:
         logger.info("Keyboard interrupt received")
-        logger.info("Stopping the viewer")
-        print("[*] Stopping the threads...")
-        viewer.stop()
+        logger.info("Stopping the engine")
+        engine.stop()
     finally:
         print("[*] Bye!")
 
