@@ -215,9 +215,6 @@ def main():
         while True:
             sleep(100)
     except OSError as err:
-        logger.debug("Stopping the engine")
-        engine.stop()
-
         logger.critical(err, exc_info=True)
         sys_exit(
             "[!] Interface {interface} doesn't exist".format(
@@ -226,10 +223,10 @@ def main():
         )
     except KeyboardInterrupt:
         logger.info("Keyboard interrupt received")
-        logger.info("Stopping the engine")
-        engine.stop()
-    finally:
         print("[*] Bye!")
+    finally:
+        logger.debug("Stopping the engine")
+        engine.stop()
 
         if config.output_file is not None:
             logger.debug("Closing output file")
