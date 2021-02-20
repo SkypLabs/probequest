@@ -41,6 +41,9 @@ labels:
   - name: cli
     description: Related to the CLI tool
     color: 1d76db
+  - name: dependencies
+    description: Related to the dependencies
+    color: 1d76db
 
   - name: android
     description: Android platform support issues
