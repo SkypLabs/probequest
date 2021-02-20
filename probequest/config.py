@@ -5,13 +5,17 @@ ProbeQuest configuration.
 import logging
 from re import compile as rcompile, IGNORECASE
 
+from scapy.arch import get_if_list
+
+from .exceptions import InterfaceDoesNotExistException
+
 
 class Config:
     """
     Configuration object.
     """
 
-    interface = None
+    _interface = None
 
     essid_filters = None
     essid_regex = None
@@ -30,6 +34,26 @@ class Config:
 
     def __init__(self):
         self.logger = logging.getLogger(__name__)
+
+    @property
+    def interface(self):
+        """
+        Interface from which the probe requests will be captured.
+        """
+
+        return self._interface
+
+    @interface.setter
+    def interface(self, interface):
+        # If interface does not exist.
+        if interface not in get_if_list():
+            raise InterfaceDoesNotExistException(
+                "Interface {interface} does not exist".format(
+                    interface=interface,
+                )
+            )
+
+        self._interface = interface
 
     @property
     def frame_filter(self):

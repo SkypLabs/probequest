@@ -13,9 +13,10 @@ from scapy.pipetool import PipeEngine
 
 from . import __version__ as VERSION
 from .config import Config
+from .exceptions import InterfaceDoesNotExistException
+from .exporters.csv import ProbeRequestCSVExporter
 from .probe_request_filter import ProbeRequestFilter
 from .probe_request_parser import ProbeRequestParser
-from .exporters.csv import ProbeRequestCSVExporter
 from .sniffers.fake_probe_request_sniffer import FakeProbeRequestSniffer
 from .sniffers.probe_request_sniffer import ProbeRequestSniffer
 from .ui.console import ProbeRequestConsole
@@ -171,7 +172,12 @@ def main():
     # Parsing arguments
     # -------------------------------------------------- #
     logger.debug("Parsing arguments")
-    get_arg_parser().parse_args(namespace=config)
+
+    try:
+        get_arg_parser().parse_args(namespace=config)
+    except InterfaceDoesNotExistException as err:
+        logger.critical(err, exc_info=True)
+        sys_exit("[!] {err_msg}".format(err_msg=err))
 
     # -------------------------------------------------- #
     # Debug mode
@@ -214,13 +220,6 @@ def main():
         engine.start()
         while True:
             sleep(100)
-    except OSError as err:
-        logger.critical(err, exc_info=True)
-        sys_exit(
-            "[!] Interface {interface} doesn't exist".format(
-                interface=config.interface
-            )
-        )
     except KeyboardInterrupt:
         logger.info("Keyboard interrupt received")
         print("[*] Bye!")
