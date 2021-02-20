@@ -27,8 +27,9 @@ class TestProbeRequestParser(unittest.TestCase):
         'ProbeRequestParser.parse()' function.
         """
 
-        packet = RadioTap() / self.dot11_layer
-        ProbeRequestParser.parse(packet)
+        with self.assertRaises(TypeError):
+            packet = RadioTap() / self.dot11_layer
+            ProbeRequestParser.parse(packet)
 
     def test_empty_essid(self):
         """
@@ -53,6 +54,7 @@ class TestProbeRequestParser(unittest.TestCase):
 
         # pylint: disable=no-self-use
 
-        for _ in range(0, 1000):
-            packet = RadioTap()/fuzz(Dot11()/Dot11ProbeReq()/Dot11Elt())
-            ProbeRequestParser.parse(packet)
+        with self.assertRaises(TypeError):
+            for _ in range(0, 1000):
+                packet = RadioTap()/fuzz(Dot11()/Dot11ProbeReq()/Dot11Elt())
+                ProbeRequestParser.parse(packet)
