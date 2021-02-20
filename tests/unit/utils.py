@@ -29,8 +29,6 @@ def create_fake_config():
     config.fake = False
     config.debug = False
 
-    config.display_func = lambda *args: None
-    config.storage_func = lambda *args: None
     config.compiled_essid_regex = None
     config.frame_filter = None
 

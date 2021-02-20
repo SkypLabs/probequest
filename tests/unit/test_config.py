@@ -44,34 +44,11 @@ class TestConfig(unittest.TestCase):
         self.assertFalse(config.fake)
         self.assertFalse(config.debug)
 
-        self.assertTrue(hasattr(config.display_func, "__call__"))
-        self.assertTrue(hasattr(config.storage_func, "__call__"))
-
         with self.assertLogs(self.logger, level=logging.DEBUG):
             self.assertEqual(
                 config.frame_filter,
                 "type mgt subtype probe-req"
             )
-
-    def test_bad_display_function(self):
-        """
-        Assigns a non-callable object to the display callback function.
-        """
-
-        with self.assertLogs(self.logger, level=logging.ERROR):
-            with self.assertRaises(TypeError):
-                config = Config()
-                config.display_func = "test"
-
-    def test_bad_storage_function(self):
-        """
-        Assigns a non-callable object to the storage callback function.
-        """
-
-        with self.assertLogs(self.logger, level=logging.ERROR):
-            with self.assertRaises(TypeError):
-                config = Config()
-                config.storage_func = "test"
 
     def test_frame_filter_with_mac_filtering(self):
         """
