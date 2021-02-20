@@ -40,51 +40,11 @@ class Config:
     fake = False
     debug = False
 
-    _display_func = lambda *args: None  # noqa: E731
-    _storage_func = lambda *args: None  # noqa: E731
     _compiled_essid_regex = None
     _frame_filter = None
 
     def __init__(self):
         self.logger = logging.getLogger(__name__)
-
-    @property
-    def display_func(self):
-        """
-        Callback function triggered when a packet needs to be displayed.
-        """
-
-        return self._display_func
-
-    @property
-    def storage_func(self):
-        """
-        Callback function triggered when a packet needs to be stored.
-        """
-
-        return self._storage_func
-
-    @display_func.setter
-    def display_func(self, func):
-        if not hasattr(func, "__call__"):
-            self.logger.error("Not a callable object: %s", func)
-            raise TypeError(
-                "The display function property must be a callable object"
-            )
-
-        self._display_func = func
-        self.logger.debug("Display function set")
-
-    @storage_func.setter
-    def storage_func(self, func):
-        if not hasattr(func, "__call__"):
-            self.logger.error("Not a callable object: %s", func)
-            raise TypeError(
-                "The storage function property must be a callable object"
-            )
-
-        self._storage_func = func
-        self.logger.debug("Storage function set")
 
     @property
     def frame_filter(self):
