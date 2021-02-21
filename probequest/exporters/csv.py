@@ -2,6 +2,7 @@
 Probe request CSV exporter module.
 """
 
+import logging
 from csv import writer
 
 from scapy.pipetool import Sink
@@ -13,6 +14,8 @@ class ProbeRequestCSVExporter(Sink):
     """
 
     def __init__(self, config, name=None):
+        self.logger = logging.getLogger(__name__)
+
         Sink.__init__(self, name=name)
 
         self.csv_file = config.output_file
@@ -20,6 +23,8 @@ class ProbeRequestCSVExporter(Sink):
 
         if self.csv_file is not None:
             self.csv_writer = writer(self.csv_file, delimiter=";")
+
+        self.logger.info("CSV exporter initialised")
 
     def push(self, msg):
         if self.csv_writer is not None:

@@ -2,6 +2,8 @@
 Probe request parser module.
 """
 
+import logging
+
 from scapy.pipetool import Drain
 from scapy.layers.dot11 import RadioTap, Dot11ProbeReq
 
@@ -14,9 +16,13 @@ class ProbeRequestParser(Drain):
     """
 
     def __init__(self, config, name=None):
+        self.logger = logging.getLogger(__name__)
+
         Drain.__init__(self, name=name)
 
         self.config = config
+
+        self.logger.info("Probe request parser initialised")
 
     def push(self, msg):
         try:

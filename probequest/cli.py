@@ -213,9 +213,11 @@ def main():
     # -------------------------------------------------- #
     # Sniffing loop
     # -------------------------------------------------- #
+    logger.info("Creating Pipe engine")
     engine = build_cluster(config)
 
     try:
+        logger.info("Starting Pipe engine")
         print("[*] Start sniffing probe requests...")
         engine.start()
         while True:

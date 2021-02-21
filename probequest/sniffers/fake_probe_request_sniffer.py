@@ -2,6 +2,7 @@
 Fake probe request sniffer module.
 """
 
+import logging
 from time import sleep
 
 from scapy.layers.dot11 import RadioTap, Dot11, Dot11ProbeReq, Dot11Elt
@@ -23,11 +24,15 @@ class FakeProbeRequestSniffer(ThreadGenSource):
     """
 
     def __init__(self, period, period2=0, name=None):
+        self.logger = logging.getLogger(__name__)
+
         ThreadGenSource.__init__(self, name=name)
 
         self.fake_probe_requests = FakeProbeRequest()
         self.period = period
         self.period2 = period2
+
+        self.logger.info("Fake probe request sniffer initialised")
 
     def generate(self):
         while self.RUN:

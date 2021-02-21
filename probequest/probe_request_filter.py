@@ -2,6 +2,7 @@
 Probe request filter module.
 """
 
+import logging
 from re import match
 
 from scapy.pipetool import Drain
@@ -13,10 +14,14 @@ class ProbeRequestFilter(Drain):
     """
 
     def __init__(self, config, name=None):
+        self.logger = logging.getLogger(__name__)
+
         Drain.__init__(self, name=name)
 
         self._config = config
         self._cregex = self._config.compiled_essid_regex
+
+        self.logger.info("Probe request filter initialised")
 
     def push(self, msg):
         if self.can_pass(msg):
