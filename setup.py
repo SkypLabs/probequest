@@ -68,7 +68,6 @@ setup(
         "faker_wifi_essid",
         "netaddr >= 0.7.19",
         "scapy >= 2.4.3",
-        "urwid>= 2.0.1",
     ],
     extras_require={
         "tests": [
