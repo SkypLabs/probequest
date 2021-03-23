@@ -65,11 +65,13 @@ setup(
     python_requires=">=3.5, <4",
     install_requires=[
         "argparse >= 1.4.0",
-        "faker_wifi_essid",
         "netaddr >= 0.7.19",
         "scapy >= 2.4.3",
     ],
     extras_require={
+        "complete": [
+            "faker_wifi_essid",
+        ],
         "tests": [
             "flake8",
             "pylint",

@@ -14,10 +14,10 @@ from scapy.pipetool import PipeEngine
 from . import __version__ as VERSION
 from .config import Config
 from .exceptions import InterfaceDoesNotExistException
+from .exceptions import DependencyNotPresentException
 from .exporters.csv import ProbeRequestCSVExporter
 from .probe_request_filter import ProbeRequestFilter
 from .probe_request_parser import ProbeRequestParser
-from .sniffers.fake_probe_request_sniffer import FakeProbeRequestSniffer
 from .sniffers.probe_request_sniffer import ProbeRequestSniffer
 from .ui.console import ProbeRequestConsole
 
@@ -127,12 +127,18 @@ def build_cluster(config):
     Build the ProbeQuest cluster.
     """
 
+    # pylint: disable=import-outside-toplevel
     # pylint: disable=pointless-statement
 
-    if config.fake:
-        sniffer = FakeProbeRequestSniffer(1)
-    else:
-        sniffer = ProbeRequestSniffer(config)
+    try:
+        if config.fake:
+            from .sniffers.fake_probe_request_sniffer \
+                import FakeProbeRequestSniffer
+            sniffer = FakeProbeRequestSniffer(1)
+        else:
+            sniffer = ProbeRequestSniffer(config)
+    except ModuleNotFoundError as err:
+        raise DependencyNotPresentException(err) from err
 
     parser = ProbeRequestParser(config)
     filters = ProbeRequestFilter(config)
@@ -213,21 +219,26 @@ def main():
     # -------------------------------------------------- #
     # Sniffing loop
     # -------------------------------------------------- #
-    logger.info("Creating Pipe engine")
-    engine = build_cluster(config)
-
     try:
+        logger.info("Creating Pipe engine")
+        engine = build_cluster(config)
+
         logger.info("Starting Pipe engine")
         print("[*] Start sniffing probe requests...")
         engine.start()
         while True:
             sleep(100)
+    except DependencyNotPresentException as err:
+        err_msg = "An optional dependency is missing: {err}".format(err=err)
+        logger.critical(err_msg, exc_info=True)
+        sys_exit("[x] " + err_msg)
     except KeyboardInterrupt:
         logger.info("Keyboard interrupt received")
         print("[*] Bye!")
     finally:
-        logger.debug("Stopping the engine")
-        engine.stop()
+        if "engine" in locals():
+            logger.debug("Stopping the Pipe engine")
+            engine.stop()
 
         if config.output_file is not None:
             logger.debug("Closing output file")

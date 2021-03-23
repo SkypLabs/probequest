@@ -8,8 +8,8 @@ from time import sleep
 from scapy.layers.dot11 import RadioTap, Dot11, Dot11ProbeReq, Dot11Elt
 from scapy.pipetool import ThreadGenSource
 
-from faker import Faker
-from faker_wifi_essid import WifiESSID
+from faker import Faker  # pylint: disable=import-error
+from faker_wifi_essid import WifiESSID  # pylint: disable=import-error
 
 
 class FakeProbeRequestSniffer(ThreadGenSource):
