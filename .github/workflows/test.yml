@@ -7,9 +7,10 @@ on:
 jobs:
   test-code:
     name: Test code
-    runs-on: ubuntu-20.04
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-20.04, macos-10.15]
         python-version: [3.5, 3.6, 3.7, 3.8]
 
     steps:
