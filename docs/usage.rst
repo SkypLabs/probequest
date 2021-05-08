@@ -5,7 +5,8 @@ Usage
 Enabling the monitor mode
 -------------------------
 
-To be able to sniff the probe requests, your Wi-Fi network interface must be set to monitor mode.
+To be able to sniff the probe requests, your Wi-Fi network interface must be set
+to monitor mode.
 
 With `ifconfig` and `iwconfig`
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
