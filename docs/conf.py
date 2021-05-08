@@ -36,6 +36,7 @@ release = VERSION
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
     'sphinxarg.ext',
@@ -68,6 +69,10 @@ html_static_path = ['_static']
 
 
 # -- Extension configuration -------------------------------------------------
+
+# -- Options for autosummary extension ---------------------------------------
+
+autosummary_generate = True
 
 # -- Options for todo extension ----------------------------------------------
 

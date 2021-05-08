@@ -2,8 +2,9 @@
 Modules
 =======
 
-.. toctree::
-    :maxdepth: 1
-    :glob:
+.. autosummary::
+   :toctree: _autosummary
+   :template: module.rst
+   :recursive:
 
-    modules/*
+   probequest
