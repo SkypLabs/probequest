@@ -22,7 +22,7 @@ from probequest import __version__ as VERSION
 # -- Project information -----------------------------------------------------
 
 project = 'ProbeQuest'
-copyright = '2020, Paul-Emmanuel Raoul'
+copyright = '2021, Paul-Emmanuel Raoul'
 author = 'Paul-Emmanuel Raoul'
 
 # The full version, including alpha/beta/rc tags
