@@ -23,6 +23,8 @@ class FakeProbeRequestSniffer(ThreadGenSource):
     this last one only accepts lists, sets and tuples.
     """
 
+    # pylint: disable=too-many-ancestors
+
     def __init__(self, period, period2=0, name=None):
         self.logger = logging.getLogger(__name__)
 
@@ -35,6 +37,9 @@ class FakeProbeRequestSniffer(ThreadGenSource):
         self.logger.info("Fake probe request sniffer initialised")
 
     def generate(self):
+        # Fix a false positive about not finding '_wake_up'.
+        # pylint: disable=no-member
+
         while self.RUN:
             # Infinite loop until 'stop()' is called.
             for fake_probe_req in self.fake_probe_requests:
