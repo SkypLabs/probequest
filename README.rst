@@ -2,7 +2,7 @@
 ProbeQuest
 ==========
 
-|PyPI Package| |PyPI Downloads| |PyPI Python Versions| |Build Status Master Branch| |Build Status Develop Branch| |Code Coverage| |LGTM Grade| |LGTM Alerts| |Documentation Status|
+|PyPI Package| |PyPI Downloads| |PyPI Python Versions| |Build Status Master Branch| |Build Status Develop Branch| |LGTM Grade| |LGTM Alerts| |Documentation Status|
 
 Toolkit allowing to sniff and display the Wi-Fi probe requests passing nearby your wireless interface.
 
@@ -49,9 +49,6 @@ License
 .. |Build Status Develop Branch| image:: https://img.shields.io/travis/SkypLabs/probequest/develop.svg?label=develop&logo=travis&style=flat
    :target: https://travis-ci.org/SkypLabs/probequest
    :alt: Build Status Develop Branch
-.. |Code Coverage| image:: https://api.codacy.com/project/badge/Grade/16b9e70e51744256b37099ae8fe9132d
-   :target: https://www.codacy.com/app/skyper/probequest?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=SkypLabs/probequest&amp;utm_campaign=Badge_Grade
-   :alt: Code Coverage
 .. |Documentation Status| image:: https://readthedocs.org/projects/probequest/badge/?version=latest
    :target: http://probequest.readthedocs.io/en/latest/?badge=latest
    :alt: Documentation Status
