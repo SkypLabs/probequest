@@ -183,7 +183,7 @@ def main():
         get_arg_parser().parse_args(namespace=config)
     except InterfaceDoesNotExistException as err:
         logger.critical(err, exc_info=True)
-        sys_exit("[!] {err_msg}".format(err_msg=err))
+        sys_exit(f"[!] {err}")
 
     # -------------------------------------------------- #
     # Debug mode
@@ -229,7 +229,7 @@ def main():
         while True:
             sleep(100)
     except DependencyNotPresentException as err:
-        err_msg = "An optional dependency is missing: {err}".format(err=err)
+        err_msg = f"An optional dependency is missing: {err}"
         logger.critical(err_msg, exc_info=True)
         sys_exit("[x] " + err_msg)
     except KeyboardInterrupt:

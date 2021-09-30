@@ -19,15 +19,15 @@ class ProbeRequest:
         self._s_mac_oui = None
 
     def __str__(self):
-        return "{timestamp} - {s_mac} ({s_mac_oui}) -> {essid}".format(
-            timestamp=strftime(
+        timestamp = strftime(
                 "%a, %d %b %Y %H:%M:%S %Z",
                 localtime(self.timestamp)
-            ),
-            s_mac=self.s_mac,
-            s_mac_oui=self.s_mac_oui,
-            essid=self.essid
-        )
+                )
+        s_mac = self.s_mac
+        s_mac_oui = self.s_mac_oui
+        essid = self.essid
+
+        return f"{timestamp} - {s_mac} ({s_mac_oui}) -> {essid}"
 
     @property
     def s_mac_oui(self):

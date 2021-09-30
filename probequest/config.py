@@ -48,9 +48,7 @@ class Config:
         # If interface does not exist.
         if interface not in get_if_list():
             raise InterfaceDoesNotExistException(
-                "Interface {interface} does not exist".format(
-                    interface=interface,
-                )
+                f"Interface {interface} does not exist"
             )
 
         self._interface = interface
@@ -73,10 +71,10 @@ class Config:
                 for i, station in enumerate(self.mac_exclusions):
                     if i == 0:
                         self._frame_filter += \
-                            "ether src host {s_mac}".format(s_mac=station)
+                            f"ether src host {station}"
                     else:
                         self._frame_filter += \
-                            "|| ether src host {s_mac}".format(s_mac=station)
+                            f"|| ether src host {station}"
 
                 self._frame_filter += ")"
 
@@ -86,10 +84,10 @@ class Config:
                 for i, station in enumerate(self.mac_filters):
                     if i == 0:
                         self._frame_filter += \
-                            "ether src host {s_mac}".format(s_mac=station)
+                            f"ether src host {station}"
                     else:
                         self._frame_filter += \
-                            "|| ether src host {s_mac}".format(s_mac=station)
+                            f"|| ether src host {station}"
 
                 self._frame_filter += ")"
 
