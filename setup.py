@@ -64,7 +64,6 @@ setup(
     },
     python_requires=">=3.6, <4",
     install_requires=[
-        "argparse >= 1.4.0",
         "netaddr >= 0.7.19",
         "scapy >= 2.4.3",
     ],
