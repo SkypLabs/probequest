@@ -78,14 +78,14 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install setuptools wheel twine
+          pip install --upgrade setuptools wheel twine build
 
       - name: Build and publish
         env:
           TWINE_USERNAME: '__token__'
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
-          python setup.py sdist bdist_wheel
+          python -m build
           twine upload --repository testpypi dist/*
 
   publish-to-pypi:
@@ -107,12 +107,12 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install setuptools wheel twine
+          pip install --upgrade setuptools wheel twine build
 
       - name: Build and publish
         env:
           TWINE_USERNAME: '__token__'
           TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
         run: |
-          python setup.py sdist bdist_wheel
+          python -m build
           twine upload dist/*
