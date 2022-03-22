@@ -6,4 +6,4 @@ Modules
     :maxdepth: 1
     :glob:
 
-    modules/*
+    modules/**
