@@ -6,7 +6,8 @@
 Welcome to ProbeQuest's documentation!
 ======================================
 
-ProbeQuest is a toolkit allowing to sniff and display the Wi-Fi probe requests passing nearby your wireless interface.
+ProbeQuest is a toolkit allowing to sniff and display the Wi-Fi probe requests
+passing nearby your wireless interface.
 
 This project has been inspired by `this paper`_.
 
