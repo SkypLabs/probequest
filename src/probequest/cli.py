@@ -11,6 +11,8 @@ from time import sleep
 
 from scapy.pipetool import PipeEngine
 
+from rich.logging import RichHandler
+
 from . import __version__ as VERSION
 from .config import Config
 from .exceptions import InterfaceDoesNotExistException
@@ -110,7 +112,7 @@ def set_up_root_logger(level=logging.DEBUG):
     root_logger = logging.getLogger("")
     root_logger.setLevel(level)
 
-    console = logging.StreamHandler()
+    console = RichHandler(rich_tracebacks=True)
 
     console_formatter = \
         logging.Formatter("%(name)-12s: %(levelname)-8s %(message)s")
