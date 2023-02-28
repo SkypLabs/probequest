@@ -13,8 +13,8 @@ from scapy.pipetool import PipeEngine
 
 from . import __version__ as VERSION
 from .config import Config
-from .exceptions import InterfaceDoesNotExistException
-from .exceptions import DependencyNotPresentException
+from .exceptions import (DependencyNotPresentException,
+                         InterfaceDoesNotExistException)
 from .exporters.csv import ProbeRequestCSVExporter
 from .probe_request_filter import ProbeRequestFilter
 from .probe_request_parser import ProbeRequestParser
@@ -155,6 +155,19 @@ def build_cluster(config):
     return engine
 
 
+def check_permissions() -> bool:
+    """
+    Check the user permissions to ensure the network trafic can be captured.
+
+    For now, this function only checks if the current user is root.
+    """
+
+    if geteuid() == 0:
+        return True
+
+    return False
+
+
 def main():
     """
     Entry point of the command-line tool.
@@ -210,9 +223,9 @@ def main():
         logger.debug("Memory handler closed")
 
     # -------------------------------------------------- #
-    # Checking privileges
+    # Check permissions
     # -------------------------------------------------- #
-    if not geteuid() == 0:
+    if not config.fake and not check_permissions():
         logger.critical("User needs to be root to sniff the traffic")
         sys_exit("[!] You must be root")
 
