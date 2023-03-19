@@ -18,8 +18,6 @@ class TestProbeRequest(unittest.TestCase):
         Initialises a 'ProbeRequest' object without any parameter.
         """
 
-        # pylint: disable=no-value-for-parameter
-
         with self.assertRaises(TypeError):
             _ = ProbeRequest()
 
@@ -27,8 +25,6 @@ class TestProbeRequest(unittest.TestCase):
         """
         Initialises a 'ProbeRequest' object with only one parameter.
         """
-
-        # pylint: disable=no-value-for-parameter
 
         timestamp = 1517872027.0
 
@@ -40,8 +36,6 @@ class TestProbeRequest(unittest.TestCase):
         Initialises a 'ProbeRequest' object with only two parameters.
         """
 
-        # pylint: disable=no-value-for-parameter
-
         timestamp = 1517872027.0
         s_mac = "aa:bb:cc:dd:ee:ff"
 
@@ -52,8 +46,6 @@ class TestProbeRequest(unittest.TestCase):
         """
         Creates a new 'ProbeRequest' with all the required parameters.
         """
-
-        # pylint: disable=no-self-use
 
         timestamp = 1517872027.0
         s_mac = "aa:bb:cc:dd:ee:ff"

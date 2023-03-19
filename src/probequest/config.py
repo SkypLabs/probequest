@@ -15,8 +15,6 @@ class Config:
     Configuration object.
     """
 
-    # pylint: disable=too-many-instance-attributes
-
     _interface = None
 
     essid_filters = None

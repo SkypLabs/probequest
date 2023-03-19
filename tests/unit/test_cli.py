@@ -19,8 +19,6 @@ class TestArgParse(unittest.TestCase):
     Tests the argument parser.
     """
 
-    # pylint: disable=too-many-public-methods
-
     output_test_file = "probequest_test_output.txt"
 
     def setUp(self):
@@ -97,8 +95,6 @@ class TestArgParse(unittest.TestCase):
         values in the configuration namespace.
         """
 
-        # pylint: disable=no-member
-
         with self.assertRaises(SystemExit) as error_code:
             error_output = StringIO()
 
@@ -123,8 +119,6 @@ class TestArgParse(unittest.TestCase):
         Calls the argument parser with the 'interface' argument.
         """
 
-        # pylint: disable=no-member
-
         config = Namespace()
         self.arg_parser.parse_args(
             [
@@ -140,8 +134,6 @@ class TestArgParse(unittest.TestCase):
         Calls the argument parser with some options but not the required
         interface argument.
         """
-
-        # pylint: disable=no-member
 
         with self.assertRaises(SystemExit) as error_code:
             error_output = StringIO()
@@ -163,8 +155,6 @@ class TestArgParse(unittest.TestCase):
         Calls the argument parser with the '--debug' option.
         """
 
-        # pylint: disable=no-member
-
         config = Namespace()
         self.arg_parser.parse_args(
             [
@@ -181,8 +171,6 @@ class TestArgParse(unittest.TestCase):
         """
         Calls the argument parser with the '--fake' option.
         """
-
-        # pylint: disable=no-member
 
         config = Namespace()
         self.arg_parser.parse_args(
@@ -201,8 +189,6 @@ class TestArgParse(unittest.TestCase):
         Calls the argument parser with the '--ignore-case' option.
         """
 
-        # pylint: disable=no-member
-
         config = Namespace()
         self.arg_parser.parse_args(
             [
@@ -219,8 +205,6 @@ class TestArgParse(unittest.TestCase):
         """
         Calls the argument parser with the '-o' option.
         """
-
-        # pylint: disable=no-member
 
         config = Namespace()
         self.arg_parser.parse_args(
@@ -241,8 +225,6 @@ class TestArgParse(unittest.TestCase):
         Calls the argument parser with the '--output' option.
         """
 
-        # pylint: disable=no-member
-
         config = Namespace()
         self.arg_parser.parse_args(
             [
@@ -261,8 +243,6 @@ class TestArgParse(unittest.TestCase):
         """
         Calls the argument parser with the '-e' option.
         """
-
-        # pylint: disable=no-member
 
         config = Namespace()
         self.arg_parser.parse_args(
@@ -285,8 +265,6 @@ class TestArgParse(unittest.TestCase):
         Calls the argument parser with the '--essid' option.
         """
 
-        # pylint: disable=no-member
-
         config = Namespace()
         self.arg_parser.parse_args(
             [
@@ -308,8 +286,6 @@ class TestArgParse(unittest.TestCase):
         Calls the argument parser with the '-r' option.
         """
 
-        # pylint: disable=no-member
-
         config = Namespace()
         self.arg_parser.parse_args(
             [
@@ -327,8 +303,6 @@ class TestArgParse(unittest.TestCase):
         """
         Calls the argument parser with the '--regex' option.
         """
-
-        # pylint: disable=no-member
 
         config = Namespace()
         self.arg_parser.parse_args(
@@ -348,8 +322,6 @@ class TestArgParse(unittest.TestCase):
         Calls the argument parser with both '--essid' and '--regex' options,
         which must fail as they are in the same mutually exclusive group.
         """
-
-        # pylint: disable=no-member
 
         with self.assertRaises(SystemExit) as error_code:
             error_output = StringIO()
@@ -373,8 +345,6 @@ class TestArgParse(unittest.TestCase):
         """
         Calls the argument parser with the '--exclude' option.
         """
-
-        # pylint: disable=no-member
 
         config = Namespace()
         self.arg_parser.parse_args(
@@ -402,8 +372,6 @@ class TestArgParse(unittest.TestCase):
         Calls the argument parser with the '-s' option.
         """
 
-        # pylint: disable=no-member
-
         config = Namespace()
         self.arg_parser.parse_args(
             [
@@ -429,8 +397,6 @@ class TestArgParse(unittest.TestCase):
         """
         Calls the argument parser with the '--station' option.
         """
-
-        # pylint: disable=no-member
 
         config = Namespace()
         self.arg_parser.parse_args(
@@ -459,8 +425,6 @@ class TestArgParse(unittest.TestCase):
         options, which must fail as they are in the same mutually exclusive
         group.
         """
-
-        # pylint: disable=no-member
 
         with self.assertRaises(SystemExit) as error_code:
             error_output = StringIO()

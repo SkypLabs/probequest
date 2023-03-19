@@ -8,8 +8,8 @@ from time import sleep
 from scapy.layers.dot11 import RadioTap, Dot11, Dot11ProbeReq, Dot11Elt
 from scapy.pipetool import ThreadGenSource
 
-from faker import Faker  # pylint: disable=import-error
-from faker_wifi_essid import WifiESSID  # pylint: disable=import-error
+from faker import Faker
+from faker_wifi_essid import WifiESSID
 
 
 class FakeProbeRequestSniffer(ThreadGenSource):
@@ -22,8 +22,6 @@ class FakeProbeRequestSniffer(ThreadGenSource):
     This class inherits from 'ThreadGenSource' and not from 'PeriodicSource' as
     this last one only accepts lists, sets and tuples.
     """
-
-    # pylint: disable=too-many-ancestors
 
     def __init__(self, period, period2=0, name=None):
         self.logger = logging.getLogger(__name__)
@@ -38,7 +36,6 @@ class FakeProbeRequestSniffer(ThreadGenSource):
 
     def generate(self):
         # Fix a false positive about not finding '_wake_up'.
-        # pylint: disable=no-member
 
         while self.RUN:
             # Infinite loop until 'stop()' is called.
@@ -74,8 +71,6 @@ class FakeProbeRequest:
         """
         Generator of fake Wi-Fi probe requests.
         """
-
-        # pylint: disable=no-member
 
         if self._should_stop:
             raise StopIteration

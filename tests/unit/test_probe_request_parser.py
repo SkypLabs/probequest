@@ -47,8 +47,6 @@ class TestProbeRequestParser(unittest.TestCase):
         'ProbeRequestParser.parse()' function.
         """
 
-        # pylint: disable=no-self-use
-
         with self.assertRaises(TypeError):
             for _ in range(0, 1000):
                 packet = RadioTap() / fuzz(Dot11() / Dot11ProbeReq() / Dot11Elt())

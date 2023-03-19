@@ -34,8 +34,6 @@ class ProbeRequest:
         The value is cached once computed.
         """
 
-        # pylint: disable=no-member
-
         if self._s_mac_oui is None:
             try:
                 self._s_mac_oui = EUI(self.s_mac).oui.registration().org

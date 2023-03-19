@@ -132,9 +132,6 @@ def build_cluster(config):
     Build the ProbeQuest cluster.
     """
 
-    # pylint: disable=import-outside-toplevel
-    # pylint: disable=pointless-statement
-
     try:
         if config.fake:
             from .sniffers.fake_probe_request_sniffer import FakeProbeRequestSniffer
@@ -177,8 +174,6 @@ def main():
     """
     Entry point of the command-line tool.
     """
-
-    # pylint: disable=too-many-statements
 
     root_logger, memory_handler, console = set_up_root_logger()
 
