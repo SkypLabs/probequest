@@ -85,13 +85,7 @@ class TestProbeRequest(unittest.TestCase):
 
         probe_req = ProbeRequest(timestamp, s_mac, essid)
 
+        self.assertNotEqual(str(probe_req).find("Mon, 05 Feb 2018 23:07:07"), -1)
         self.assertNotEqual(
-            str(probe_req).find("Mon, 05 Feb 2018 23:07:07"),
-            -1
-        )
-        self.assertNotEqual(
-            str(probe_req).find(
-                "aa:bb:cc:dd:ee:ff (Unknown OUI) -> Test ESSID"
-            ),
-            -1
+            str(probe_req).find("aa:bb:cc:dd:ee:ff (Unknown OUI) -> Test ESSID"), -1
         )

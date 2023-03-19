@@ -28,9 +28,6 @@ class ProbeRequestCSVExporter(Sink):
 
     def push(self, msg):
         if self.csv_writer is not None:
-            self.csv_writer.writerow([
-                msg.timestamp,
-                msg.s_mac,
-                msg.s_mac_oui,
-                msg.essid
-            ])
+            self.csv_writer.writerow(
+                [msg.timestamp, msg.s_mac, msg.s_mac_oui, msg.essid]
+            )

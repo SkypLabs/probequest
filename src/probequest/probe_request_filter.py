@@ -43,13 +43,14 @@ class ProbeRequestFilter(Drain):
 
         # If the probe request's ESSID is not one of those in the filtering
         # list.
-        if (self._config.essid_filters is not None and
-                probe_req.essid not in self._config.essid_filters):
+        if (
+            self._config.essid_filters is not None
+            and probe_req.essid not in self._config.essid_filters
+        ):
             return False
 
         # If the probe request's ESSID doesn't match the regex.
-        if (self._cregex is not None and
-                not match(self._cregex, probe_req.essid)):
+        if self._cregex is not None and not match(self._cregex, probe_req.essid):
             return False
 
         return True

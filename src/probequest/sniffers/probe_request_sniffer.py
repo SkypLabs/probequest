@@ -21,10 +21,6 @@ class ProbeRequestSniffer(SniffSource):
 
         frame_filter = self.config.frame_filter
 
-        SniffSource.__init__(
-            self,
-            iface=self.config.interface,
-            filter=frame_filter
-        )
+        SniffSource.__init__(self, iface=self.config.interface, filter=frame_filter)
 
         self.logger.info("Probe request sniffer initialised")

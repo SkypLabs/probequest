@@ -13,8 +13,7 @@ from scapy.pipetool import PipeEngine
 
 from . import __version__ as VERSION
 from .config import Config
-from .exceptions import (DependencyNotPresentException,
-                         InterfaceDoesNotExistException)
+from .exceptions import DependencyNotPresentException, InterfaceDoesNotExistException
 from .exporters.csv import ProbeRequestCSVExporter
 from .probe_request_filter import ProbeRequestFilter
 from .probe_request_parser import ProbeRequestParser
@@ -40,22 +39,26 @@ def get_arg_parser():
         help="wireless interface to use (must be in monitor mode)",
     )
     arg_parser.add_argument(
-        "--debug", action="store_true",
+        "--debug",
+        action="store_true",
         dest="debug",
         help="debug mode",
     )
     arg_parser.add_argument(
-        "--fake", action="store_true",
+        "--fake",
+        action="store_true",
         dest="fake",
         help="display only fake ESSIDs",
     )
     arg_parser.add_argument(
-        "--ignore-case", action="store_true",
+        "--ignore-case",
+        action="store_true",
         dest="ignore_case",
         help="ignore case distinctions in the regex pattern (default: false)",
     )
     arg_parser.add_argument(
-        "-o", "--output",
+        "-o",
+        "--output",
         type=FileType("a"),
         dest="output_file",
         help="output file to save the captured data (CSV format)",
@@ -67,14 +70,16 @@ def get_arg_parser():
 
     essid_arguments = arg_parser.add_mutually_exclusive_group()
     essid_arguments.add_argument(
-        "-e", "--essid",
+        "-e",
+        "--essid",
         nargs="+",
         metavar="ESSID",
         dest="essid_filters",
         help="ESSID of the APs to filter (space-separated list)",
     )
     essid_arguments.add_argument(
-        "-r", "--regex",
+        "-r",
+        "--regex",
         metavar="REGEX",
         dest="essid_regex",
         help="regex to filter the ESSIDs",
@@ -89,7 +94,8 @@ def get_arg_parser():
         help="MAC addresses of the stations to exclude (space-separated list)",
     )
     station_arguments.add_argument(
-        "-s", "--station",
+        "-s",
+        "--station",
         nargs="+",
         metavar="STATION",
         dest="mac_filters",
@@ -112,8 +118,7 @@ def set_up_root_logger(level=logging.DEBUG):
 
     console = logging.StreamHandler()
 
-    console_formatter = \
-        logging.Formatter("%(name)-12s: %(levelname)-8s %(message)s")
+    console_formatter = logging.Formatter("%(name)-12s: %(levelname)-8s %(message)s")
     console.setFormatter(console_formatter)
 
     memory_handler = MemoryHandler(MEMORY_LOGGER_CAPACITY)
@@ -132,8 +137,8 @@ def build_cluster(config):
 
     try:
         if config.fake:
-            from .sniffers.fake_probe_request_sniffer \
-                import FakeProbeRequestSniffer
+            from .sniffers.fake_probe_request_sniffer import FakeProbeRequestSniffer
+
             sniffer = FakeProbeRequestSniffer(1)
         else:
             sniffer = ProbeRequestSniffer(config)

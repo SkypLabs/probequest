@@ -46,10 +46,7 @@ class TestConfig(unittest.TestCase):
         self.assertFalse(config.debug)
 
         with self.assertLogs(self.logger, level=logging.DEBUG):
-            self.assertEqual(
-                config.frame_filter,
-                "type mgt subtype probe-req"
-            )
+            self.assertEqual(config.frame_filter, "type mgt subtype probe-req")
 
     def test_non_existing_interface(self):
         """
@@ -57,8 +54,7 @@ class TestConfig(unittest.TestCase):
         network interface.
         """
 
-        with patch("probequest.config.get_if_list", return_value=("wlan0",
-                   "wlan0mon")):
+        with patch("probequest.config.get_if_list", return_value=("wlan0", "wlan0mon")):
             config = Config()
 
             with self.assertRaises(InterfaceDoesNotExistException):
@@ -69,10 +65,7 @@ class TestConfig(unittest.TestCase):
         Tests with an existing network interface.
         """
 
-        # pylint: disable=no-self-use
-
-        with patch("probequest.config.get_if_list", return_value=("wlan0",
-                   "wlan0mon")):
+        with patch("probequest.config.get_if_list", return_value=("wlan0", "wlan0mon")):
             config = Config()
             config.interface = "wlan0"
 
@@ -87,9 +80,9 @@ class TestConfig(unittest.TestCase):
         with self.assertLogs(self.logger, level=logging.DEBUG):
             self.assertEqual(
                 config.frame_filter,
-                "type mgt subtype probe-req" +
-                " and (ether src host a4:77:33:9a:73:5c" +
-                "|| ether src host b0:05:94:5d:5a:4d)"
+                "type mgt subtype probe-req"
+                + " and (ether src host a4:77:33:9a:73:5c"
+                + "|| ether src host b0:05:94:5d:5a:4d)",
             )
 
     def test_frame_filter_with_mac_exclusion(self):
@@ -103,9 +96,9 @@ class TestConfig(unittest.TestCase):
         with self.assertLogs(self.logger, level=logging.DEBUG):
             self.assertEqual(
                 config.frame_filter,
-                "type mgt subtype probe-req" +
-                " and not (ether src host a4:77:33:9a:73:5c" +
-                "|| ether src host b0:05:94:5d:5a:4d)"
+                "type mgt subtype probe-req"
+                + " and not (ether src host a4:77:33:9a:73:5c"
+                + "|| ether src host b0:05:94:5d:5a:4d)",
             )
 
     def test_compiled_essid_regex_with_an_empty_regex(self):
@@ -143,5 +136,4 @@ class TestConfig(unittest.TestCase):
         with self.assertLogs(self.logger, level=logging.DEBUG):
             compiled_regex = config.compiled_essid_regex
 
-        self.assertEqual(compiled_regex, rcompile(
-            config.essid_regex, IGNORECASE))
+        self.assertEqual(compiled_regex, rcompile(config.essid_regex, IGNORECASE))

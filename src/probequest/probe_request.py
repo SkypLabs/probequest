@@ -19,10 +19,7 @@ class ProbeRequest:
         self._s_mac_oui = None
 
     def __str__(self):
-        timestamp = strftime(
-                "%a, %d %b %Y %H:%M:%S %Z",
-                localtime(self.timestamp)
-                )
+        timestamp = strftime("%a, %d %b %Y %H:%M:%S %Z", localtime(self.timestamp))
         s_mac = self.s_mac
         s_mac_oui = self.s_mac_oui
         essid = self.essid

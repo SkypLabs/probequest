@@ -37,12 +37,7 @@ class TestProbeRequestParser(unittest.TestCase):
         it with the 'ProbeRequestParser.parse()' function.
         """
 
-        packet = RadioTap() \
-            / self.dot11_layer \
-            / Dot11ProbeReq() \
-            / Dot11Elt(
-                info=""
-            )
+        packet = RadioTap() / self.dot11_layer / Dot11ProbeReq() / Dot11Elt(info="")
 
         ProbeRequestParser.parse(packet)
 
@@ -56,5 +51,5 @@ class TestProbeRequestParser(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             for _ in range(0, 1000):
-                packet = RadioTap()/fuzz(Dot11()/Dot11ProbeReq()/Dot11Elt())
+                packet = RadioTap() / fuzz(Dot11() / Dot11ProbeReq() / Dot11Elt())
                 ProbeRequestParser.parse(packet)

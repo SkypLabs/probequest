@@ -80,16 +80,16 @@ class FakeProbeRequest:
         if self._should_stop:
             raise StopIteration
 
-        return RadioTap() \
+        return (
+            RadioTap()
             / Dot11(
                 addr1="ff:ff:ff:ff:ff:ff",
                 addr2=self._fake.mac_address(),
-                addr3=self._fake.mac_address()
-            ) \
-            / Dot11ProbeReq() \
-            / Dot11Elt(
-                info=self._fake.wifi_essid()
+                addr3=self._fake.mac_address(),
             )
+            / Dot11ProbeReq()
+            / Dot11Elt(info=self._fake.wifi_essid())
+        )
 
     def stop(self):
         """

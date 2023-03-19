@@ -72,11 +72,9 @@ class Config:
 
                 for i, station in enumerate(self.mac_exclusions):
                     if i == 0:
-                        self._frame_filter += \
-                            f"ether src host {station}"
+                        self._frame_filter += f"ether src host {station}"
                     else:
-                        self._frame_filter += \
-                            f"|| ether src host {station}"
+                        self._frame_filter += f"|| ether src host {station}"
 
                 self._frame_filter += ")"
 
@@ -85,15 +83,13 @@ class Config:
 
                 for i, station in enumerate(self.mac_filters):
                     if i == 0:
-                        self._frame_filter += \
-                            f"ether src host {station}"
+                        self._frame_filter += f"ether src host {station}"
                     else:
-                        self._frame_filter += \
-                            f"|| ether src host {station}"
+                        self._frame_filter += f"|| ether src host {station}"
 
                 self._frame_filter += ")"
 
-            self.logger.debug("Frame filter: \"%s\"", self._frame_filter)
+            self.logger.debug('Frame filter: "%s"', self._frame_filter)
 
         return self._frame_filter
 
@@ -113,10 +109,7 @@ class Config:
             if self.ignore_case:
                 self.logger.debug("Ignoring case in ESSID regex")
 
-                self._compiled_essid_regex = rcompile(
-                    self.essid_regex,
-                    IGNORECASE
-                )
+                self._compiled_essid_regex = rcompile(self.essid_regex, IGNORECASE)
             else:
                 self._compiled_essid_regex = rcompile(self.essid_regex)
 
