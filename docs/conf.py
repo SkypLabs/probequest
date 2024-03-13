@@ -5,13 +5,15 @@
 
 # pylint: skip-file
 
+from datetime import datetime
+
 from probequest import __version__ as VERSION
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "ProbeQuest"
-copyright = "2022, Paul-Emmanuel Raoul"
+copyright = f"2017-{datetime.now().year}, Paul-Emmanuel Raoul"
 author = "Paul-Emmanuel Raoul"
 
 release = VERSION
