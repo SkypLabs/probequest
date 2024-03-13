@@ -66,6 +66,14 @@ html_theme = 'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+html_context = {
+    'conf_py_path': '/docs/',
+    'display_github': True,
+    'github_user': 'SkypLabs',
+    'github_repo': 'probequest',
+    'github_version': 'develop',
+    "plausible_domain": 'probequest.skyplabs.net',
+}
 
 # -- Extension configuration -------------------------------------------------
 
@@ -79,14 +87,3 @@ todo_include_todos = True
 
 # Fontpath for seqdiag (truetype font).
 seqdiag_fontpath = '/usr/share/fonts/truetype/ipafont/ipagp.ttf'
-
-
-# -- Options for GitHub integration ------------------------------------------
-
-html_context = {
-    'display_github': True,         # Integrate GitHub
-    'github_user': 'SkypLabs',      # Username
-    'github_repo': 'probequest',    # Repo name
-    'github_version': 'develop',    # Version
-    'conf_py_path': '/docs/',       # Path in the checkout to the docs root
-}
