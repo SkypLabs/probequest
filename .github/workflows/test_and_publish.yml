@@ -1,8 +1,9 @@
 name: Test and Publish
 
 on:
-  - push
-  - pull_request
+  push:
+  pull_request:
+    branches: [develop]
 
 jobs:
   test-code:
