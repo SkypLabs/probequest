@@ -24,12 +24,11 @@ classifiers = [
   "Topic :: System :: Networking",
   "Topic :: System :: Networking :: Monitoring",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.7",
   "Programming Language :: Python :: 3.8",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
 ]
-requires-python = ">=3.7, <4"
+requires-python = ">=3.8, <4"
 dependencies = [
   "netaddr >= 0.7.19",
   "scapy >= 2.4.3",
