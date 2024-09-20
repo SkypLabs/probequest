@@ -28,13 +28,13 @@ class ProbeRequestParser(Drain):
         try:
             self._send(self.parse(msg))
         except TypeError:
-            return
+            pass
 
     def high_push(self, msg):
         try:
             self._high_send(self.parse(msg))
         except TypeError:
-            return
+            pass
 
     @staticmethod
     def parse(packet):
