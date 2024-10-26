@@ -6,6 +6,7 @@
 # pylint: skip-file
 
 from datetime import datetime
+from os import environ
 
 from probequest import __version__ as VERSION
 
@@ -62,3 +63,15 @@ todo_include_todos = True
 # http://blockdiag.com/en/seqdiag/sphinxcontrib.html
 
 seqdiag_fontpath = "/usr/share/fonts/truetype/ipafont/ipagp.ttf"
+
+# -- Read the Docs -----------------------------------------------------------
+
+# Set canonical URL from the Read the Docs Domain
+html_baseurl = environ.get("READTHEDOCS_CANONICAL_URL", "")
+
+# Tell Jinja2 templates the build is running on Read the Docs
+if environ.get("READTHEDOCS", "") == "True":
+    if "html_context" not in globals():
+        html_context = {}
+
+    html_context["READTHEDOCS"] = True
