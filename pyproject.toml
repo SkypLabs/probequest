@@ -60,8 +60,8 @@ version = {attr = "probequest.__version__"}
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.pylint.master]
+[tool.pylint.main]
 load-plugins = "pylint.extensions.no_self_use"
 
-[tool.pylint.message_control]
+[tool.pylint."messages control"]
 disable = "duplicate-code"
