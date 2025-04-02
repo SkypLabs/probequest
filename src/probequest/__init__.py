@@ -3,9 +3,8 @@ ProbeQuest package.
 """
 
 import logging
-from pkg_resources import get_distribution
 
-__version__ = get_distribution("probequest").version
+__version__ = "0.8.0"
 
 
 def set_up_package_logger():

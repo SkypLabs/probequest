@@ -1,7 +1,67 @@
 [build-system]
 requires = [
-    "setuptools >= 42",
-    "setuptools_scm >= 2.0.0, <3",
+    "setuptools >= 61",
     "wheel",
 ]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "probequest"
+authors = [
+  {name = "Paul-Emmanuel Raoul", email = "skyper@skyplabs.net"},
+]
+description = "Toolkit for Playing with Wi-Fi Probe Requests."
+readme = "README.rst"
+license = "GPL-3.0-only"
+license-files = ["LICENSE"]
+keywords = ["wifi", "wireless", "security", "sniffer"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Information Technology",
+  "Natural Language :: English",
+  "Topic :: Security",
+  "Topic :: System :: Networking",
+  "Topic :: System :: Networking :: Monitoring",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.7",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+]
+requires-python = ">=3.7, <4"
+dependencies = [
+  "netaddr >= 0.7.19",
+  "scapy >= 2.4.3",
+]
+dynamic = ["version"]
+
+[project.urls]
+"Bug Tracker" = "https://github.com/SkypLabs/probequest/issues"
+Documentatioon = "https://probequest.skyplabs.net"
+"Source Code"= "https://github.com/SkypLabs/probequest"
+
+[project.optional-dependencies]
+complete = ["faker_wifi_essid"]
+docs = [
+  "Sphinx >= 3.2",
+  "sphinxcontrib-seqdiag >= 2.0.0",
+  "sphinx-argparse >= 0.2.2",
+  "sphinx_rtd_theme >= 0.5.0",
+]
+tests = ["flake8", "pylint", "tox"]
+
+[project.scripts]
+probequest = "probequest.cli:main"
+
+[tool.setuptools.dynamic]
+version = {attr = "probequest.__version__"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pylint.master]
+load-plugins = "pylint.extensions.no_self_use"
+
+[tool.pylint.message_control]
+disable = "duplicate-code"
