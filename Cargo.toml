@@ -1,0 +1,7 @@
+[package]
+name = "probequest"
+version = "2.0.0"
+authors = ["Paul-Emmanuel Raoul <skyper@skyplabs.net>"]
+edition = "2024"
+
+[dependencies]
