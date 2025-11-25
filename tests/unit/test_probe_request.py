@@ -3,6 +3,7 @@ Unit tests for the probe request module.
 """
 
 import unittest
+from time import localtime, strftime
 from netaddr.core import AddrFormatError
 
 from probequest.probe_request import ProbeRequest
@@ -86,8 +87,10 @@ class TestProbeRequest(unittest.TestCase):
         probe_req = ProbeRequest(timestamp, s_mac, essid)
 
         self.assertNotEqual(
-            str(probe_req).find("Mon, 05 Feb 2018 23:07:07"),
-            -1
+            str(probe_req).find(
+                strftime("%a, %d %b %Y %H:%M:%S %Z", localtime(timestamp))
+            ),
+            -1,
         )
         self.assertNotEqual(
             str(probe_req).find(
