@@ -1,6 +1,6 @@
 use anyhow::{Context, Result, bail};
 use clap::Parser;
-use pcap::Device;
+use pcap::{Capture, Device, Linktype};
 
 mod cli;
 
@@ -19,7 +19,27 @@ fn main() -> Result<()> {
             .context("No available device found via lookup")?
     };
 
-    println!("Device: {}", device.name);
+    // "In immediate mode, packets are always delivered as soon as they arrive,
+    // with no buffering."
+    //
+    // See https://www.man7.org/linux/man-pages/man3/pcap_set_immediate_mode.3pcap.html.
+    let capture = Capture::from_device(device)
+        .context("Failed to create a pcap capture handle from device")?
+        .immediate_mode(true);
+
+    let mut capture = capture
+        .open()
+        .context("Failed to open the pcap capture handle on selected device")?;
+
+    capture
+        // See https://www.tcpdump.org/linktypes.html.
+        .set_datalink(pcap::Linktype(Linktype::IEEE802_11_RADIOTAP.0))
+        .context("Failed to set the datalink type")?;
+
+    while let Ok(packet) = capture.next_packet() {
+        // TODO
+        println!("Packet received...");
+    }
 
     Ok(())
 }
