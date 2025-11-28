@@ -1,6 +1,7 @@
 use anyhow::{Context, Result, bail};
 use clap::Parser;
-use pcap::{Capture, Device, Linktype};
+use pcap::{Capture, Device, Linktype, Packet};
+use radiotap::Radiotap;
 
 mod cli;
 
@@ -36,9 +37,14 @@ fn main() -> Result<()> {
         .set_datalink(pcap::Linktype(Linktype::IEEE802_11_RADIOTAP.0))
         .context("Failed to set the datalink type")?;
 
+    capture
+        .filter("type mgt subtype probe-req", true)
+        .context("Failed to set the packet filter")?;
+
+    println!("[*] Starting sniffing probe requests...");
+
     while let Ok(packet) = capture.next_packet() {
-        // TODO
-        println!("Packet received...");
+        handle_packet(packet)?;
     }
 
     Ok(())
@@ -55,4 +61,33 @@ fn find_device_by_name(name: &str) -> Result<Device> {
     }
 
     bail!("Device '{}' not found", name)
+}
+
+fn handle_packet(packet: Packet) -> Result<()> {
+    let radiotap = match Radiotap::from_bytes(packet.data) {
+        Ok(radiotap) => radiotap,
+        Err(_error) => {
+            // TODO: handle error
+            return Ok(());
+        }
+    };
+
+    let payload = &packet.data[radiotap.header.length..];
+    match libwifi::parse_frame(payload, false) {
+        Ok(frame) => match frame {
+            libwifi::Frame::ProbeRequest(probe) => {
+                if let Some(essid) = probe.station_info.essid() {
+                    let s_mac = probe.header.address_2.to_long_string();
+                    println!("{} -> {}", s_mac, essid);
+                }
+            }
+            _ => {}
+        },
+        Err(error) => {
+            // TODO: handle error
+            println!("Error during parsing: {error}");
+        }
+    }
+
+    Ok(())
 }

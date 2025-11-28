@@ -7,4 +7,6 @@ edition = "2024"
 [dependencies]
 anyhow = "1.0.100"
 clap = { version = "4.5", features = ["derive"] }
+libwifi = "0.4.6"
 pcap = { version = "2.3.0", features = ["capture-stream"] }
+radiotap = "1.3.0"
